@@ -1,9 +1,16 @@
-import React from 'react';
-import { Alert, Input, Form } from 'reactstrap';
 import { transpose } from 'chord-transposer';
+import React from 'react';
+import { Alert, Form, Input } from 'reactstrap';
+import styled from 'styled-components';
 
 const majorKeys = ['C', 'Db', 'D', 'Eb', 'E', 'F', 'F#', 'Gb', 'G', 'Ab', 'A', 'Bb', 'B'];
 const minorKeys = ['Cm', 'C#m', 'Dm', 'D#m', 'Ebm', 'Em', 'Fm', 'F#m', 'Gm', 'G#m', 'Am', 'Bbm', 'Bm'];
+
+const DisplayOnlyAlert = styled(Alert)`
+  @media print {
+    display: none;
+  }
+`;
 
 export default class Transpose extends React.Component {
   state = {
@@ -23,7 +30,7 @@ export default class Transpose extends React.Component {
 
     return (
       <>
-        <Alert color="info">
+        <DisplayOnlyAlert color="info">
           <Form inline>
             <span className="mr-2">
               Transpose from <strong>{originalKey}</strong> to
@@ -36,7 +43,7 @@ export default class Transpose extends React.Component {
               ))}
             </Input>
           </Form>
-        </Alert>
+        </DisplayOnlyAlert>
 
         {children({ lyrics: transposedLyrics })}
       </>

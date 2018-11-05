@@ -3,7 +3,7 @@ import SongLyricsLine from './SongLyricsLine';
 import styled from 'styled-components';
 
 const Section = styled.div`
-  margin-bottom: 1rem;
+  margin-bottom: 2rem;
 `;
 
 function translateSectionHeader(header) {

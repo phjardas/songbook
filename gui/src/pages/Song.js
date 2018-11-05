@@ -9,7 +9,7 @@ import SongLyrics from './SongLyrics';
 function Song({ song }) {
   return (
     <>
-      <h1>
+      <h1 className="mb-3">
         {song.title} <small className="text-muted">by {song.author}</small>
       </h1>
       <SongLyrics songId={song.id} />
