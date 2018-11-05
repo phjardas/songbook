@@ -1,25 +1,16 @@
-import gql from 'graphql-tag';
 import React from 'react';
 import { Query } from 'react-apollo';
 import { Alert } from 'reactstrap';
+import Loading from '../components/Loading';
 import SongLyrics from '../components/SongLyrics';
 import { parseLyrics } from '../opensong';
-
-const query = gql`
-  query SongLyrics($id: ID!) {
-    song(id: $id) {
-      id
-      lyrics
-      key
-    }
-  }
-`;
+import { songLyricsQuery } from './queries';
 
 export default ({ songId }) => {
   return (
-    <Query query={query} variables={{ id: songId }}>
+    <Query query={songLyricsQuery} variables={{ id: songId }}>
       {({ loading, error, data }) => {
-        if (loading) return <Alert color="info">loading</Alert>;
+        if (loading) return <Loading />;
         if (error) return <Alert color="danger">Error: {error.message}</Alert>;
         return <SongLyrics lyrics={parseLyrics(data.song.lyrics)} originalKey={data.song.key} />;
       }}

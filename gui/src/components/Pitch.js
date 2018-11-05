@@ -1,21 +1,19 @@
-import React from 'react';
-
 export default function Pitch({ pitch }) {
+  return renderPitch(pitch);
+}
+
+export function renderPitch(pitch) {
   const m = pitch.match(/^([CDEFGAB])([b#]?)$/);
   if (!m) return pitch;
 
   // eslint-disable-next-line
   const [_, key, accidental] = m;
 
-  return (
-    <>
-      {key}
-      {accidental && <sup>{renderAccidental(accidental)}</sup>}
-    </>
-  );
+  return `${key}${renderAccidental(accidental)}`;
 }
 
 function renderAccidental(accidental) {
+  if (!accidental) return '';
   switch (accidental) {
     case '#':
       return '♯';

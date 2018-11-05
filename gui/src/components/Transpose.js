@@ -1,12 +1,17 @@
 import { transpose } from 'chord-transposer';
 import React from 'react';
-import { Alert, Form, Input } from 'reactstrap';
+import { Alert, CustomInput, Form } from 'reactstrap';
 import styled from 'styled-components';
+import Pitch, { renderPitch } from './Pitch';
 
 const majorKeys = ['C', 'Db', 'D', 'Eb', 'E', 'F', 'F#', 'Gb', 'G', 'Ab', 'A', 'Bb', 'B'];
 const minorKeys = ['Cm', 'C#m', 'Dm', 'D#m', 'Ebm', 'Em', 'Fm', 'F#m', 'Gm', 'G#m', 'Am', 'Bbm', 'Bm'];
 
-const DisplayOnlyAlert = styled(Alert)`
+const TransposeBox = styled(Alert)`
+  @media (min-width: 768px) {
+    margin-top: -7rem;
+  }
+
   @media print {
     display: none;
   }
@@ -30,20 +35,24 @@ export default class Transpose extends React.Component {
 
     return (
       <>
-        <DisplayOnlyAlert color="info">
+        <TransposeBox color="info" className="float-md-right">
           <Form inline>
             <span className="mr-2">
-              Transpose from <strong>{originalKey}</strong> to
+              Transpose from{' '}
+              <strong>
+                <Pitch pitch={originalKey} />
+              </strong>{' '}
+              to
             </span>
-            <Input type="select" value={transposedKey} onChange={e => this.transposeTo(e.target.value)}>
+            <CustomInput id="transpose" type="select" value={transposedKey} onChange={e => this.transposeTo(e.target.value)}>
               {keys.map(key => (
                 <option key={key} value={key}>
-                  {key}
+                  {renderPitch(key)}
                 </option>
               ))}
-            </Input>
+            </CustomInput>
           </Form>
-        </DisplayOnlyAlert>
+        </TransposeBox>
 
         {children({ lyrics: transposedLyrics })}
       </>

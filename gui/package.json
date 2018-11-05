@@ -7,6 +7,9 @@
     "build": "REACT_APP_GRAPHQL_ENDPOINT=https://us-central1-songbook-pi.cloudfunctions.net/api/graphql react-scripts build"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.8",
+    "@fortawesome/free-solid-svg-icons": "^5.5.0",
+    "@fortawesome/react-fontawesome": "^0.1.3",
     "apollo-cache-inmemory": "^1.3.9",
     "apollo-client": "^2.4.5",
     "apollo-link": "^1.2.3",

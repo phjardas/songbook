@@ -3,6 +3,7 @@ import { ApolloClient } from 'apollo-client';
 import { ApolloLink } from 'apollo-link';
 import { onError } from 'apollo-link-error';
 import { createHttpLink } from 'apollo-link-http';
+import { toIdValue } from 'apollo-utilities';
 
 const errorLink = onError(({ graphQLErrors, networkError }) => {
   if (graphQLErrors)
@@ -19,7 +20,15 @@ const httpLink = createHttpLink({
   credentials: 'same-origin',
 });
 
+const cache = new InMemoryCache({
+  cacheRedirects: {
+    Query: {
+      song: (_, { id }) => toIdValue(cache.config.dataIdFromObject({ __typename: 'Song', id })),
+    },
+  },
+});
+
 export const apollo = new ApolloClient({
   link: ApolloLink.from([errorLink, httpLink]),
-  cache: new InMemoryCache(),
+  cache,
 });
