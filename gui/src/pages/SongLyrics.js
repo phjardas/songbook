@@ -10,6 +10,7 @@ const query = gql`
     song(id: $id) {
       id
       lyrics
+      key
     }
   }
 `;
@@ -20,7 +21,7 @@ export default ({ songId }) => {
       {({ loading, error, data }) => {
         if (loading) return <Alert color="info">loading</Alert>;
         if (error) return <Alert color="danger">Error: {error.message}</Alert>;
-        return <SongLyrics lyrics={parseLyrics(data.song.lyrics)} />;
+        return <SongLyrics lyrics={parseLyrics(data.song.lyrics)} originalKey={data.song.key} />;
       }}
     </Query>
   );

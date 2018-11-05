@@ -11,5 +11,6 @@ export const typeDefs = gql`
     title: String!
     author: String!
     lyrics: String!
+    key: String
   }
 `;

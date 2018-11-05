@@ -1,12 +1,7 @@
 import React from 'react';
 import SongLyricsSection from './SongLyricsSection';
+import Transpose from './Transpose';
 
-export default function SongLyrics({ lyrics }) {
-  return (
-    <>
-      {lyrics.map((section, i) => (
-        <SongLyricsSection key={i} section={section} />
-      ))}
-    </>
-  );
-}
+export default props => (
+  <Transpose {...props}>{({ lyrics }) => lyrics.map((section, i) => <SongLyricsSection key={i} section={section} />)}</Transpose>
+);
