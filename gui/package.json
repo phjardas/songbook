@@ -1,9 +1,10 @@
 {
   "name": "songbook-gui",
   "private": true,
+  "homepage": "https://songbook-pi.firebaseapp.com/",
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build"
+    "build": "REACT_APP_GRAPHQL_ENDPOINT=https://us-central1-songbook-pi.cloudfunctions.net/api/graphql react-scripts build"
   },
   "dependencies": {
     "apollo-cache-inmemory": "^1.3.9",

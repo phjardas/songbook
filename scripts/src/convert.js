@@ -27,6 +27,6 @@ async function main(args) {
   if (args.output === '-') {
     console.log(JSON.stringify(song, null, 2));
   } else {
-    await writeFile(args.output, JSON.stringify(song), 'utf8');
+    await writeFile(args.output, JSON.stringify(song, null, 2), 'utf8');
   }
 }

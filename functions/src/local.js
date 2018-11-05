@@ -2,7 +2,12 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import express from 'express';
 import { graphiqlExpress, graphqlExpress } from 'graphql-server-express';
-import { schema } from './schema';
+import { makeExecutableSchema } from 'graphql-tools';
+import { typeDefs } from './typeDefs';
+
+const resolvers = process.env.LOCAL_RESOLVERS === 'true' ? require('./resolvers-local') : require('resolvers');
+
+const schema = makeExecutableSchema({ typeDefs, resolvers });
 
 export const app = express();
 app.use(cors());
