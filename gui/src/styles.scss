@@ -1,0 +1,9 @@
+@import '~bootstrap/scss/bootstrap';
+
+a.list-group-item {
+  color: $body-color;
+}
+
+.list-group-item-text:last-child {
+  margin-bottom: 0;
+}
