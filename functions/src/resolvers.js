@@ -5,7 +5,10 @@ const firestore = firebase.firestore();
 firestore.settings({ timestampsInSnapshots: true });
 
 async function getSongs() {
-  const { docs } = await firestore.collection('songs').get();
+  const { docs } = await firestore
+    .collection('songs')
+    .orderBy('title')
+    .get();
   return docs.map(doc => ({ ...doc.data(), id: doc.id }));
 }
 
