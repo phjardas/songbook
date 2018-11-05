@@ -4,12 +4,12 @@ import Transpose from './Transpose';
 
 export default props => (
   <Transpose {...props}>
-    {({ lyrics }) =>
-      lyrics.map((section, i) => (
-        <div className="mt-5">
+    {({ lyrics }) => (
+      <div className="mt-5">
+        {lyrics.map((section, i) => (
           <SongLyricsSection key={i} section={section} />
-        </div>
-      ))
-    }
+        ))}
+      </div>
+    )}
   </Transpose>
 );

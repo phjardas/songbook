@@ -9,7 +9,7 @@ const minorKeys = ['Cm', 'C#m', 'Dm', 'D#m', 'Ebm', 'Em', 'Fm', 'F#m', 'Gm', 'G#
 
 const TransposeBox = styled(Alert)`
   @media (min-width: 768px) {
-    margin-top: -7rem;
+    margin-top: -6rem;
   }
 
   @media print {

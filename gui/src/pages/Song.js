@@ -4,12 +4,14 @@ import { Alert } from 'reactstrap';
 import Layout from '../components/Layout';
 import Loading from '../components/Loading';
 import PaddedContent from '../components/PaddedContent';
+import PageQR from '../components/PageQR';
 import { songQuery } from './queries';
 import SongLyrics from './SongLyrics';
 
 function Song({ song }) {
   return (
     <>
+      <PageQR />
       <h1 className="mb-0">{song.title}</h1>
       <h2 className="mb-3">
         <small className="text-muted">by {song.author}</small>
