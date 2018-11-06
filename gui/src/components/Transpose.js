@@ -64,7 +64,7 @@ export default class Transpose extends React.Component {
 
     const transposer = chord => {
       if (!chord.trim()) return chord;
-      return transpose(sanitizeChord(chord))
+      return transpose(chord)
         .fromKey(originalKey)
         .toKey(transposedKey)
         .toString();
@@ -83,8 +83,4 @@ export default class Transpose extends React.Component {
       transposedLyrics,
     });
   };
-}
-
-function sanitizeChord(chord) {
-  return chord.replace(/^Gbm/, 'F#m');
 }
