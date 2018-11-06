@@ -4,8 +4,8 @@ import FontAwesome from './FontAwesome';
 
 export default function Loading({ message = 'loading…' }) {
   return (
-    <Alert color="info">
-      <FontAwesome icon="spinner" className="fa-pulse" /> {message}
+    <Alert color="secondary">
+      <FontAwesome icon="spinner" className="fa-pulse mr-2" /> {message}
     </Alert>
   );
 }
