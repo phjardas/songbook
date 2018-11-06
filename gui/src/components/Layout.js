@@ -12,7 +12,7 @@ export default function Layout({ title, icon = 'music', children }) {
       </Helmet>
       <Navbar color="primary" dark fixed="top" className="navbar-expand">
         <Container>
-          <NavbarBrand to="/" tag={RRLink}>
+          <NavbarBrand to="/songs" tag={RRLink}>
             <FontAwesome icon={icon} className="ml-3 mr-2" />
             {title || 'Songbook'}
           </NavbarBrand>
