@@ -4,8 +4,7 @@ import express from 'express';
 import { graphiqlExpress, graphqlExpress } from 'graphql-server-express';
 import { makeExecutableSchema } from 'graphql-tools';
 import { typeDefs } from './typeDefs';
-
-const resolvers = process.env.LOCAL_RESOLVERS === 'true' ? require('./resolvers-local') : require('resolvers');
+import { resolvers } from './resolvers-local';
 
 const schema = makeExecutableSchema({ typeDefs, resolvers });
 
