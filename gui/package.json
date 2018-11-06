@@ -1,10 +1,10 @@
 {
   "name": "songbook-gui",
   "private": true,
-  "homepage": "https://songbook-pi.firebaseapp.com/",
+  "homepage": "https://songbook.jardas.de/",
   "scripts": {
     "start": "react-scripts start",
-    "build": "REACT_APP_GRAPHQL_ENDPOINT=https://us-central1-songbook-pi.cloudfunctions.net/api/graphql react-scripts build"
+    "build": "react-scripts build"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.8",
