@@ -1,17 +1,19 @@
 import React from 'react';
-import { Query } from 'react-apollo';
 import { Link } from 'react-router-dom';
 import { Alert, ListGroup, ListGroupItem, ListGroupItemHeading, ListGroupItemText } from 'reactstrap';
 import Layout from '../components/Layout';
 import Loading from '../components/Loading';
 import PaddedContent from '../components/PaddedContent';
-import { songLyricsQuery, songsQuery } from './queries';
+import { firestore } from '../firebase';
 
-function Songs({ songs, preloadData }) {
+function Songs({ loading, error, songs }) {
+  if (loading) return <Loading message="Loading songs…" />;
+  if (error) return <Alert color="danger">Error: {error.message}</Alert>;
+
   return (
     <ListGroup>
       {songs.map(song => (
-        <ListGroupItem key={song.id} tag={Link} to={`/songs/${song.id}`} onMouseOver={() => preloadData(song)}>
+        <ListGroupItem key={song.id} tag={Link} to={`/songs/${song.id}`}>
           <ListGroupItemHeading>{song.title}</ListGroupItemHeading>
           <ListGroupItemText>by {song.author}</ListGroupItemText>
         </ListGroupItem>
@@ -20,18 +22,38 @@ function Songs({ songs, preloadData }) {
   );
 }
 
-export default () => {
-  return (
-    <Layout title="Songs">
-      <PaddedContent>
-        <Query query={songsQuery}>
-          {({ loading, error, data, client }) => {
-            if (loading) return <Loading />;
-            if (error) return <Alert color="danger">Error: {error.message}</Alert>;
-            return <Songs songs={data.songs} preloadData={({ id }) => client.query({ query: songLyricsQuery, variables: { id } })} />;
-          }}
-        </Query>
-      </PaddedContent>
-    </Layout>
-  );
-};
+export default class SongsWrapper extends React.Component {
+  state = {
+    loading: true,
+    error: null,
+    songs: null,
+    subscription: null,
+  };
+
+  render() {
+    return (
+      <Layout title="Songs">
+        <PaddedContent>
+          <Songs {...this.state} />
+        </PaddedContent>
+      </Layout>
+    );
+  }
+
+  async componentDidMount() {
+    const subscription = firestore.collection('songs').onSnapshot({
+      next: snapshot => {
+        const songs = snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id })).sort((a, b) => a.title.localeCompare(b.title));
+        this.setState({ loading: false, error: null, songs });
+      },
+      error: error => this.setState({ loading: false, error, songs: null }),
+    });
+
+    this.setState({ subscription });
+  }
+
+  componentWillUnmount() {
+    const { subscription } = this.state;
+    if (subscription) subscription();
+  }
+}
