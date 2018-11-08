@@ -115,7 +115,7 @@ class ShareUser extends React.Component {
 
 class ShareSong extends React.Component {
   state = {
-    modalShown: true,
+    modalShown: false,
   };
 
   render() {
