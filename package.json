@@ -2,7 +2,7 @@
   "name": "songbook",
   "private": true,
   "scripts": {
-    "postinstall": "(cd gui && npm install) && (cd scripts && npm install)",
+    "postinstall": "npm --prefix gui install",
     "deploy": "firebase deploy"
   },
   "devDependencies": {
