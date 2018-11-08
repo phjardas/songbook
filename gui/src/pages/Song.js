@@ -1,13 +1,16 @@
 import React from 'react';
 import Link from 'react-router-dom/Link';
-import { Alert } from 'reactstrap';
+import { Alert, Button } from 'reactstrap';
+import FontAwesome from '../components/FontAwesome';
 import Layout from '../components/Layout';
 import Loading from '../components/Loading';
 import PaddedContent from '../components/PaddedContent';
 import PageQR from '../components/PageQR';
 import SongLyrics from '../components/SongLyrics';
+import UserInfo from '../components/UserInfo';
 import { firestore } from '../firebase';
 import { parseLyrics } from '../opensong';
+import { WithAuth } from '../providers/Auth';
 
 function Song({ song }) {
   return (
@@ -18,16 +21,31 @@ function Song({ song }) {
         <small className="text-muted">by {song.author}</small>
       </h2>
 
-      <Link to={`/songs/${song.id}/edit`} className="btn btn-outline-primary">
-        Edit song
-      </Link>
+      {song.isOwner ? (
+        <div className="d-print-none">
+          <Link to={`/songs/${song.id}/edit`} className="btn btn-outline-primary">
+            <FontAwesome icon="edit" className="mr-2" />
+            Edit
+          </Link>
+          <Button color="primary" outline className="mx-2" onClick={() => alert('TODO')}>
+            <FontAwesome icon="share-alt" className="mr-2" />
+            Share
+          </Button>
+        </div>
+      ) : (
+        <p>
+          <small>
+            <UserInfo id={song.owner}>{user => <span className="text-muted">Shared by {user.label}</span>}</UserInfo>
+          </small>
+        </p>
+      )}
 
       <SongLyrics lyrics={parseLyrics(song.lyrics)} originalKey={song.key} />
     </>
   );
 }
 
-export default class SongWrapper extends React.Component {
+class SongWrapper extends React.Component {
   state = {
     loading: true,
     error: null,
@@ -68,18 +86,20 @@ export default class SongWrapper extends React.Component {
   }
 
   async componentDidMount() {
-    const {
-      match: {
-        params: { songId },
-      },
-    } = this.props;
+    const { user, songId } = this.props;
 
     const subscription = firestore
       .collection('songs')
       .doc(songId)
       .onSnapshot({
         next: doc => {
-          const song = { ...doc.data(), id: doc.id };
+          const data = doc.data();
+          const song = {
+            ...data,
+            id: doc.id,
+            isOwner: user.id === data.owner,
+          };
+
           this.setState({ loading: false, error: null, song });
         },
         error: error => this.setState({ loading: false, error, song: null }),
@@ -93,3 +113,9 @@ export default class SongWrapper extends React.Component {
     if (subscription) subscription();
   }
 }
+
+export default ({
+  match: {
+    params: { songId },
+  },
+}) => <WithAuth>{({ user }) => <SongWrapper songId={songId} user={user} />}</WithAuth>;

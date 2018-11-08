@@ -27,7 +27,7 @@ export default class Transpose extends React.Component {
     const { children, lyrics, originalKey } = this.props;
 
     if (!originalKey) {
-      return children({ lyrics });
+      return <div className="mt-5">{children({ lyrics })}</div>;
     }
 
     const { transposedKey, transposedLyrics } = this.state;

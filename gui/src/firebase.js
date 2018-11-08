@@ -1,7 +1,10 @@
-import firebase from 'firebase/app';
+import Firebase from 'firebase/app';
+import 'firebase/auth';
 import 'firebase/firestore';
 
-const app = firebase.initializeApp(
+export { Firebase };
+
+const firebase = Firebase.initializeApp(
   {
     apiKey: 'AIzaSyB6JZLHNPTfY9y4pGxAIozZYnLhvoFDR2Y',
     authDomain: 'songbook-pi.firebaseapp.com',
@@ -13,6 +16,8 @@ const app = firebase.initializeApp(
   'songbook'
 );
 
-export const firestore = app.firestore();
+export const auth = firebase.auth();
+
+export const firestore = firebase.firestore();
 firestore.settings({ timestampsInSnapshots: true });
 firestore.enablePersistence().catch(error => console.error('Error enabling Firestore offline persistence:', error));
