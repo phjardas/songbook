@@ -54,7 +54,7 @@ export default class Transpose extends React.Component {
           </Form>
         </TransposeBox>
 
-        {children({ lyrics: transposedLyrics })}
+        <div className="mt-5">{children({ lyrics: transposedLyrics })}</div>
       </>
     );
   }

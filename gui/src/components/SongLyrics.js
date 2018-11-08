@@ -3,13 +3,5 @@ import SongLyricsSection from './SongLyricsSection';
 import Transpose from './Transpose';
 
 export default props => (
-  <Transpose {...props}>
-    {({ lyrics }) => (
-      <div className="mt-5">
-        {lyrics.map((section, i) => (
-          <SongLyricsSection key={i} section={section} />
-        ))}
-      </div>
-    )}
-  </Transpose>
+  <Transpose {...props}>{({ lyrics }) => lyrics.map((section, i) => <SongLyricsSection key={i} section={section} />)}</Transpose>
 );

@@ -1,4 +1,5 @@
 import React from 'react';
+import Link from 'react-router-dom/Link';
 import { Alert } from 'reactstrap';
 import Layout from '../components/Layout';
 import Loading from '../components/Loading';
@@ -16,6 +17,10 @@ function Song({ song }) {
       <h2 className="mb-3">
         <small className="text-muted">by {song.author}</small>
       </h2>
+
+      <Link to={`/songs/${song.id}/edit`} className="btn btn-outline-primary">
+        Edit song
+      </Link>
 
       <SongLyrics lyrics={parseLyrics(song.lyrics)} originalKey={song.key} />
     </>

@@ -5,6 +5,7 @@ import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import ContentUpdatedBanner from './components/ContentUpdatedBanner';
 import ScrollToTop from './components/ScrollToTop';
 import ServiceWorker from './components/ServiceWorker';
+import EditSong from './pages/EditSong';
 import Song from './pages/Song';
 import Songs from './pages/Songs';
 import './styles.scss';
@@ -21,6 +22,7 @@ export default function App() {
                   <TransitionGroup component={null}>
                     <CSSTransition key={location.pathname} classNames="fade" timeout={300}>
                       <Switch location={location}>
+                        <Route path="/songs/:songId/edit" component={EditSong} />
                         <Route path="/songs/:songId" component={Song} />
                         <Route path="/songs" component={Songs} />
                         <Route exact path="/">
