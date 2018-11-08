@@ -1,11 +1,12 @@
 import React from 'react';
 import Link from 'react-router-dom/Link';
-import { Alert, Button } from 'reactstrap';
+import { Alert } from 'reactstrap';
 import FontAwesome from '../components/FontAwesome';
 import Layout from '../components/Layout';
 import Loading from '../components/Loading';
 import PaddedContent from '../components/PaddedContent';
 import PageQR from '../components/PageQR';
+import ShareSong from '../components/ShareSong';
 import SongLyrics from '../components/SongLyrics';
 import UserInfo from '../components/UserInfo';
 import { firestore } from '../firebase';
@@ -27,10 +28,7 @@ function Song({ song }) {
             <FontAwesome icon="edit" className="mr-2" />
             Edit
           </Link>
-          <Button color="primary" outline className="mx-2" onClick={() => alert('TODO')}>
-            <FontAwesome icon="share-alt" className="mr-2" />
-            Share
-          </Button>
+          <ShareSong song={song} color="primary" outline className="mx-2" />
         </div>
       ) : (
         <p>

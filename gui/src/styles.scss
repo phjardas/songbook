@@ -10,26 +10,11 @@ a.list-group-item {
   margin-bottom: 0;
 }
 
-.fade-enter {
-  position: absolute;
-  top: 0;
-  left: 100vw;
-  width: 100%;
-}
-
-.fade-enter-active {
-  left: 0;
-  transition: left 250ms ease-out;
-}
-
-.fade-exit {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-}
-
-.fade-exit-active {
-  left: -100vw;
-  transition: left 250ms ease-out;
+.rbt {
+  mark {
+    padding: 0;
+    background: inherit;
+    color: inherit;
+    font-weight: 700;
+  }
 }
