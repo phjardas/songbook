@@ -3,6 +3,7 @@
   "private": true,
   "scripts": {
     "postinstall": "npm --prefix gui install",
+    "start": "npm --prefix gui start",
     "deploy": "firebase deploy"
   },
   "devDependencies": {
