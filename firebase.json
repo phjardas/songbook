@@ -3,6 +3,9 @@
     "rules": "firestore.rules",
     "indexes": "firestore.indexes.json"
   },
+  "functions": {
+    "predeploy": "npm --prefix functions run build"
+  },
   "hosting": {
     "public": "gui/build",
     "predeploy": "npm --prefix gui run build",

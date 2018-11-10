@@ -2,8 +2,10 @@
   "name": "songbook",
   "private": true,
   "scripts": {
-    "postinstall": "npm --prefix gui install",
-    "deploy": "firebase deploy"
+    "postinstall": "(npm --prefix gui install) && (npm --prefix functions install)",
+    "deploy": "firebase deploy",
+    "deploy:functions": "firebase deploy --only functions",
+    "deploy:hosting": "firebase deploy --only hosting"
   },
   "devDependencies": {
     "firebase-tools": "^6.0.1"
