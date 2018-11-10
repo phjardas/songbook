@@ -3,6 +3,7 @@
   "private": true,
   "scripts": {
     "postinstall": "(npm --prefix gui install) && (npm --prefix functions install)",
+    "start": "npm --prefix gui start",
     "deploy": "firebase deploy",
     "deploy:functions": "firebase deploy --only functions",
     "deploy:hosting": "firebase deploy --only hosting"

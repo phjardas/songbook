@@ -1,7 +1,8 @@
 import React from 'react';
-import { Button } from 'reactstrap';
+import { Button, ButtonGroup } from 'reactstrap';
 import styled from 'styled-components';
 import Error from '../components/Error';
+import FontAwesome from '../components/FontAwesome';
 import Loading from '../components/Loading';
 import Logo from '../components/Logo';
 import { WithAuth } from '../providers/Auth';
@@ -45,11 +46,15 @@ class SignIn extends React.Component {
           <Loading message="Signing you in…" />
         ) : (
           <>
-            {providers.map(provider => (
-              <Button key={provider.id} color="primary" onClick={() => this.signIn(provider.id)}>
-                Sign in with {provider.label}
-              </Button>
-            ))}
+            <p>Please sign in:</p>
+            <ButtonGroup>
+              {providers.map(provider => (
+                <Button key={provider.id} color="primary" outline onClick={() => this.signIn(provider.id)}>
+                  <FontAwesome icon={provider.icon} className="mr-2" />
+                  {provider.label}
+                </Button>
+              ))}
+            </ButtonGroup>
           </>
         )}
       </Splash>

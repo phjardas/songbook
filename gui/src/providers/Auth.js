@@ -7,8 +7,17 @@ const providers = [
   {
     id: 'google',
     label: 'Google',
+    icon: ['fab', 'google'],
     get provider() {
       return new Firebase.auth.GoogleAuthProvider();
+    },
+  },
+  {
+    id: 'github',
+    label: 'GitHub',
+    icon: ['fab', 'github'],
+    get provider() {
+      return new Firebase.auth.GithubAuthProvider();
     },
   },
 ];
