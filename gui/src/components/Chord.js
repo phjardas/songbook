@@ -1,25 +1,35 @@
+import { withStyles } from '@material-ui/core';
 import React from 'react';
-import styled from 'styled-components';
 import Pitch from './Pitch';
 
-const ChordSymbol = styled.span`
-  font-weight: bold;
-`;
-
-export default function Chord({ chord }) {
+function Chord({ chord, classes }) {
   if (!chord.trim()) return null;
   const m = chord.match(/^([CDEFGAB][b#]?)(m?)(.*?)(\/.*)?$/);
-  if (!m) return <ChordSymbol>{chord}</ChordSymbol>;
 
+  if (!m) {
+    return (
+      <span className={classes.chord}>
+        <Pitch pitch={chord} />
+      </span>
+    );
+  }
   // eslint-disable-next-line
   const [_, pitch, gender, alterations, inversion] = m;
 
   return (
-    <ChordSymbol>
+    <span className={classes.chord}>
       <Pitch pitch={pitch} />
       {gender}
       {alterations && <sup>{alterations}</sup>}
       {inversion}
-    </ChordSymbol>
+    </span>
   );
 }
+
+const styles = {
+  chord: {
+    fontWeight: 600,
+  },
+};
+
+export default withStyles(styles)(Chord);

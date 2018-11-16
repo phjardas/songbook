@@ -1,44 +1,108 @@
+import { AppBar, Avatar, IconButton, Menu, MenuItem, Toolbar, Typography, withStyles } from '@material-ui/core';
+import { AccountCircle as AccountCircleIcon, ChevronLeft as ChevronLeftIcon } from '@material-ui/icons';
 import React from 'react';
 import Helmet from 'react-helmet';
-import { NavLink as RRLink } from 'react-router-dom';
-import { Container, Navbar, NavbarBrand, Nav, UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
-import FontAwesome from './FontAwesome';
-import UserIcon from './UserIcon';
-import { WithAuth } from '../providers/Auth';
+import { Link } from 'react-router-dom';
+import { Authenticated } from '../providers/Auth';
+import Logo from './Logo';
 
-function Layout({ title, icon = 'music', back = '/songs', user, signOut, children }) {
-  return (
-    <div>
-      <Helmet titleTemplate="%s - Songbook" defaultTitle="Songbook">
-        <title>{title}</title>
-      </Helmet>
-      <Navbar color="primary" dark fixed="top" className="navbar-expand">
-        <Container>
-          <NavbarBrand to={back} tag={RRLink}>
-            <FontAwesome icon={icon} className="ml-3 mr-2" />
-            {title || 'Songbook'}
-          </NavbarBrand>
+class Layout extends React.Component {
+  state = {
+    authMenuOpened: false,
+  };
 
-          {user && (
-            <Nav navbar className="ml-auto">
-              <UncontrolledDropdown nav inNavbar>
-                <DropdownToggle nav caret>
-                  {user.photoURL ? <UserIcon user={user} /> : user.label}
-                </DropdownToggle>
-                <DropdownMenu right>
-                  {user.displayName && <DropdownItem>{user.displayName}</DropdownItem>}
-                  {user.email && <DropdownItem>{user.email}</DropdownItem>}
-                  <DropdownItem divider />
-                  <DropdownItem onClick={signOut}>Sign out</DropdownItem>
-                </DropdownMenu>
-              </UncontrolledDropdown>
-            </Nav>
-          )}
-        </Container>
-      </Navbar>
-      {children}
-    </div>
-  );
+  render() {
+    const { title, back, user, classes, children } = this.props;
+    const { authMenuOpened, authMenuAnchor } = this.state;
+
+    return (
+      <>
+        <Helmet titleTemplate="%s - Songbook" title={title} defaultTitle="Songbook">
+          <body className={classes.body} />
+        </Helmet>
+
+        <AppBar position="static">
+          <Toolbar>
+            <Link to={back || '/'} className={classes.title}>
+              {back ? <ChevronLeftIcon className={classes.titleIcon} /> : <Logo className={`${classes.logo} ${classes.titleIcon}`} />}
+              <Typography variant="h6" color="inherit">
+                {title || 'Songbook'}
+              </Typography>
+            </Link>
+
+            <>
+              <IconButton onClick={this.toggleAuthMenu} color="inherit">
+                {user.photoURL ? (
+                  <Avatar src={user.photoURL} />
+                ) : (
+                  <Avatar>
+                    <AccountCircleIcon />
+                  </Avatar>
+                )}
+              </IconButton>
+              <Menu
+                id="menu-appbar"
+                anchorEl={authMenuAnchor}
+                anchorOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                open={authMenuOpened}
+                onClose={this.closeAuthMenu}
+              >
+                {user.displayName && <MenuItem>{user.displayName}</MenuItem>}
+                {user.email && <MenuItem>{user.email}</MenuItem>}
+                <MenuItem onClick={this.signOut}>SignOut</MenuItem>
+              </Menu>
+            </>
+          </Toolbar>
+        </AppBar>
+
+        {children}
+      </>
+    );
+  }
+
+  toggleAuthMenu = event => {
+    event.preventDefault();
+    this.setState({ authMenuOpened: !this.state.authMenuOpened, authMenuAnchor: event.currentTarget });
+  };
+
+  closeAuthMenu = () => this.setState({ authMenuOpened: false, authMenuAnchor: undefined });
+
+  signOut = () => {
+    this.closeAuthMenu();
+    this.props.signOut();
+  };
 }
 
-export default props => <WithAuth>{({ user, signOut }) => <Layout {...props} user={user} signOut={signOut} />}</WithAuth>;
+const styles = ({ spacing }) => ({
+  body: {
+    background: 'white',
+  },
+  grow: {
+    flexGrow: 1,
+  },
+  title: {
+    display: 'flex',
+    color: 'inherit',
+    flexGrow: 1,
+    alignItems: 'center',
+    textDecoration: 'none',
+  },
+  logo: {
+    marginRight: spacing.unit,
+  },
+  titleIcon: {
+    width: '1.2em',
+    height: '1.2em',
+  },
+});
+
+const StyledLayout = withStyles(styles)(Layout);
+
+export default props => <Authenticated>{({ user, signOut }) => <StyledLayout {...props} user={user} signOut={signOut} />}</Authenticated>;

@@ -1,7 +1,4 @@
 import React from 'react';
-import { Alert, Button } from 'reactstrap';
-import styled from 'styled-components';
-import FontAwesome from './FontAwesome';
 
 const Banner = styled.div`
   position: fixed;

@@ -1,10 +1,9 @@
+import { TextField, withStyles } from '@material-ui/core';
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { Alert, Col, Form, FormGroup, Input, Label, Row } from 'reactstrap';
-import Error from '../components/Error';
+import ButtonLink from '../components/ButtonLink';
+import ErrorSnackbar from '../components/ErrorSnackbar';
 import Layout from '../components/Layout';
 import Loading from '../components/Loading';
-import PaddedContent from '../components/PaddedContent';
 import SaveButton from '../components/SaveButton';
 import SongLyrics from '../components/SongLyrics';
 import { firestore } from '../firebase';
@@ -24,61 +23,56 @@ class EditSong extends React.Component {
   };
 
   render() {
+    const { classes } = this.props;
     const { id, title, author, lyrics, key, saving, saved, error } = this.state;
 
     const updateField = field => e => this.setState({ [field]: e.target.value });
 
     return (
-      <Form onSubmit={this.save}>
-        <Row>
-          <Col md={5}>
-            <FormGroup>
-              <Label for="title">Title</Label>
-              <Input id="title" value={title} onChange={updateField('title')} disabled={saving} />
-            </FormGroup>
-          </Col>
+      <form onSubmit={this.save} className={classes.form}>
+        <TextField
+          id="title"
+          label="Title"
+          value={title}
+          required
+          onChange={updateField('title')}
+          disabled={saving}
+          className={classes.field}
+        />
+        <TextField
+          id="author"
+          label="Author"
+          value={author}
+          required
+          onChange={updateField('author')}
+          disabled={saving}
+          className={classes.field}
+        />
+        <TextField id="key" label="Key" value={key} onChange={updateField('key')} disabled={saving} className={classes.field} />
 
-          <Col md={5}>
-            <FormGroup>
-              <Label for="author">Author</Label>
-              <Input id="author" value={author} onChange={updateField('author')} disabled={saving} />
-            </FormGroup>
-          </Col>
+        <TextField
+          id="lyrics"
+          label="Lyrics"
+          value={lyrics}
+          multiline
+          rowsMax={100}
+          required
+          onChange={updateField('lyrics')}
+          className={classes.lyrics}
+        />
 
-          <Col md={2}>
-            <FormGroup>
-              <Label for="key">Key</Label>
-              <Input id="key" value={key} onChange={updateField('key')} disabled={saving} />
-            </FormGroup>
-          </Col>
-        </Row>
-
-        <Row>
-          <Col sm={12} lg={6}>
-            <h2>Lyrics</h2>
-            <Input type="textarea" value={lyrics} style={{ height: 600, fontFamily: 'monospace' }} onChange={updateField('lyrics')} />
-          </Col>
-          <Col sm={12} lg={6}>
-            <h2>Preview</h2>
-            <div style={{ height: 600, overflow: 'auto' }}>
-              <LyricsPreview lyrics={lyrics} />
-            </div>
-          </Col>
-        </Row>
-
-        {error && (
-          <div className="mt-3">
-            <Error message="Error saving song" error={error} />
-          </div>
-        )}
-
-        <div className="mt-3 d-flex flex-row-reverse justify-content-start align-items-center">
-          <SaveButton saving={saving} saved={saved} valid={title && author && lyrics} />
-          <Link to={`/songs/${id}`} className="text-secondary mx-3">
-            Cancel
-          </Link>
+        <div className={classes.preview}>
+          <h2>Preview</h2>
+          <LyricsPreview lyrics={lyrics} />
         </div>
-      </Form>
+
+        {error && <ErrorSnackbar message="Error saving song" error={error} />}
+
+        <div className={classes.actions}>
+          <SaveButton saving={saving} saved={saved} valid={title && author && lyrics} />
+          <ButtonLink to={`/songs/${id}`}>Cancel</ButtonLink>
+        </div>
+      </form>
     );
   }
 
@@ -99,6 +93,32 @@ class EditSong extends React.Component {
   };
 }
 
+const styles = ({ spacing }) => ({
+  form: {
+    padding: spacing.unit * 3,
+    display: 'flex',
+    flexWrap: 'wrap',
+  },
+  field: {
+    margin: spacing.unit,
+  },
+  lyrics: {
+    width: '100%',
+    margin: spacing.unit,
+  },
+  preview: {
+    width: '100%',
+  },
+  actions: {
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'row-reverse',
+    justifyContent: 'flex-start',
+  },
+});
+
+const StyledEditSong = withStyles(styles)(EditSong);
+
 export default class EditSongWrapper extends React.Component {
   state = {
     loading: true,
@@ -117,29 +137,23 @@ export default class EditSongWrapper extends React.Component {
 
     if (loading) {
       return (
-        <Layout title="loading…" icon="chevron-left" back={back}>
-          <PaddedContent>
-            <Loading />
-          </PaddedContent>
+        <Layout back={back}>
+          <Loading />
         </Layout>
       );
     }
 
     if (error) {
       return (
-        <Layout title="Error" icon="chevron-left" back={back}>
-          <PaddedContent>
-            <Alert color="danger">Error: {error.message}</Alert>
-          </PaddedContent>
+        <Layout back={back}>
+          <ErrorSnackbar error={error} />
         </Layout>
       );
     }
 
     return (
-      <Layout title={song.title} icon="chevron-left" back={back}>
-        <PaddedContent>
-          <EditSong song={song} saveSong={this.saveSong} />
-        </PaddedContent>
+      <Layout title={song.title} back={back}>
+        <StyledEditSong song={song} saveSong={this.saveSong} />
       </Layout>
     );
   }

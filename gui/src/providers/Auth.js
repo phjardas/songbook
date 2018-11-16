@@ -1,5 +1,7 @@
 import React from 'react';
-import { auth, firestore, Firebase } from '../firebase';
+import { auth, Firebase, firestore } from '../firebase';
+import GitHubIcon from '../icons/GitHub';
+import GoogleIcon from '../icons/Google';
 
 const Context = React.createContext();
 
@@ -7,7 +9,7 @@ const providers = [
   {
     id: 'google',
     label: 'Google',
-    icon: ['fab', 'google'],
+    icon: GoogleIcon,
     get provider() {
       return new Firebase.auth.GoogleAuthProvider();
     },
@@ -15,7 +17,7 @@ const providers = [
   {
     id: 'github',
     label: 'GitHub',
-    icon: ['fab', 'github'],
+    icon: GitHubIcon,
     get provider() {
       return new Firebase.auth.GithubAuthProvider();
     },
@@ -88,3 +90,7 @@ export class AuthProvider extends React.Component {
 }
 
 export const WithAuth = Context.Consumer;
+
+export function Authenticated({ children }) {
+  return <WithAuth>{({ user, signOut, signingOut }) => (user ? children({ user, signOut, signingOut }) : null)}</WithAuth>;
+}

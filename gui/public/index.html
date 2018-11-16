@@ -1,65 +1,90 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>Songbook</title>
 
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <title>Songbook</title>
+    <meta name="theme-color" content="#9c27b0" />
+    <link rel="apple-touch-icon" sizes="180x180" href="%PUBLIC_URL%/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="%PUBLIC_URL%/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="%PUBLIC_URL%/favicon-16x16.png" />
+    <link rel="manifest" href="%PUBLIC_URL%/site.webmanifest" />
+    <link rel="mask-icon" href="%PUBLIC_URL%/safari-pinned-tab.svg" color="#9c27b0" />
+    <meta name="apple-mobile-web-app-title" content="Songbook" />
+    <meta name="application-name" content="Songbook" />
+    <meta name="msapplication-TileColor" content="#9c27b0" />
 
-  <meta name="theme-color" content="#7b1fa2">
-  <link rel="apple-touch-icon" sizes="180x180" href="%PUBLIC_URL%/apple-touch-icon.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="%PUBLIC_URL%/favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="%PUBLIC_URL%/favicon-16x16.png">
-  <link rel="manifest" href="%PUBLIC_URL%/site.webmanifest">
-  <link rel="mask-icon" href="%PUBLIC_URL%/safari-pinned-tab.svg" color="#7b1fa2">
-  <meta name="apple-mobile-web-app-title" content="Songbook">
-  <meta name="application-name" content="Songbook">
-  <meta name="msapplication-TileColor" content="#7b1fa2">
-</head>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" />
+  </head>
 
-<body>
-  <noscript>
-    You need to enable JavaScript to run this app.
-  </noscript>
+  <body>
+    <noscript> You need to enable JavaScript to run this app. </noscript>
 
-  <div id="root">
-    <style>
-      .splash {
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-        font-size: 1rem;
-        font-weight: 400;
-        line-height: 1.5;
-        color: #7b1fa2;
-        position: absolute;
-        top: 0;
-        left: 0;
-        bottom: 0;
-        right: 0;
-        background: white;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-      }
+    <div id="root">
+      <style>
+        .splash {
+          position: absolute;
+          top: 0;
+          left: 0;
+          bottom: 0;
+          right: 0;
+          background: #fafafa;
+        }
 
-      .splash svg {
-        margin-bottom: 1rem;
-      }
+        .splash,
+        .splash * {
+          box-sizing: border-box;
+        }
 
-      .splash h1 {
-        font-size: 2.5rem;
-        font-weight: 500;
-        margin: 0;
-        line-height: 1.2;
-      }
-    </style>
-    <div class="splash">
-      <svg xmlns="http://www.w3.org/2000/svg" width="150" height="150" viewBox="0 0 512 512">
-        <path fill="currentColor" d="M511.99 32.01c0-21.71-21.1-37.01-41.6-30.51L150.4 96c-13.3 4.2-22.4 16.5-22.4 30.5v261.42c-10.05-2.38-20.72-3.92-32-3.92-53.02 0-96 28.65-96 64s42.98 64 96 64 96-28.65 96-64V214.31l256-75.02v184.63c-10.05-2.38-20.72-3.92-32-3.92-53.02 0-96 28.65-96 64s42.98 64 96 64 96-28.65 96-64l-.01-351.99z"></path>
-      </svg>
-      <h1>Songbook</h1>
+        .splash-card {
+          width: auto;
+          display: block;
+          margin: 64px 24px 0;
+          padding: 16px 24px 24px;
+
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+
+          background: #fff;
+          box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 3px 1px -2px rgba(0, 0, 0, 0.12);
+          border-radius: 4px;
+        }
+
+        @media (min-width: 448px) {
+          .splash-card {
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+          }
+        }
+
+        .splash svg {
+          color: #9c27b0;
+          margin: 8px;
+        }
+
+        .splash h1 {
+          font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
+          font-size: 1.5rem;
+          font-weight: 400;
+          margin: 0;
+          line-height: 1.33;
+        }
+      </style>
+      <div class="splash">
+        <div class="splash-card">
+          <svg xmlns="http://www.w3.org/2000/svg" width="150" height="150" viewBox="0 0 512 512">
+            <path
+              fill="currentColor"
+              d="M511.99 32.01c0-21.71-21.1-37.01-41.6-30.51L150.4 96c-13.3 4.2-22.4 16.5-22.4 30.5v261.42c-10.05-2.38-20.72-3.92-32-3.92-53.02 0-96 28.65-96 64s42.98 64 96 64 96-28.65 96-64V214.31l256-75.02v184.63c-10.05-2.38-20.72-3.92-32-3.92-53.02 0-96 28.65-96 64s42.98 64 96 64 96-28.65 96-64l-.01-351.99z"
+            ></path>
+          </svg>
+          <h1>Songbook</h1>
+        </div>
+      </div>
     </div>
-  </div>
-</body>
-
+  </body>
 </html>

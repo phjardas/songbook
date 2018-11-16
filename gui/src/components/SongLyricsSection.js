@@ -1,10 +1,6 @@
+import { withStyles } from '@material-ui/core';
 import React from 'react';
 import SongLyricsLine from './SongLyricsLine';
-import styled from 'styled-components';
-
-const Section = styled.div`
-  margin-bottom: 2rem;
-`;
 
 function translateSectionHeader(header) {
   if (header === 'B') return 'Bridge';
@@ -14,17 +10,24 @@ function translateSectionHeader(header) {
   return header;
 }
 
-function SongLyricsSectionHeader({ header }) {
-  return <h3>{translateSectionHeader(header)}</h3>;
-}
-
-export default function SongLyricsSection({ section: { header, lines } }) {
+function SongLyricsSection({ section: { header, lines }, classes }) {
   return (
-    <Section>
-      {header && <SongLyricsSectionHeader header={header} />}
+    <div className={classes.section}>
+      {header && <div className={classes.header}>{translateSectionHeader(header)}</div>}
       {lines.map(({ chords, lyrics }, i) => (
         <SongLyricsLine key={i} chords={chords} lyrics={lyrics} />
       ))}
-    </Section>
+    </div>
   );
 }
+
+const styles = ({ spacing, typography }) => ({
+  section: {
+    marginTop: spacing.unit * 3,
+  },
+  header: {
+    ...typography.h5,
+  },
+});
+
+export default withStyles(styles)(SongLyricsSection);
