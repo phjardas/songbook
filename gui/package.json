@@ -4,7 +4,9 @@
   "homepage": "https://songbook.jardas.de/",
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build"
+    "build": "react-scripts build",
+    "storybook": "start-storybook -p 9009 -s public",
+    "build-storybook": "build-storybook -s public"
   },
   "dependencies": {
     "@material-ui/core": "^3.4.0",
@@ -20,6 +22,11 @@
     "xml2js": "^0.4.19"
   },
   "devDependencies": {
+    "@babel/core": "^7.1.6",
+    "@storybook/addon-viewport": "^4.0.7",
+    "@storybook/addons": "^4.0.7",
+    "@storybook/react": "^4.0.7",
+    "babel-loader": "^8.0.4",
     "react-scripts": "2.1.1"
   },
   "eslintConfig": {

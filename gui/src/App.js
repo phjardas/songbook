@@ -1,23 +1,15 @@
 import { CssBaseline } from '@material-ui/core';
-import amber from '@material-ui/core/colors/amber';
-import purple from '@material-ui/core/colors/purple';
-import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
+import { MuiThemeProvider } from '@material-ui/core/styles';
 import React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
+import ContentUpdatedBanner from './components/ContentUpdatedBanner';
 import Loading from './components/Loading';
 import ServiceWorker from './components/ServiceWorker';
-// import ContentUpdatedBanner from './components/ContentUpdatedBanner';
 import SmallLayout from './components/SmallLayout';
 import Main from './pages/Main';
 import SignIn from './pages/SignIn';
 import { AuthProvider, WithAuth } from './providers/Auth';
-
-const theme = createMuiTheme({
-  palette: {
-    primary: purple,
-    secondary: amber,
-  },
-});
+import { theme } from './theme';
 
 export default function App() {
   return (
@@ -43,7 +35,7 @@ export default function App() {
             </AuthProvider>
           </Router>
 
-          {/* contentUpdated && <ContentUpdatedBanner /> */}
+          <ContentUpdatedBanner show={contentUpdated} />
         </MuiThemeProvider>
       )}
     </ServiceWorker>
