@@ -35,7 +35,7 @@ export default function App() {
             </AuthProvider>
           </Router>
 
-          <ContentUpdatedBanner show={contentUpdated} />
+          {contentUpdated && <ContentUpdatedBanner />}
         </MuiThemeProvider>
       )}
     </ServiceWorker>

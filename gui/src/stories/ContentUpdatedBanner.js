@@ -17,7 +17,7 @@ class Controller extends React.Component {
             {show ? 'hide' : 'show'}
           </Button>
         </Pad>
-        <ContentUpdatedBanner show={show} />
+        {show && <ContentUpdatedBanner />}
       </>
     );
   }
