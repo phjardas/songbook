@@ -1,41 +1,33 @@
 import { Snackbar } from '@material-ui/core';
-import * as React from 'react';
+import React, { useState, useEffect } from 'react';
 
-export default class CustomSnackbar extends React.Component {
-  state = {
-    open: false,
+export default function CustomSnackbar({ children }) {
+  const [timer, setTimer] = useState(null);
+  const [open, setOpen] = useState(true);
+
+  const handleClose = () => {
+    window.clearTimeout(timer);
+    setTimer(null);
+    setOpen(false);
   };
 
-  render() {
-    const { children } = this.props;
-    const { open } = this.state;
+  useEffect(() => {
+    const autoHideDuration = 6000;
+    const timer = window.setTimeout(handleClose, autoHideDuration);
+    setTimer(timer);
+    return () => window.clearTimeout(timer);
+  });
 
-    return (
-      <Snackbar
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'left',
-        }}
-        open={open}
-        onClose={this.handleClose}
-      >
-        {children}
-      </Snackbar>
-    );
-  }
-
-  componentDidMount() {
-    const { autoHideDuration = 6000 } = this.props;
-    const timer = window.setTimeout(this.handleClose, autoHideDuration);
-    this.setState({ open: true, timer });
-  }
-
-  componentWillUnmount() {
-    window.clearTimeout(this.state.timer);
-  }
-
-  handleClose = () => {
-    window.clearTimeout(this.state.timer);
-    this.setState({ open: false, timer: undefined });
-  };
+  return (
+    <Snackbar
+      anchorOrigin={{
+        vertical: 'bottom',
+        horizontal: 'left',
+      }}
+      open={open}
+      onClose={handleClose}
+    >
+      {children}
+    </Snackbar>
+  );
 }
