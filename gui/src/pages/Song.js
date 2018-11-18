@@ -1,12 +1,14 @@
 import { Typography, withStyles, Zoom } from '@material-ui/core';
 import { Edit as EditIcon } from '@material-ui/icons';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import ButtonLink from '../components/ButtonLink';
 import ErrorSnackbar from '../components/ErrorSnackbar';
 import Layout from '../components/Layout';
 import Loading from '../components/Loading';
 import PageQR from '../components/PageQR';
+import ShareSong from '../components/ShareSong';
 import SongLyrics from '../components/SongLyrics';
+import UserChip from '../components/UserChip';
 import { firestore } from '../firebase';
 import { parseLyrics } from '../opensong';
 import { WithAuth } from '../providers/Auth';
@@ -20,19 +22,21 @@ function Song({ song, classes, theme }) {
       </Typography>
       <Typography variant="subtitle1">by {song.author}</Typography>
 
-      {song.isOwner ? (
+      {!song.isOwner && (
+        <Typography variant="body2" component="div">
+          Shared by <UserChip id={song.owner} />
+        </Typography>
+      )}
+
+      {song.isOwner && (
         <>
           <Zoom in={true} timeout={theme.transitions.duration.enteringScreen}>
             <ButtonLink variant="fab" color="secondary" to={`/songs/${song.id}/edit`} className={classes.fab}>
               <EditIcon />
             </ButtonLink>
           </Zoom>
-          {/* <ShareSong song={song} color="primary" outline className="mx-2" /> */}
+          <ShareSong song={song} color="primary" />
         </>
-      ) : (
-        <p>
-          <small>{/* <UserInfo id={song.owner}>{user => <span className="text-muted">Shared by {user.label}</span>}</UserInfo> */}</small>
-        </p>
       )}
 
       <SongLyrics lyrics={parseLyrics(song.lyrics)} originalKey={song.key} />
@@ -58,67 +62,51 @@ const styles = ({ spacing }) => ({
 
 const StyledSong = withStyles(styles, { withTheme: true })(Song);
 
-class SongWrapper extends React.Component {
-  state = {
-    loading: true,
-    error: null,
-    song: null,
-    subscription: null,
-  };
+function SongWrapper({ user, songId }) {
+  const [{ loading, error, song }, setState] = useState({ loading: true });
 
-  render() {
-    const { loading, error, song } = this.state;
+  useEffect(
+    () =>
+      firestore
+        .collection('songs')
+        .doc(songId)
+        .onSnapshot({
+          next: doc => {
+            const data = doc.data();
+            const song = {
+              ...data,
+              id: doc.id,
+              isOwner: user.id === data.owner,
+            };
 
-    if (loading) {
-      return (
-        <Layout back="/">
-          <Loading />
-        </Layout>
-      );
-    }
+            setState({ loading: false, error: null, song });
+          },
+          error: error => setState({ loading: false, error, song: null }),
+        }),
+    [user, songId]
+  );
 
-    if (error) {
-      return (
-        <Layout back="/">
-          <ErrorSnackbar error={error} />
-        </Layout>
-      );
-    }
-
+  if (loading) {
     return (
-      <Layout title={song.title} back="/">
-        <StyledSong song={song} />
+      <Layout back="/">
+        <Loading />
       </Layout>
     );
   }
 
-  async componentDidMount() {
-    const { user, songId } = this.props;
-
-    const subscription = firestore
-      .collection('songs')
-      .doc(songId)
-      .onSnapshot({
-        next: doc => {
-          const data = doc.data();
-          const song = {
-            ...data,
-            id: doc.id,
-            isOwner: user.id === data.owner,
-          };
-
-          this.setState({ loading: false, error: null, song });
-        },
-        error: error => this.setState({ loading: false, error, song: null }),
-      });
-
-    this.setState({ subscription });
+  if (error) {
+    return (
+      <Layout back="/">
+        <ErrorSnackbar error={error} />
+      </Layout>
+    );
   }
 
-  componentWillUnmount() {
-    const { subscription } = this.state;
-    if (subscription) subscription();
-  }
+  return (
+    <Layout title={song.title} back="/">
+      <StyledSong song={song} />
+    </Layout>
+  );
 }
 
 export default ({

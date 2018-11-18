@@ -3,29 +3,44 @@ import { green } from '@material-ui/core/colors';
 import { Check as CheckIcon, Save as SaveIcon } from '@material-ui/icons';
 import React from 'react';
 
-function SaveButton({ saving, saved, valid, classes, ...props }) {
+const defaultTitles = {
+  save: 'Save',
+  saving: 'Saving…',
+  saved: 'Saved!',
+};
+
+const defaultIcons = {
+  save: SaveIcon,
+  saving: props => <CircularProgress size={24} color="inherit" {...props} />,
+  saved: CheckIcon,
+};
+
+function SaveButton({ saving, saved, valid, classes, titles, icons, color = 'primary', variant = 'contained', ...props }) {
+  titles = { ...defaultTitles, ...titles };
+  const Icons = { ...defaultIcons, ...icons };
+
   if (saving) {
     return (
-      <Button variant="contained" color="primary" disabled={true} className={classes.button} {...props}>
-        <CircularProgress size={24} color="inherit" className={classes.icon} />
-        Saving…
+      <Button variant={variant} color={color} disabled={true} className={classes.button} {...props}>
+        <Icons.saving className={classes.icon} />
+        {titles.saving}
       </Button>
     );
   }
 
   if (saved) {
     return (
-      <Button type="submit" variant="contained" className={`${classes.button} ${classes.success}`} {...props}>
-        <CheckIcon className={classes.icon} />
-        Saved!
+      <Button type="submit" variant={variant} className={`${classes.button} ${classes.success}`} {...props}>
+        <Icons.saved className={classes.icon} />
+        {titles.saved}
       </Button>
     );
   }
 
   return (
-    <Button type="submit" variant="contained" color="primary" disabled={!valid} className={classes.button} {...props}>
-      <SaveIcon className={classes.icon} />
-      Save
+    <Button type="submit" variant={variant} color={color} disabled={!valid} className={classes.button} {...props}>
+      <Icons.save className={classes.icon} />
+      {titles.save}
     </Button>
   );
 }

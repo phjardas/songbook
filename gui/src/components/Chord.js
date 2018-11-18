@@ -28,7 +28,7 @@ function Chord({ chord, classes }) {
 
 const styles = {
   chord: {
-    fontWeight: 600,
+    fontWeight: 500,
   },
 };
 
