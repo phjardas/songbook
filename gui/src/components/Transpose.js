@@ -77,6 +77,9 @@ const styles = ({ typography, spacing }) => ({
     padding: `${spacing.unit}px ${spacing.unit * 2}px`,
     marginTop: spacing.unit * 2,
     display: 'inline-block',
+    '@media print': {
+      display: 'none',
+    },
   },
   text: {
     marginRight: spacing.unit,

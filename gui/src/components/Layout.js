@@ -1,4 +1,4 @@
-import { AppBar, Avatar, IconButton, Menu, MenuItem, Toolbar, Typography, withStyles } from '@material-ui/core';
+import { AppBar, Avatar, IconButton, Menu, MenuItem, Toolbar, Typography, withStyles, Paper } from '@material-ui/core';
 import { AccountCircle as AccountCircleIcon, ChevronLeft as ChevronLeftIcon } from '@material-ui/icons';
 import React, { useState } from 'react';
 import Helmet from 'react-helmet';
@@ -27,7 +27,7 @@ function Layout({ title, back, user, signOut, classes, children }) {
         <body className={classes.body} />
       </Helmet>
 
-      <AppBar position="static">
+      <AppBar position="fixed" className={classes.appbar}>
         <Toolbar>
           <Link to={back || '/'} className={classes.title}>
             {back ? <ChevronLeftIcon className={classes.titleIcon} /> : <Logo className={`${classes.logo} ${classes.titleIcon}`} />}
@@ -68,17 +68,24 @@ function Layout({ title, back, user, signOut, classes, children }) {
         </Toolbar>
       </AppBar>
 
-      {children}
+      <Paper className={classes.main} square elevation={4}>
+        {children}
+      </Paper>
     </>
   );
 }
 
-const styles = ({ spacing }) => ({
+const styles = ({ breakpoints, spacing }) => ({
   body: {
     background: 'white',
   },
   grow: {
     flexGrow: 1,
+  },
+  appbar: {
+    '@media print': {
+      display: 'none',
+    },
   },
   title: {
     display: 'flex',
@@ -93,6 +100,14 @@ const styles = ({ spacing }) => ({
   titleIcon: {
     width: '1.2em',
     height: '1.2em',
+  },
+  main: {
+    marginTop: spacing.unit * 8,
+    [breakpoints.up('md')]: {
+      maxWidth: 800,
+      marginLeft: 'auto',
+      marginRight: 'auto',
+    },
   },
 });
 
