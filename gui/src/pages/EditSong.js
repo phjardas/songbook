@@ -39,7 +39,9 @@ export default class EditSongWrapper extends React.Component {
 
     return (
       <Layout title={song.title} back={back}>
-        <SongEditor song={song} saveSong={this.saveSong} />
+        <div style={{ padding: 16 }}>
+          <SongEditor song={song} saveSong={this.saveSong} />
+        </div>
       </Layout>
     );
   }
