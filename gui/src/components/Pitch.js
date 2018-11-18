@@ -11,11 +11,6 @@ export default function Pitch({ pitch }) {
   );
 }
 
-export function renderPitch(pitch) {
-  const { key, accidental, suffix } = parsePitch(pitch);
-  return `${key}${renderAccidental(accidental)}${suffix}`;
-}
-
 function parsePitch(pitch) {
   const m = pitch.match(/^([CDEFGAB])([b#]?)(.*)$/);
   if (!m) return pitch;

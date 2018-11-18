@@ -1,30 +1,47 @@
+import { Button, List, ListItem, ListItemText, withStyles, Zoom } from '@material-ui/core';
+import { Add as AddIcon } from '@material-ui/icons';
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ListGroup, ListGroupItem, ListGroupItemHeading, ListGroupItemText, Alert, Button } from 'reactstrap';
-import Error from '../components/Error';
+import Route from 'react-router-dom/Route';
+import ErrorSnackbar from '../components/ErrorSnackbar';
 import Layout from '../components/Layout';
 import Loading from '../components/Loading';
-import PaddedContent from '../components/PaddedContent';
 import { firestore } from '../firebase';
 import { WithAuth } from '../providers/Auth';
-import Route from 'react-router-dom/Route';
 
-function Songs({ loading, error, songs }) {
+function Songs({ loading, error, songs, createSong, classes, theme }) {
   if (loading) return <Loading message="Loading songs…" />;
-  if (error) return <Error error={error} />;
-  if (!songs.length) return <Alert color="info">You have no songs yet.</Alert>;
+  if (error) return <ErrorSnackbar error={error} />;
+  if (!songs.length) return <em>You have no songs yet.</em>;
 
   return (
-    <ListGroup>
-      {songs.map(song => (
-        <ListGroupItem key={song.id} tag={Link} to={`/songs/${song.id}`}>
-          <ListGroupItemHeading>{song.title || <em>no title</em>}</ListGroupItemHeading>
-          <ListGroupItemText>by {song.author || <em>no author</em>}</ListGroupItemText>
-        </ListGroupItem>
-      ))}
-    </ListGroup>
+    <>
+      <List>
+        {songs.map(song => (
+          <ListItem key={song.id} button component={Link} to={`/songs/${song.id}`}>
+            <ListItemText primary={song.title || <em>no title</em>} secondary={song.author || <em>no author</em>} />
+          </ListItem>
+        ))}
+      </List>
+
+      <Zoom in={true} timeout={theme.transitions.duration.enteringScreen}>
+        <Button variant="fab" color="secondary" onClick={createSong} className={classes.fab}>
+          <AddIcon />
+        </Button>
+      </Zoom>
+    </>
   );
 }
+
+const styles = ({ spacing }) => ({
+  fab: {
+    position: 'fixed',
+    bottom: spacing.unit * 2,
+    right: spacing.unit * 2,
+  },
+});
+
+const StyledSongs = withStyles(styles, { withTheme: true })(Songs);
 
 class SongsWrapper extends React.Component {
   state = {
@@ -37,14 +54,7 @@ class SongsWrapper extends React.Component {
   render() {
     return (
       <Layout title="Songs">
-        <PaddedContent>
-          <p>
-            <Button color="primary" onClick={this.createSong}>
-              Create song
-            </Button>
-          </p>
-          <Songs {...this.state} createSong={this.createSong} />
-        </PaddedContent>
+        <StyledSongs {...this.state} createSong={this.createSong} />
       </Layout>
     );
   }

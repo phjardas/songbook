@@ -1,22 +1,22 @@
 import React from 'react';
 import { QRCode } from 'react-qr-svg';
-import { withRouter } from 'react-router';
+import { withStyles } from '@material-ui/core';
 
-import styled from 'styled-components';
-
-const QR = styled(QRCode)`
-  width: 8rem;
-  float: right;
-
-  @media screen {
-    display: none;
-  }
-`;
-
-class PageQR extends React.Component {
-  render() {
-    return <QR bgColor="#FFFFFF" fgColor="#000000" level="L" value={window.location.href} />;
-  }
+function PageQR({ classes, ...props }) {
+  return <QRCode bgColor="#FFFFFF" fgColor="#000000" level="L" value={window.location.href} className={classes.qr} {...props} />;
 }
 
-export default withRouter(PageQR);
+const styles = {
+  qr: {
+    float: 'right',
+    width: 100,
+    height: 100,
+    marginLeft: 50,
+    marginBottom: 50,
+    '@media screen': {
+      display: 'none',
+    },
+  },
+};
+
+export default withStyles(styles)(PageQR);

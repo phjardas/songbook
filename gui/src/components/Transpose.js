@@ -1,33 +1,22 @@
+import { MenuItem, Paper, Select, withStyles } from '@material-ui/core';
 import { transpose } from 'chord-transposer';
 import React from 'react';
-import { Alert, CustomInput, Form } from 'reactstrap';
-import styled from 'styled-components';
-import Pitch, { renderPitch } from './Pitch';
+import Pitch from './Pitch';
 
 const majorKeys = ['C', 'Db', 'D', 'Eb', 'E', 'F', 'F#', 'Gb', 'G', 'Ab', 'A', 'Bb', 'B'];
 const minorKeys = ['Cm', 'C#m', 'Dm', 'D#m', 'Ebm', 'Em', 'Fm', 'F#m', 'Gm', 'G#m', 'Am', 'Bbm', 'Bm'];
 
-const TransposeBox = styled(Alert)`
-  @media (min-width: 768px) {
-    margin-top: -6rem;
-  }
-
-  @media print {
-    display: none;
-  }
-`;
-
-export default class Transpose extends React.Component {
+class Transpose extends React.Component {
   state = {
     transposedKey: this.props.originalKey,
     transposedLyrics: this.props.lyrics,
   };
 
   render() {
-    const { children, lyrics, originalKey } = this.props;
+    const { children, lyrics, originalKey, classes } = this.props;
 
     if (!originalKey) {
-      return <div className="mt-5">{children({ lyrics })}</div>;
+      return children({ lyrics });
     }
 
     const { transposedKey, transposedLyrics } = this.state;
@@ -35,26 +24,24 @@ export default class Transpose extends React.Component {
 
     return (
       <>
-        <TransposeBox color="info" className="float-md-right">
-          <Form inline>
-            <span className="mr-2">
-              Transpose from{' '}
-              <strong>
-                <Pitch pitch={originalKey} />
-              </strong>{' '}
-              to
-            </span>
-            <CustomInput id="transpose" type="select" value={transposedKey} onChange={e => this.transposeTo(e.target.value)}>
-              {keys.map(key => (
-                <option key={key} value={key}>
-                  {renderPitch(key)}
-                </option>
-              ))}
-            </CustomInput>
-          </Form>
-        </TransposeBox>
+        <Paper className={classes.box}>
+          <span className={classes.text}>
+            Transpose from{' '}
+            <strong>
+              <Pitch pitch={originalKey} />
+            </strong>{' '}
+            to
+          </span>
+          <Select id="transpose" value={transposedKey} onChange={e => this.transposeTo(e.target.value)}>
+            {keys.map(key => (
+              <MenuItem key={key} value={key}>
+                <Pitch pitch={key} />
+              </MenuItem>
+            ))}
+          </Select>
+        </Paper>
 
-        <div className="mt-5">{children({ lyrics: transposedLyrics })}</div>
+        {children({ lyrics: transposedLyrics })}
       </>
     );
   }
@@ -84,3 +71,20 @@ export default class Transpose extends React.Component {
     });
   };
 }
+
+const styles = ({ typography, spacing }) => ({
+  box: {
+    padding: `${spacing.unit}px ${spacing.unit * 2}px`,
+    marginTop: spacing.unit * 2,
+    display: 'inline-block',
+    '@media print': {
+      display: 'none',
+    },
+  },
+  text: {
+    marginRight: spacing.unit,
+    ...typography.body1,
+  },
+});
+
+export default withStyles(styles)(Transpose);

@@ -1,31 +1,32 @@
-import React from 'react';
-import { Alert, Button } from 'reactstrap';
-import styled from 'styled-components';
-import FontAwesome from './FontAwesome';
+import { Button, Snackbar, IconButton, withStyles } from '@material-ui/core';
+import { Close as CloseIcon } from '@material-ui/icons';
+import React, { useState } from 'react';
 
-const Banner = styled.div`
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  border-radius: 0;
-  z-index: 10;
+function ContentUpdatedBanner({ classes }) {
+  const [show, setShow] = useState(true);
+  const handleReload = () => window.location.reload(true);
+  const handleClose = () => setShow(false);
 
-  .alert {
-    margin: 0;
-  }
-`;
-
-export default function ContentUpdatedBanner() {
   return (
-    <Banner>
-      <Alert color="info">
-        <FontAwesome icon="exclamation-circle" className="mr-2" />
-        The app has been updated.{' '}
-        <Button color="info" onClick={() => window.location.reload()}>
-          Please reload
-        </Button>
-      </Alert>
-    </Banner>
+    <Snackbar
+      open={show}
+      anchorOrigin={{
+        vertical: 'bottom',
+        horizontal: 'left',
+      }}
+      message="The application has been updated"
+      action={[
+        <Button key="reload" color="secondary" size="small" onClick={handleReload}>
+          Reload
+        </Button>,
+        <IconButton key="close" color="inherit" onClick={handleClose} className={classes.close}>
+          <CloseIcon />
+        </IconButton>,
+      ]}
+    />
   );
 }
+
+const styles = ({ spacing }) => ({ close: { padding: spacing.unit / 2 } });
+
+export default withStyles(styles)(ContentUpdatedBanner);

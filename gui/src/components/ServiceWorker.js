@@ -1,22 +1,17 @@
-import React from 'react';
+import { useEffect, useState } from 'react';
 import * as serviceWorker from '../serviceWorker';
 
-export default class ServiceWorker extends React.Component {
-  state = {
-    contentUpdated: false,
-  };
+export default function ServiceWorker({ children }) {
+  const [contentUpdated, setUpdated] = useState(false);
 
-  render() {
-    const { children } = this.props;
-    return children(this.state);
-  }
-
-  componentDidMount() {
+  useEffect(() => {
     serviceWorker.register({
       onUpdate: () => {
         console.info('Cached content has been updated.');
-        this.setState({ contentUpdated: true });
+        setUpdated(true);
       },
     });
-  }
+  });
+
+  return children({ contentUpdated });
 }

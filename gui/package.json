@@ -4,31 +4,30 @@
   "homepage": "https://songbook.jardas.de/",
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build"
+    "build": "react-scripts build",
+    "storybook": "start-storybook -p 9009 -s public",
+    "build-storybook": "build-storybook -s public"
   },
   "dependencies": {
-    "@fortawesome/fontawesome-svg-core": "^1.2.8",
-    "@fortawesome/free-brands-svg-icons": "^5.5.0",
-    "@fortawesome/free-solid-svg-icons": "^5.5.0",
-    "@fortawesome/react-fontawesome": "^0.1.3",
-    "bootstrap": "^4.1.3",
+    "@material-ui/core": "^3.4.0",
+    "@material-ui/icons": "^3.0.1",
     "chord-transposer": "^2.0.1",
+    "downshift": "^3.1.5",
     "firebase": "^5.5.7",
-    "node-sass": "^4.10.0",
-    "react": "^16.6.0",
-    "react-bootstrap-typeahead": "^3.2.4",
-    "react-dom": "^16.6.0",
+    "react": "^16.7.0-alpha.2",
+    "react-dom": "^16.7.0-alpha.2",
     "react-helmet": "^5.2.0",
     "react-qr-svg": "^2.1.0",
     "react-router": "^4.3.1",
     "react-router-dom": "^4.3.1",
-    "react-transition-group": "^2.5.0",
-    "reactstrap": "^6.5.0",
-    "styled-components": "^4.0.3",
     "xml2js": "^0.4.19"
   },
   "devDependencies": {
-    "firebase-tools": "^6.0.1",
+    "@babel/core": "^7.1.6",
+    "@storybook/addon-viewport": "^4.0.7",
+    "@storybook/addons": "^4.0.7",
+    "@storybook/react": "^4.0.7",
+    "babel-loader": "^8.0.4",
     "react-scripts": "2.1.1"
   },
   "eslintConfig": {

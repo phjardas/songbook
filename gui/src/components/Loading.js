@@ -1,11 +1,26 @@
+import { CircularProgress, withStyles } from '@material-ui/core';
 import React from 'react';
-import { Alert } from 'reactstrap';
-import FontAwesome from './FontAwesome';
 
-export default function Loading({ message = 'loading…' }) {
+function Loading({ message = 'loading…', classes, className }) {
   return (
-    <Alert color="secondary">
-      <FontAwesome icon="spinner" className="fa-pulse mr-2" /> {message}
-    </Alert>
+    <div className={`${classes.main} ${className}`}>
+      <CircularProgress color="secondary" className={classes.progress} />
+      <span className={classes.message}>{message}</span>
+    </div>
   );
 }
+
+const styles = ({ spacing, typography }) => ({
+  main: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  progress: {},
+  message: {
+    marginTop: spacing.unit,
+    ...typography.body1,
+  },
+});
+
+export default withStyles(styles)(Loading);

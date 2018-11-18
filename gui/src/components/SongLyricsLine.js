@@ -1,56 +1,50 @@
+import { withStyles } from '@material-ui/core';
 import React from 'react';
 import Chord from './Chord';
-import styled from 'styled-components';
 
-const Table = styled.table`
-  margin-bottom: 0.5rem;
-  line-height: 1;
-`;
-
-const ChordsRow = styled.tr`
-  td {
-    line-height: 1.2;
-    padding-right: 0.5rem;
-
-    &:last-child {
-      padding-right: 0;
-    }
-  }
-`;
-
-const LyricsRow = styled.tr`
-  td {
-    padding-right: 0.2rem;
-
-    &:last-child {
-      padding-right: 0;
-    }
-  }
-`;
-
-export default function SongLyricsLine({ chords, lyrics }) {
+function SongLyricsLine({ chords, lyrics, classes }) {
   return (
-    <Table>
+    <table className={classes.table}>
       <tbody>
-        {chords &&
-          chords.length && (
-            <ChordsRow>
-              {chords.map((chord, i) => (
-                <td key={i}>
-                  <Chord chord={chord} />
-                </td>
-              ))}
-            </ChordsRow>
-          )}
-        {lyrics &&
-          lyrics.length && (
-            <LyricsRow>
-              {lyrics.map((lyric, i) => (
-                <td key={i}>{lyric}</td>
-              ))}
-            </LyricsRow>
-          )}
+        {chords && chords.length && (
+          <tr>
+            {chords.map((chord, i) => (
+              <td key={i} className={classes.chordsCell}>
+                <Chord chord={chord} />
+              </td>
+            ))}
+          </tr>
+        )}
+        {lyrics && lyrics.length && (
+          <tr>
+            {lyrics.map((lyric, i) => (
+              <td key={i} className={classes.lyricsCell}>
+                {lyric}
+              </td>
+            ))}
+          </tr>
+        )}
       </tbody>
-    </Table>
+    </table>
   );
 }
+
+const styles = ({ spacing, typography }) => ({
+  table: {
+    marginBottom: spacing.unit,
+    lineHeight: 1,
+  },
+  chordsCell: {
+    lineHeight: 1.2,
+    padding: '0 0.5rem 0 0',
+    verticalAlign: 'baseline',
+    ...typography.body1,
+  },
+  lyricsCell: {
+    padding: '0 0.1rem 0 0',
+    verticalAlign: 'baseline',
+    ...typography.body1,
+  },
+});
+
+export default withStyles(styles)(SongLyricsLine);
