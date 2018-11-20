@@ -1,12 +1,11 @@
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, Typography, withMobileDialog } from '@material-ui/core';
-import { Share as ShareIcon } from '@material-ui/icons';
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography, withMobileDialog } from '@material-ui/core';
 import React, { useState } from 'react';
 import { firestore } from '../../firebase';
 import { WithAuth } from '../../providers/Auth';
 import SharedUsers from './SharedUsers';
 import ShareUser from './ShareUser';
 
-function ShareSong({ song, user, fullScreen, ...rest }) {
+function ShareSong({ song, user, fullScreen, children }) {
   const [modalShown, setModalShown] = useState(false);
 
   const showModal = () => setModalShown(true);
@@ -33,9 +32,7 @@ function ShareSong({ song, user, fullScreen, ...rest }) {
 
   return (
     <>
-      <IconButton {...rest} onClick={showModal}>
-        <ShareIcon />
-      </IconButton>
+      {children({ onClick: showModal })}
       <Dialog open={modalShown} fullScreen={fullScreen} onClose={hideModal}>
         <DialogTitle>Share Song</DialogTitle>
         <DialogContent>

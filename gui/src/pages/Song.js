@@ -1,5 +1,5 @@
-import { Typography, withStyles } from '@material-ui/core';
-import { Edit as EditIcon } from '@material-ui/icons';
+import { IconButton, ListItemIcon, ListItemText, Menu, MenuItem, Typography, withStyles } from '@material-ui/core';
+import { Edit as EditIcon, MoreVert as MoreVertIcon, Share as ShareIcon } from '@material-ui/icons';
 import React, { useEffect, useState } from 'react';
 import ButtonLink from '../components/ButtonLink';
 import ErrorSnackbar from '../components/ErrorSnackbar';
@@ -13,6 +13,32 @@ import { firestore } from '../firebase';
 import { parseLyrics } from '../opensong';
 import { WithAuth } from '../providers/Auth';
 
+function SongMenu({ song, className }) {
+  const [anchor, setAnchor] = useState();
+
+  const toggle = e => setAnchor(anchor ? null : e.currentTarget);
+
+  return (
+    <div className={className}>
+      <IconButton onClick={toggle}>
+        <MoreVertIcon />
+      </IconButton>
+      <Menu open={!!anchor} anchorEl={anchor} onClose={toggle}>
+        <ShareSong song={song}>
+          {props => (
+            <MenuItem {...props}>
+              <ListItemIcon>
+                <ShareIcon />
+              </ListItemIcon>
+              <ListItemText primary="Share" />
+            </MenuItem>
+          )}
+        </ShareSong>
+      </Menu>
+    </div>
+  );
+}
+
 function Song({ song, classes }) {
   return (
     <Layout
@@ -20,7 +46,7 @@ function Song({ song, classes }) {
       back="/"
       fab={
         song.isOwner && (
-          <ButtonLink variant="fab" color="secondary" to={`/songs/${song.id}/edit`} className={`${classes.fab} ${classes.screenOnly}`}>
+          <ButtonLink variant="fab" color="secondary" to={`/songs/${song.id}/edit`}>
             <EditIcon />
           </ButtonLink>
         )
@@ -28,6 +54,9 @@ function Song({ song, classes }) {
     >
       <div className={classes.main}>
         <PageQR />
+
+        {song.isOwner && <SongMenu song={song} className={classes.menu} />}
+
         <Typography variant="h3" component="h1">
           {song.title}
         </Typography>
@@ -39,8 +68,6 @@ function Song({ song, classes }) {
           </Typography>
         )}
 
-        {song.isOwner && <ShareSong song={song} color="primary" className={classes.screenOnly} />}
-
         <SongLyrics lyrics={parseLyrics(song.lyrics)} originalKey={song.key} />
       </div>
     </Layout>
@@ -50,6 +77,12 @@ function Song({ song, classes }) {
 const styles = ({ spacing }) => ({
   main: {
     padding: spacing.unit * 3,
+  },
+  menu: {
+    float: 'right',
+    '@media print': {
+      display: 'none',
+    },
   },
   screenOnly: {
     '@media print': {
