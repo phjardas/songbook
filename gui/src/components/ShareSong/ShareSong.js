@@ -1,7 +1,8 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography, withMobileDialog } from '@material-ui/core';
 import React, { useState } from 'react';
+import { compose } from 'recompose';
 import { firestore } from '../../firebase';
-import { WithAuth } from '../../providers/Auth';
+import { withAuth } from '../../providers/Auth';
 import SharedUsers from './SharedUsers';
 import ShareUser from './ShareUser';
 
@@ -51,6 +52,7 @@ function ShareSong({ song, user, fullScreen, children }) {
   );
 }
 
-const ResponsiveShareSong = withMobileDialog()(ShareSong);
-
-export default props => <WithAuth>{({ user }) => <ResponsiveShareSong {...props} user={user} />}</WithAuth>;
+export default compose(
+  withMobileDialog(),
+  withAuth()
+)(ShareSong);

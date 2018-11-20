@@ -91,6 +91,10 @@ export class AuthProvider extends React.Component {
 
 export const WithAuth = Context.Consumer;
 
+export function withAuth() {
+  return Component => props => <WithAuth>{context => <Component {...props} {...context} />}</WithAuth>;
+}
+
 export function Authenticated({ children }) {
   return <WithAuth>{({ user, signOut, signingOut }) => (user ? children({ user, signOut, signingOut }) : null)}</WithAuth>;
 }

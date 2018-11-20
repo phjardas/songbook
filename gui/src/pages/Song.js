@@ -1,7 +1,8 @@
 import { IconButton, ListItemIcon, ListItemText, Menu, MenuItem, Typography, withStyles } from '@material-ui/core';
-import { Edit as EditIcon, MoreVert as MoreVertIcon, Share as ShareIcon } from '@material-ui/icons';
+import { Delete as DeleteIcon, Edit as EditIcon, MoreVert as MoreVertIcon, Share as ShareIcon } from '@material-ui/icons';
 import React, { useEffect, useState } from 'react';
 import ButtonLink from '../components/ButtonLink';
+import DeleteSong from '../components/DeleteSong';
 import ErrorSnackbar from '../components/ErrorSnackbar';
 import Layout from '../components/Layout';
 import Loading from '../components/Loading';
@@ -34,6 +35,16 @@ function SongMenu({ song, className }) {
             </MenuItem>
           )}
         </ShareSong>
+        <DeleteSong song={song}>
+          {props => (
+            <MenuItem {...props}>
+              <ListItemIcon>
+                <DeleteIcon />
+              </ListItemIcon>
+              <ListItemText primary="Delete" />
+            </MenuItem>
+          )}
+        </DeleteSong>
       </Menu>
     </div>
   );
