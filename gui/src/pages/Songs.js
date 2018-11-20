@@ -1,4 +1,4 @@
-import { Button, List, ListItem, ListItemText, withStyles, Zoom } from '@material-ui/core';
+import { Button, List, ListItem, ListItemText, withStyles } from '@material-ui/core';
 import { Add as AddIcon } from '@material-ui/icons';
 import React from 'react';
 import { Link } from 'react-router-dom';
@@ -9,13 +9,39 @@ import Loading from '../components/Loading';
 import { firestore } from '../firebase';
 import { WithAuth } from '../providers/Auth';
 
-function Songs({ loading, error, songs, createSong, classes, theme }) {
-  if (loading) return <Loading message="Loading songs…" />;
-  if (error) return <ErrorSnackbar error={error} />;
-  if (!songs.length) return <em>You have no songs yet.</em>;
+function Songs({ loading, error, songs, createSong, classes }) {
+  if (loading) {
+    return (
+      <Layout title="Songs">
+        <Loading message="Loading songs…" className={classes.loading} />
+      </Layout>
+    );
+  }
 
+  if (error) {
+    return (
+      <Layout title="Songs">
+        <ErrorSnackbar error={error} />
+      </Layout>
+    );
+  }
+
+  if (!songs.length) {
+    return (
+      <Layout title="Songs">
+        <em>You have no songs yet.</em>
+      </Layout>
+    );
+  }
   return (
-    <>
+    <Layout
+      title="Songs"
+      fab={
+        <Button variant="fab" color="secondary" onClick={createSong}>
+          <AddIcon />
+        </Button>
+      }
+    >
       <List>
         {songs.map(song => (
           <ListItem key={song.id} button component={Link} to={`/songs/${song.id}`}>
@@ -23,25 +49,17 @@ function Songs({ loading, error, songs, createSong, classes, theme }) {
           </ListItem>
         ))}
       </List>
-
-      <Zoom in={true} timeout={theme.transitions.duration.enteringScreen}>
-        <Button variant="fab" color="secondary" onClick={createSong} className={classes.fab}>
-          <AddIcon />
-        </Button>
-      </Zoom>
-    </>
+    </Layout>
   );
 }
 
 const styles = ({ spacing }) => ({
-  fab: {
-    position: 'fixed',
-    bottom: spacing.unit * 2,
-    right: spacing.unit * 2,
+  loading: {
+    padding: `${spacing.unit * 4}px 0`,
   },
 });
 
-const StyledSongs = withStyles(styles, { withTheme: true })(Songs);
+const StyledSongs = withStyles(styles)(Songs);
 
 class SongsWrapper extends React.Component {
   state = {
@@ -52,11 +70,7 @@ class SongsWrapper extends React.Component {
   };
 
   render() {
-    return (
-      <Layout title="Songs">
-        <StyledSongs {...this.state} createSong={this.createSong} />
-      </Layout>
-    );
+    return <StyledSongs {...this.state} createSong={this.createSong} />;
   }
 
   async componentDidMount() {
