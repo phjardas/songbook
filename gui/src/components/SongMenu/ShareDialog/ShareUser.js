@@ -1,9 +1,9 @@
 import { Grid, withStyles } from '@material-ui/core';
 import { Share as ShareIcon } from '@material-ui/icons';
 import React, { useState } from 'react';
-import { firestore } from '../../firebase';
-import ErrorSnackbar from '../ErrorSnackbar';
-import SaveButton from '../SaveButton';
+import { firestore } from '../../../firebase';
+import ErrorSnackbar from '../../ErrorSnackbar';
+import SaveButton from '../../SaveButton';
 import SelectUser from './SelectUser';
 
 function ShareUser({ ownerId, sharedUserIds, shareUser, classes }) {

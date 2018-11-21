@@ -1,108 +1,12 @@
-import { IconButton, ListItemIcon, ListItemText, Menu, MenuItem, Typography, withStyles } from '@material-ui/core';
-import { Delete as DeleteIcon, Edit as EditIcon, MoreVert as MoreVertIcon, Share as ShareIcon } from '@material-ui/icons';
+import { withStyles } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
-import ButtonLink from '../components/ButtonLink';
-import DeleteSong from '../components/DeleteSong';
+import { compose } from 'recompose';
 import ErrorSnackbar from '../components/ErrorSnackbar';
 import Layout from '../components/Layout';
 import Loading from '../components/Loading';
-import PageQR from '../components/PageQR';
-import ShareSong from '../components/ShareSong';
-import SongLyrics from '../components/SongLyrics';
-import UserChip from '../components/UserChip';
+import Song from '../components/Song';
 import { firestore } from '../firebase';
-import { parseLyrics } from '../opensong';
-import { WithAuth } from '../providers/Auth';
-
-function SongMenu({ song, className }) {
-  const [anchor, setAnchor] = useState();
-
-  const toggle = e => setAnchor(anchor ? null : e.currentTarget);
-
-  return (
-    <div className={className}>
-      <IconButton onClick={toggle}>
-        <MoreVertIcon />
-      </IconButton>
-      <Menu open={!!anchor} anchorEl={anchor} onClose={toggle}>
-        <ShareSong song={song}>
-          {props => (
-            <MenuItem {...props}>
-              <ListItemIcon>
-                <ShareIcon />
-              </ListItemIcon>
-              <ListItemText primary="Share" />
-            </MenuItem>
-          )}
-        </ShareSong>
-        <DeleteSong song={song}>
-          {props => (
-            <MenuItem {...props}>
-              <ListItemIcon>
-                <DeleteIcon />
-              </ListItemIcon>
-              <ListItemText primary="Delete" />
-            </MenuItem>
-          )}
-        </DeleteSong>
-      </Menu>
-    </div>
-  );
-}
-
-function Song({ song, classes }) {
-  return (
-    <Layout
-      title={song.title}
-      back="/"
-      fab={
-        song.isOwner && (
-          <ButtonLink variant="fab" color="secondary" to={`/songs/${song.id}/edit`}>
-            <EditIcon />
-          </ButtonLink>
-        )
-      }
-    >
-      <div className={classes.main}>
-        <PageQR />
-
-        {song.isOwner && <SongMenu song={song} className={classes.menu} />}
-
-        <Typography variant="h3" component="h1">
-          {song.title}
-        </Typography>
-        <Typography variant="subtitle1">by {song.author}</Typography>
-
-        {!song.isOwner && (
-          <Typography variant="body2" component="div" className={classes.screenOnly}>
-            Shared by <UserChip id={song.owner} />
-          </Typography>
-        )}
-
-        <SongLyrics lyrics={parseLyrics(song.lyrics)} originalKey={song.key} />
-      </div>
-    </Layout>
-  );
-}
-
-const styles = ({ spacing }) => ({
-  main: {
-    padding: spacing.unit * 3,
-  },
-  menu: {
-    float: 'right',
-    '@media print': {
-      display: 'none',
-    },
-  },
-  screenOnly: {
-    '@media print': {
-      display: 'none',
-    },
-  },
-});
-
-const StyledSong = withStyles(styles)(Song);
+import { withAuth } from '../providers/Auth';
 
 function SongWrapper({ user, songId, classes }) {
   const [{ loading, error, song }, setState] = useState({ loading: true });
@@ -144,17 +48,16 @@ function SongWrapper({ user, songId, classes }) {
     );
   }
 
-  return <StyledSong song={song} />;
+  return <Song song={song} />;
 }
 
-const StyledSongWrapper = withStyles(({ spacing }) => ({
+const styles = ({ spacing }) => ({
   loading: {
     padding: `${spacing.unit * 4}px 0`,
   },
-}))(SongWrapper);
+});
 
-export default ({
-  match: {
-    params: { songId },
-  },
-}) => <WithAuth>{({ user }) => <StyledSongWrapper songId={songId} user={user} />}</WithAuth>;
+export default compose(
+  withStyles(styles),
+  withAuth()
+)(({ match: { params: { songId } }, ...props }) => <SongWrapper songId={songId} {...props} />);

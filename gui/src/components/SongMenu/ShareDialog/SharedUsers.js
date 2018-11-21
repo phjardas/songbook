@@ -1,7 +1,7 @@
-import { CircularProgress, IconButton, List, ListItem, ListItemSecondaryAction, ListItemText, Typography, Avatar } from '@material-ui/core';
+import { Avatar, CircularProgress, IconButton, List, ListItem, ListItemSecondaryAction, ListItemText, Typography } from '@material-ui/core';
 import { Delete as DeleteIcon } from '@material-ui/icons';
 import React, { useState } from 'react';
-import UserInfo from '../UserInfo';
+import UserInfo from '../../UserInfo';
 
 function SharedUser({ userId, unshareUser }) {
   const [unsharing, setUnsharing] = useState(false);

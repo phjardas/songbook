@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { auth, Firebase, firestore } from '../firebase';
 import GitHubIcon from '../icons/GitHub';
 import GoogleIcon from '../icons/Google';
@@ -24,69 +24,59 @@ const providers = [
   },
 ];
 
-export class AuthProvider extends React.Component {
-  state = {
-    pending: true,
-    user: null,
-  };
+function authChangeHandler(setState) {
+  return async evt => {
+    if (evt) {
+      const now = new Date();
 
-  render() {
-    const { children } = this.props;
-    const { pending, user } = this.state;
+      const user = {
+        id: evt.uid,
+        displayName: evt.displayName,
+        email: evt.email,
+        photoURL: evt.photoURL,
+        label: evt.displayName || evt.email,
+      };
 
-    const value = {
-      pending,
-      providers,
-      signIn: this.signIn,
-      signOut: this.signOut,
-      user,
-    };
+      const userDoc = firestore.collection('users').doc(user.id);
+      const dbUser = await userDoc.get();
 
-    return <Context.Provider value={value}>{children}</Context.Provider>;
-  }
-
-  componentDidMount() {
-    auth.onAuthStateChanged(async evt => {
-      if (evt) {
-        const now = new Date();
-
-        const user = {
-          id: evt.uid,
-          displayName: evt.displayName,
-          email: evt.email,
-          photoURL: evt.photoURL,
-          label: evt.displayName || evt.email,
-        };
-
-        const userDoc = firestore.collection('users').doc(user.id);
-        const dbUser = await userDoc.get();
-
-        if (!dbUser.exists) {
-          await userDoc.set({ ...user, signedUpAt: now, lastSignInAt: now });
-        } else {
-          await userDoc.update({ lastSignInAt: now });
-        }
-
-        this.setState({
-          pending: false,
-          user,
-        });
+      if (!dbUser.exists) {
+        await userDoc.set({ ...user, signedUpAt: now, lastSignInAt: now });
       } else {
-        this.setState({
-          pending: false,
-          user: null,
-        });
+        await userDoc.update({ lastSignInAt: now });
       }
-    });
-  }
 
-  signIn = providerId => {
-    const provider = providers.find(p => p.id === providerId);
-    if (!provider) throw new Error(`Invalid authentication provider: ${providerId}`);
-    return auth.signInWithPopup(provider.provider);
+      setState({
+        pending: false,
+        user,
+      });
+    } else {
+      setState({
+        pending: false,
+        user: null,
+      });
+    }
   };
+}
 
-  signOut = () => auth.signOut();
+function signIn(providerId) {
+  const provider = providers.find(p => p.id === providerId);
+  if (!provider) throw new Error(`Invalid authentication provider: ${providerId}`);
+  return auth.signInWithPopup(provider.provider);
+}
+
+function signOut() {
+  auth.signOut();
+}
+
+export function AuthProvider({ children }) {
+  const [{ pending, user }, setState] = useState({ pending: true });
+
+  useEffect(() => auth.onAuthStateChanged(authChangeHandler(setState)), []);
+
+  const value = { pending, providers, signIn, signOut, user };
+
+  return <Context.Provider value={value}>{children}</Context.Provider>;
 }
 
 export const WithAuth = Context.Consumer;
