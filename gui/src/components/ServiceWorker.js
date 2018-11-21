@@ -1,17 +1,17 @@
 import { useEffect, useState } from 'react';
-import * as serviceWorker from '../serviceWorker';
+import { registerServiceWorker } from '../serviceWorker';
 
 export default function ServiceWorker({ children }) {
   const [contentUpdated, setUpdated] = useState(false);
 
   useEffect(() => {
-    serviceWorker.register({
+    registerServiceWorker({
       onUpdate: () => {
         console.info('Cached content has been updated.');
         setUpdated(true);
       },
     });
-  });
+  }, []);
 
   return children({ contentUpdated });
 }

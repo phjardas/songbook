@@ -18,10 +18,12 @@ const isLocalhost = Boolean(
     window.location.hostname.match(/^127(?:\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}$/)
 );
 
-export function register(config) {
+export function registerServiceWorker(config) {
   if ('serviceWorker' in navigator) {
     // The URL constructor is available in all browsers that support SW.
     const publicUrl = new URL(process.env.PUBLIC_URL, window.location.href);
+    console.log('registerServiceWorker', { isLocalhost, config, publicUrl: publicUrl.origin, origin: window.location.origin });
+
     if (publicUrl.origin !== window.location.origin) {
       // Our service worker won't work if PUBLIC_URL is on a different origin
       // from what our page is served on. This might happen if a CDN is used to
@@ -99,12 +101,4 @@ function checkValidServiceWorker(swUrl, config) {
       }
     })
     .catch(() => console.warn('No internet connection found. App is running in offline mode.'));
-}
-
-export function unregister() {
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.ready.then(registration => {
-      registration.unregister();
-    });
-  }
 }
