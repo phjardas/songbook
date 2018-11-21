@@ -10,7 +10,6 @@ function Footer({ classes }) {
 const styles = ({ spacing, typography }) => ({
   main: {
     ...typography.caption,
-    textAlign: 'right',
     padding: `${spacing.unit * 2}px ${spacing.unit * 3}px`,
     '@media print': {
       display: 'none',
