@@ -1,14 +1,16 @@
 import React from 'react';
-import { Redirect, Switch } from 'react-router-dom';
-import Route from 'react-router-dom/Route';
-import ScrollToTop from '../components/ScrollToTop';
+import { Redirect, Route, Switch } from 'react-router-dom';
+import ContentUpdatedBanner from '../components/ContentUpdatedBanner';
+import Layout from '../components/Layout';
+import Notifications from '../components/Notifications';
+import { withServiceWorker } from '../providers/ServiceWorker';
 import EditSong from './EditSong';
 import Song from './Song';
 import Songs from './Songs';
 
-export default function Main() {
+function Main({ contentUpdated }) {
   return (
-    <ScrollToTop>
+    <Layout>
       <Switch>
         <Route path="/songs/:songId/edit" component={EditSong} />
         <Route path="/songs/:songId" component={Song} />
@@ -17,6 +19,10 @@ export default function Main() {
           {() => <Redirect to="/songs" />}
         </Route>
       </Switch>
-    </ScrollToTop>
+      <Notifications />
+      {contentUpdated && <ContentUpdatedBanner />}
+    </Layout>
   );
 }
+
+export default withServiceWorker(Main);

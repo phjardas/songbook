@@ -48,5 +48,5 @@ const styles = ({ palette }) => ({
 export default compose(
   withStyles(styles),
   withRouter,
-  withNotifications()
+  withNotifications
 )(DeleteDialog);

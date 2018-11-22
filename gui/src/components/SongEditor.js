@@ -20,13 +20,13 @@ class SongEditor extends React.Component {
   };
 
   render() {
-    const { classes } = this.props;
+    const { className, classes } = this.props;
     const { id, title, author, lyrics, key, saving, saved, error } = this.state;
 
     const updateField = field => e => this.setState({ [field]: e.target.value });
 
     return (
-      <form onSubmit={this.save}>
+      <form onSubmit={this.save} className={className}>
         <Grid container spacing={24}>
           <Grid item xs={12} sm={4}>
             <TextField id="title" label="Title" value={title} required onChange={updateField('title')} disabled={saving} fullWidth />
@@ -87,10 +87,10 @@ class SongEditor extends React.Component {
   };
 }
 
-const styles = ({ spacing }) => ({
+const styles = {
   lyricsInput: {
     fontFamily: 'monospace',
   },
-});
+};
 
 export default withStyles(styles)(SongEditor);

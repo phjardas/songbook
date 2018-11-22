@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { withConsumer } from './with';
 
 const Context = React.createContext();
 
@@ -23,7 +24,4 @@ export function NotificationsProvider({ children }) {
 }
 
 export const WithNotifications = Context.Consumer;
-
-export function withNotifications() {
-  return Component => props => <WithNotifications>{context => <Component {...props} {...context} />}</WithNotifications>;
-}
+export const withNotifications = withConsumer(WithNotifications);

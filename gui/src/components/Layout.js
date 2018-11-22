@@ -3,11 +3,14 @@ import { AccountCircle as AccountCircleIcon, ChevronLeft as ChevronLeftIcon } fr
 import React, { useEffect, useState } from 'react';
 import Helmet from 'react-helmet';
 import { Link } from 'react-router-dom';
-import { Authenticated } from '../providers/Auth';
+import { compose } from 'recompose';
+import { withAuthentication } from '../providers/Auth';
+import { withNotifications } from '../providers/Notifications';
+import { withPageData } from '../providers/PageData';
 import Footer from './Footer';
 import Logo from './Logo';
 
-function Layout({ title, back, user, signOut, fab, classes, theme, children }) {
+function Layout({ user, signOut, pageData: { title, back, fab } = {}, classes, theme, children }) {
   const [appBarElevation, setAppBarElevation] = useState(0);
   const [{ authMenuOpened, authMenuAnchor }, setAuthMenu] = useState({ authMenuOpened: false });
 
@@ -75,7 +78,7 @@ function Layout({ title, back, user, signOut, fab, classes, theme, children }) {
               </>
 
               {fab && (
-                <div className={classes.fab}>
+                <div key={title} className={classes.fab}>
                   <Zoom in={true} timeout={theme.transitions.duration.enteringScreen}>
                     {fab}
                   </Zoom>
@@ -132,12 +135,16 @@ const styles = ({ breakpoints, shadows, spacing, transitions }) => ({
   wrapper: {
     [breakpoints.up('md')]: {
       maxWidth: 900,
+      marginTop: spacing.unit * 2,
       marginLeft: 'auto',
       marginRight: 'auto',
     },
   },
 });
 
-const StyledLayout = withStyles(styles, { withTheme: true })(Layout);
-
-export default props => <Authenticated>{({ user, signOut }) => <StyledLayout {...props} user={user} signOut={signOut} />}</Authenticated>;
+export default compose(
+  withStyles(styles, { withTheme: true }),
+  withAuthentication,
+  withNotifications,
+  withPageData
+)(Layout);

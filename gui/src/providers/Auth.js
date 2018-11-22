@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { auth, Firebase, firestore } from '../firebase';
 import GitHubIcon from '../icons/GitHub';
 import GoogleIcon from '../icons/Google';
+import { withConsumer } from './with';
 
 const Context = React.createContext();
 
@@ -80,11 +81,9 @@ export function AuthProvider({ children }) {
 }
 
 export const WithAuth = Context.Consumer;
-
-export function withAuth() {
-  return Component => props => <WithAuth>{context => <Component {...props} {...context} />}</WithAuth>;
-}
+export const withAuth = withConsumer(WithAuth);
 
 export function Authenticated({ children }) {
   return <WithAuth>{({ user, signOut, signingOut }) => (user ? children({ user, signOut, signingOut }) : null)}</WithAuth>;
 }
+export const withAuthentication = withConsumer(Authenticated);

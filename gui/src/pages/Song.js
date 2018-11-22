@@ -1,19 +1,23 @@
 import { withStyles } from '@material-ui/core';
+import { Edit as EditIcon } from '@material-ui/icons';
 import React, { useEffect, useState } from 'react';
 import { compose } from 'recompose';
+import ButtonLink from '../components/ButtonLink';
 import ErrorSnackbar from '../components/ErrorSnackbar';
-import Layout from '../components/Layout';
 import Loading from '../components/Loading';
 import Song from '../components/Song';
 import { firestore } from '../firebase';
 import { withAuth } from '../providers/Auth';
+import { withPageData } from '../providers/PageData';
 
-function SongWrapper({ user, songId, classes }) {
+function SongWrapper({ user, songId, setPageData, classes }) {
   const [{ loading, error, song }, setState] = useState({ loading: true });
 
   useEffect(
-    () =>
-      firestore
+    () => {
+      setPageData({ back: '/', fab: null });
+
+      return firestore
         .collection('songs')
         .doc(songId)
         .onSnapshot({
@@ -26,28 +30,26 @@ function SongWrapper({ user, songId, classes }) {
             };
 
             setState({ loading: false, error: null, song });
+            setPageData({
+              title: song.title,
+              back: '/',
+              fab: song.isOwner && (
+                <ButtonLink variant="fab" color="secondary" to={`/songs/${song.id}/edit`}>
+                  <EditIcon />
+                </ButtonLink>
+              ),
+            });
           },
-          error: error => setState({ loading: false, error, song: null }),
-        }),
+          error: error => {
+            setState({ loading: false, error, song: null });
+          },
+        });
+    },
     [user, songId]
   );
 
-  if (loading) {
-    return (
-      <Layout back="/">
-        <Loading className={classes.loading} />
-      </Layout>
-    );
-  }
-
-  if (error) {
-    return (
-      <Layout back="/">
-        <ErrorSnackbar error={error} />
-      </Layout>
-    );
-  }
-
+  if (loading) return <Loading className={classes.loading} />;
+  if (error) return <ErrorSnackbar error={error} />;
   return <Song song={song} />;
 }
 
@@ -59,5 +61,6 @@ const styles = ({ spacing }) => ({
 
 export default compose(
   withStyles(styles),
-  withAuth()
+  withAuth,
+  withPageData
 )(({ match: { params: { songId } }, ...props }) => <SongWrapper songId={songId} {...props} />);

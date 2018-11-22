@@ -12,4 +12,4 @@ function Notifications({ notification }) {
   );
 }
 
-export default withNotifications()(Notifications);
+export default withNotifications(Notifications);

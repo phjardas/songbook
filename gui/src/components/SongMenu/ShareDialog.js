@@ -1,11 +1,12 @@
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography } from '@material-ui/core';
+import { Typography } from '@material-ui/core';
 import React from 'react';
 import { firestore } from '../../firebase';
 import { withAuth } from '../../providers/Auth';
+import { FullScreenDialog } from '../dialog';
 import SharedUsers from './ShareDialog/SharedUsers';
 import ShareUser from './ShareDialog/ShareUser';
 
-function ShareDialog({ song, user, hide, ...props }) {
+function ShareDialog({ song, user, hide, open, onClose }) {
   const shareUser = async userId => {
     const ref = firestore.collection('songs').doc(song.id);
     const doc = await ref.get();
@@ -26,21 +27,15 @@ function ShareDialog({ song, user, hide, ...props }) {
     .sort();
 
   return (
-    <Dialog {...props}>
-      <DialogTitle>Share Song</DialogTitle>
-      <DialogContent>
-        {sharedUserIds.length !== 0 ? (
-          <SharedUsers userIds={sharedUserIds} unshareUser={unshareUser} />
-        ) : (
-          <Typography variant="body1">You're not sharing this song yet.</Typography>
-        )}
-        <ShareUser ownerId={song.owner} sharedUserIds={sharedUserIds} shareUser={shareUser} />
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={hide}>Close</Button>
-      </DialogActions>
-    </Dialog>
+    <FullScreenDialog open={open} onClose={onClose} hide={hide} title="Share Song">
+      {sharedUserIds.length !== 0 ? (
+        <SharedUsers userIds={sharedUserIds} unshareUser={unshareUser} />
+      ) : (
+        <Typography variant="body1">You're not sharing this song yet.</Typography>
+      )}
+      <ShareUser ownerId={song.owner} sharedUserIds={sharedUserIds} shareUser={shareUser} />
+    </FullScreenDialog>
   );
 }
 
-export default withAuth()(ShareDialog);
+export default withAuth(ShareDialog);

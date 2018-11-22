@@ -83,7 +83,7 @@ const styles = ({ spacing }) => ({
     right: 0,
   },
   progress: {
-    margin: spacing.unit,
+    margin: spacing.unit * 2,
   },
 });
 
