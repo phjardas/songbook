@@ -31,19 +31,20 @@ function SongLyricsLine({ chords, lyrics, classes }) {
 
 const styles = ({ spacing, typography }) => ({
   table: {
-    marginBottom: spacing.unit,
+    marginBottom: spacing.unit / 2,
     lineHeight: 1,
   },
   chordsCell: {
-    lineHeight: 1.2,
     padding: '0 0.5rem 0 0',
     verticalAlign: 'baseline',
     ...typography.body1,
+    lineHeight: 1,
   },
   lyricsCell: {
     padding: '0 0.1rem 0 0',
     verticalAlign: 'baseline',
     ...typography.body1,
+    lineHeight: 1,
   },
 });
 

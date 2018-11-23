@@ -29,6 +29,7 @@ function Chord({ chord, classes }) {
 const styles = {
   chord: {
     fontWeight: 500,
+    color: 'rgba(0, 0, 0, 0.66)',
   },
 };
 
