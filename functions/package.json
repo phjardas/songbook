@@ -10,17 +10,8 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.1.2",
-    "apollo-server-express": "^2.1.0",
-    "body-parser": "^1.18.3",
-    "cors": "^2.8.5",
-    "express": "^4.16.4",
     "firebase-admin": "~6.0.0",
-    "firebase-functions": "^2.1.0",
-    "graphql": "^14.0.2",
-    "graphql-server-express": "^1.4.0",
-    "graphql-tag": "^2.10.0",
-    "graphql-tools": "^4.0.3",
-    "nodemailer": "^4.6.8"
+    "firebase-functions": "^2.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.1.2",

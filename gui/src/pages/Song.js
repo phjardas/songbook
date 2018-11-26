@@ -10,6 +10,18 @@ import { firestore } from '../firebase';
 import { withAuth } from '../providers/Auth';
 import { withPageData } from '../providers/PageData';
 
+function EditSongButton({ song }) {
+  return (
+    song.isOwner &&
+    (({ withLabel, classes = {}, ...props }) => (
+      <ButtonLink {...props} className={classes.root} to={`/songs/${song.id}/edit`}>
+        <EditIcon className={classes.icon} />
+        {withLabel && 'Edit song'}
+      </ButtonLink>
+    ))
+  );
+}
+
 function SongWrapper({ user, songId, setPageData, classes }) {
   const [{ loading, error, song }, setState] = useState({ loading: true });
 
@@ -33,11 +45,7 @@ function SongWrapper({ user, songId, setPageData, classes }) {
             setPageData({
               title: song.title,
               back: '/',
-              fab: song.isOwner && (
-                <ButtonLink variant="fab" color="secondary" to={`/songs/${song.id}/edit`}>
-                  <EditIcon />
-                </ButtonLink>
-              ),
+              Fab: EditSongButton({ song }),
             });
           },
           error: error => {

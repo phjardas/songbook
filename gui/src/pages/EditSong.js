@@ -18,7 +18,7 @@ function EditSongWrapper({
   const [{ loading, error, song }, setState] = useState({ loading: true });
 
   const loadSong = async () => {
-    setPageData({ back, fab: null });
+    setPageData({ back, Fab: null });
 
     try {
       const doc = await firestore

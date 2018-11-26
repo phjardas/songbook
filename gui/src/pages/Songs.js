@@ -9,7 +9,7 @@ import { firestore } from '../firebase';
 import { withAuth } from '../providers/Auth';
 import { withPageData } from '../providers/PageData';
 
-function Songs({ songs, createSong, setPageData }) {
+function Songs({ songs }) {
   return (
     <List>
       {songs.map(song => (
@@ -22,6 +22,15 @@ function Songs({ songs, createSong, setPageData }) {
 }
 
 const StyledSongs = compose(withPageData)(Songs);
+
+function NewSongButton({ createSong }) {
+  return ({ withLabel, classes = {}, ...props }) => (
+    <Button {...props} className={classes.root} onClick={createSong}>
+      <AddIcon className={classes.icon} />
+      {withLabel && 'New song'}
+    </Button>
+  );
+}
 
 function SongsWrapper({ user, history, setPageData, classes }) {
   const [{ loading, error, songs }, setState] = useState({ loading: true });
@@ -44,30 +53,23 @@ function SongsWrapper({ user, history, setPageData, classes }) {
       {
         title: 'Songs',
         back: null,
-        fab: (
-          <Button variant="fab" color="secondary" onClick={createSong}>
-            <AddIcon />
-          </Button>
-        ),
+        Fab: NewSongButton({ createSong }),
       },
       []
     );
 
-    return firestore
-      .collection('songs')
-      .where(`users.${user.id}`, '==', 'true')
-      .onSnapshot({
-        next: snapshot => {
-          const songs = snapshot.docs
-            .map(doc => ({
-              ...doc.data(),
-              id: doc.id,
-            }))
-            .sort((a, b) => (a.title || '').localeCompare(b.title || ''));
-          setState({ loading: false, error: null, songs });
-        },
-        error: error => setState({ loading: false, error, songs: null }),
-      });
+    return firestore.collection('songs').onSnapshot({
+      next: snapshot => {
+        const songs = snapshot.docs
+          .map(doc => ({
+            ...doc.data(),
+            id: doc.id,
+          }))
+          .sort((a, b) => (a.title || '').localeCompare(b.title || ''));
+        setState({ loading: false, error: null, songs });
+      },
+      error: error => setState({ loading: false, error, songs: null }),
+    });
   }, []);
 
   if (loading) return <Loading message="Loading songs…" className={classes.loading} />;

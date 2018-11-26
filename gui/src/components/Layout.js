@@ -1,18 +1,17 @@
-import { AppBar, Avatar, IconButton, Menu, MenuItem, Paper, Toolbar, Typography, withStyles, Zoom } from '@material-ui/core';
-import { AccountCircle as AccountCircleIcon, ChevronLeft as ChevronLeftIcon } from '@material-ui/icons';
+import { AppBar, Drawer, Hidden, IconButton, SwipeableDrawer, Toolbar, Typography, withStyles, Zoom } from '@material-ui/core';
+import { Menu as MenuIcon } from '@material-ui/icons';
 import React, { useEffect, useState } from 'react';
 import Helmet from 'react-helmet';
 import { Link } from 'react-router-dom';
 import { compose } from 'recompose';
-import { withAuthentication } from '../providers/Auth';
 import { withNotifications } from '../providers/Notifications';
 import { withPageData } from '../providers/PageData';
 import Footer from './Footer';
-import Logo from './Logo';
+import MainMenu, { drawerWidth } from './MainMenu';
 
-function Layout({ user, signOut, pageData: { title, back, fab } = {}, classes, theme, children }) {
+function Layout({ pageData: { title, back, Fab } = {}, classes, theme, children }) {
   const [appBarElevation, setAppBarElevation] = useState(0);
-  const [{ authMenuOpened, authMenuAnchor }, setAuthMenu] = useState({ authMenuOpened: false });
+  const [drawerOpen, setDrawerOpen] = useState(false);
 
   useEffect(() => {
     const onScroll = () => setAppBarElevation(window.scrollY > 0 ? 4 : 0);
@@ -20,86 +19,65 @@ function Layout({ user, signOut, pageData: { title, back, fab } = {}, classes, t
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  const toggleAuthMenu = event => {
-    event.preventDefault();
-    setAuthMenu({ authMenuOpened: !authMenuOpened, authMenuAnchor: event.currentTarget });
-  };
-
-  const closeAuthMenu = () => setAuthMenu({ authMenuOpened: false, authMenuAnchor: undefined });
-
-  const doSignOut = () => {
-    closeAuthMenu();
-    signOut();
-  };
+  const openDrawer = () => setDrawerOpen(true);
+  const closeDrawer = () => setDrawerOpen(false);
 
   return (
     <>
       <Helmet titleTemplate="%s - Songbook" title={title} defaultTitle="Songbook" />
 
-      <div className={classes.wrapper}>
-        <Paper square className={classes.paper} elevation={0}>
-          <AppBar position="sticky" elevation={appBarElevation} className={classes.appbar}>
-            <Toolbar>
-              <Link to={back || '/'} className={classes.title}>
-                {back ? <ChevronLeftIcon className={classes.titleIcon} /> : <Logo className={`${classes.logo} ${classes.titleIcon}`} />}
-                <Typography variant="h6" color="inherit">
-                  {title || 'Songbook'}
-                </Typography>
-              </Link>
+      <Hidden smDown>
+        <Drawer open={true} variant="permanent" classes={{ paper: classes.drawerPermanent }}>
+          <MainMenu onClose={closeDrawer} Fab={Fab} />
+        </Drawer>
+      </Hidden>
 
-              <>
-                <IconButton onClick={toggleAuthMenu} color="inherit">
-                  {user.photoURL ? (
-                    <Avatar src={user.photoURL} />
-                  ) : (
-                    <Avatar>
-                      <AccountCircleIcon />
-                    </Avatar>
-                  )}
-                </IconButton>
-                <Menu
-                  id="menu-appbar"
-                  anchorEl={authMenuAnchor}
-                  anchorOrigin={{
-                    vertical: 'top',
-                    horizontal: 'right',
-                  }}
-                  transformOrigin={{
-                    vertical: 'top',
-                    horizontal: 'right',
-                  }}
-                  open={authMenuOpened}
-                  onClose={closeAuthMenu}
-                >
-                  {user.displayName && <MenuItem>{user.displayName}</MenuItem>}
-                  {user.email && <MenuItem>{user.email}</MenuItem>}
-                  <MenuItem onClick={doSignOut}>SignOut</MenuItem>
-                </Menu>
-              </>
+      <Hidden mdUp>
+        <SwipeableDrawer open={drawerOpen} onClose={closeDrawer} onOpen={openDrawer}>
+          <MainMenu onClose={closeDrawer} />
+        </SwipeableDrawer>
+      </Hidden>
 
-              {fab && (
-                <div key={title} className={classes.fab}>
-                  <Zoom in={true} timeout={theme.transitions.duration.enteringScreen}>
-                    {fab}
-                  </Zoom>
-                </div>
-              )}
-            </Toolbar>
-          </AppBar>
+      <AppBar position="sticky" elevation={appBarElevation} className={classes.appbar}>
+        <Toolbar>
+          <IconButton color="inherit" onClick={openDrawer} className={classes.menuIcon}>
+            <MenuIcon />
+          </IconButton>
 
-          {children}
-        </Paper>
+          <Link to={back || '/'} className={classes.title}>
+            <Typography variant="h6" color="inherit">
+              {title || 'Songbook'}
+            </Typography>
+          </Link>
 
-        <Footer />
-      </div>
+          <Hidden mdUp>
+            {Fab && (
+              <div key={title} className={classes.fab}>
+                <Zoom in={true} timeout={theme.transitions.duration.enteringScreen}>
+                  <Fab variant="fab" color="secondary" withLabel={false} />
+                </Zoom>
+              </div>
+            )}
+          </Hidden>
+        </Toolbar>
+      </AppBar>
+
+      <main className={classes.main}>{children}</main>
+
+      <Footer />
     </>
   );
 }
 
-const styles = ({ breakpoints, shadows, spacing, transitions }) => ({
+const styles = ({ breakpoints, spacing, transitions }) => ({
   appbar: {
     transition: `box-shadow ${transitions.easing.easeInOut} ${transitions.duration.standard}ms`,
     '@media print': {
+      display: 'none',
+    },
+  },
+  menuIcon: {
+    [breakpoints.up('md')]: {
       display: 'none',
     },
   },
@@ -110,41 +88,25 @@ const styles = ({ breakpoints, shadows, spacing, transitions }) => ({
     alignItems: 'center',
     textDecoration: 'none',
   },
-  logo: {
-    marginRight: spacing.unit,
-  },
-  titleIcon: {
-    width: '1.2em',
-    height: '1.2em',
-  },
   fab: {
     position: 'fixed',
     bottom: spacing.unit * 2,
     right: spacing.unit * 2,
+  },
+  drawerPermanent: {
     [breakpoints.up('md')]: {
-      position: 'absolute',
-      bottom: -28,
-      right: 100,
+      marginTop: 64,
     },
   },
-  paper: {
+  main: {
     [breakpoints.up('md')]: {
-      boxShadow: shadows[2],
-    },
-  },
-  wrapper: {
-    [breakpoints.up('md')]: {
-      maxWidth: 900,
-      marginTop: spacing.unit * 2,
-      marginLeft: 'auto',
-      marginRight: 'auto',
+      marginLeft: drawerWidth,
     },
   },
 });
 
 export default compose(
   withStyles(styles, { withTheme: true }),
-  withAuthentication,
   withNotifications,
   withPageData
 )(Layout);
