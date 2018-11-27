@@ -1,16 +1,18 @@
-import React from 'react';
+import React, { lazy, Suspense } from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import ContentUpdatedBanner from '../components/ContentUpdatedBanner';
+import LayoutLoader from '../components/LayoutLoader';
 import Notifications from '../components/Notifications';
 import { withServiceWorker } from '../providers/ServiceWorker';
-import CreateSong from './CreateSong';
-import EditSong from './EditSong';
-import Song from './Song';
-import Songs from './Songs';
+
+const CreateSong = lazy(async () => import('./CreateSong'));
+const EditSong = lazy(async () => import('./EditSong'));
+const Song = lazy(async () => import('./Song'));
+const Songs = lazy(async () => import('./Songs'));
 
 function Main({ contentUpdated }) {
   return (
-    <>
+    <Suspense fallback={<LayoutLoader />}>
       <Switch>
         <Route exact path="/songs" component={Songs} />
         <Route exact path="/songs/_new" component={CreateSong} />
@@ -27,7 +29,7 @@ function Main({ contentUpdated }) {
       </Switch>
       <Notifications />
       {contentUpdated && <ContentUpdatedBanner />}
-    </>
+    </Suspense>
   );
 }
 

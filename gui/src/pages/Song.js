@@ -1,31 +1,16 @@
-import { withStyles } from '@material-ui/core';
 import React from 'react';
 import { withRouter } from 'react-router-dom';
 import { compose } from 'recompose';
 import CustomSnackbarContent from '../components/CustomSnackbarContent';
-import ErrorSnackbar from '../components/ErrorSnackbar';
-import Layout from '../components/layout';
-import Loading from '../components/Loading';
+import LayoutError from '../components/LayoutError';
+import LayoutLoader from '../components/LayoutLoader';
 import Song from '../components/Song';
 import { withNotifications } from '../providers/Notifications';
 import { SongProvider, withSong } from '../providers/Song';
 
-let SongWrapper = ({ loading, error, history, addNotification, publishSong, unpublishSong, classes, ...props }) => {
-  if (loading) {
-    return (
-      <Layout>
-        <Loading className={classes.loading} />
-      </Layout>
-    );
-  }
-
-  if (error) {
-    return (
-      <Layout>
-        <ErrorSnackbar error={error} />
-      </Layout>
-    );
-  }
+let SongWrapper = ({ loading, error, history, addNotification, publishSong, unpublishSong, ...props }) => {
+  if (loading) return <LayoutLoader />;
+  if (error) return <LayoutError error={error} />;
 
   const doPublishSong = async () => {
     const published = await publishSong();
@@ -48,14 +33,7 @@ let SongWrapper = ({ loading, error, history, addNotification, publishSong, unpu
   return <Song {...props} publishSong={doPublishSong} unpublishSong={doUnpublishSong} />;
 };
 
-const styles = ({ spacing }) => ({
-  loading: {
-    padding: `${spacing.unit * 4}px 0`,
-  },
-});
-
 SongWrapper = compose(
-  withStyles(styles),
   withRouter,
   withSong,
   withNotifications

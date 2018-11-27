@@ -1,9 +1,10 @@
 import { Button, withStyles } from '@material-ui/core';
-import * as React from 'react';
+import React from 'react';
+import { compose } from 'recompose';
 import ErrorSnackbar from '../components/ErrorSnackbar';
 import Loading from '../components/Loading';
 import SmallLayout from '../components/SmallLayout';
-import { WithAuth } from '../providers/Auth';
+import { withAuth } from '../providers/Auth';
 
 function SignInForm({ providers, signIn, signInError, classes }) {
   return (
@@ -21,14 +22,8 @@ function SignInForm({ providers, signIn, signInError, classes }) {
   );
 }
 
-function SignIn({ classes }) {
-  return (
-    <WithAuth>
-      {auth => (
-        <SmallLayout>{auth.signingIn ? <Loading message="Signing you in…" /> : <SignInForm {...auth} classes={classes} />}</SmallLayout>
-      )}
-    </WithAuth>
-  );
+function SignIn({ auth, classes }) {
+  return <SmallLayout>{auth.signingIn ? <Loading message="Signing you in…" /> : <SignInForm {...auth} classes={classes} />}</SmallLayout>;
 }
 
 const styles = ({ spacing, palette, typography }) => ({
@@ -56,4 +51,7 @@ const styles = ({ spacing, palette, typography }) => ({
   },
 });
 
-export default withStyles(styles)(SignIn);
+export default compose(
+  withAuth,
+  withStyles(styles)
+)(SignIn);
