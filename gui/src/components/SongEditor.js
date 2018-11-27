@@ -20,8 +20,12 @@ class SongEditor extends React.Component {
   };
 
   render() {
-    const { className, classes } = this.props;
-    const { id, title, author, lyrics, key, saving, saved, error } = this.state;
+    const {
+      song: { id, draft },
+      className,
+      classes,
+    } = this.props;
+    const { title, author, lyrics, key, saving, saved, error } = this.state;
 
     const updateField = field => e => this.setState({ [field]: e.target.value });
 
@@ -59,7 +63,7 @@ class SongEditor extends React.Component {
                 <SaveButton saving={saving} saved={saved} valid={title && author && lyrics} />
               </Grid>
               <Grid item>
-                <ButtonLink to={`/songs/${id}`}>Back</ButtonLink>
+                <ButtonLink to={draft ? '/drafts' : `/songs/${id}`}>Back</ButtonLink>
               </Grid>
             </Grid>
           </Grid>

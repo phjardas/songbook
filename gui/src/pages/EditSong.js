@@ -2,11 +2,11 @@ import { withStyles } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
 import { compose } from 'recompose';
 import ErrorSnackbar from '../components/ErrorSnackbar';
+import Layout from '../components/layout';
 import Loading from '../components/Loading';
 import SongEditor from '../components/SongEditor';
-import { firestore } from '../firebase';
-import Layout from '../components/layout';
 import { withAuthentication } from '../providers/Auth';
+import { getSongsCollection } from './data';
 
 function EditSong({ loading, error, song, saveSong, classes }) {
   if (loading) return <Loading className={classes.loading} />;
@@ -20,13 +20,7 @@ function EditSongWrapper({ match, user, classes }) {
     path,
   } = match;
 
-  const draft = path.startsWith('/');
-  const collection = draft
-    ? firestore
-        .collection('users')
-        .doc(user.id)
-        .collection('drafts')
-    : firestore.collection('songs');
+  const { draft, collection, toSong } = getSongsCollection({ path, user });
   const docRef = collection.doc(songId);
 
   const [state, setState] = useState({ loading: true });
@@ -34,9 +28,7 @@ function EditSongWrapper({ match, user, classes }) {
   const loadSong = async () => {
     try {
       const doc = await docRef.get();
-
-      const song = { ...doc.data(), id: doc.id, draft };
-      setState({ loading: false, error: null, song });
+      setState({ loading: false, error: null, song: toSong(doc) });
     } catch (error) {
       setState({ loading: false, error, song: null });
     }

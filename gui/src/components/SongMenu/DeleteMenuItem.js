@@ -5,7 +5,7 @@ import ModalController from '../ModalController';
 import DeleteDialog from './DeleteDialog';
 
 export default function DeleteMenuItem({ song, hideMenu, children }) {
-  if (!song.isOwner) return children(null);
+  if (!song.owned) return children(null);
 
   return (
     <ModalController>

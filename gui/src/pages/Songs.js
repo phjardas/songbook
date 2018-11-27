@@ -6,8 +6,8 @@ import CreateSongButton from '../components/CreateSongButton';
 import ErrorSnackbar from '../components/ErrorSnackbar';
 import Layout from '../components/layout';
 import Loading from '../components/Loading';
-import { firestore } from '../firebase';
 import { withAuth } from '../providers/Auth';
+import { getSongsCollection } from './data';
 
 let Songs = ({ loading, error, songs, classes }) => {
   if (loading) return <Loading message="Loading songs…" className={classes.loading} />;
@@ -17,7 +17,7 @@ let Songs = ({ loading, error, songs, classes }) => {
   return (
     <List>
       {songs.map(song => (
-        <ListItem key={song.id} button component={Link} to={`/songs/${song.id}`}>
+        <ListItem key={song.id} button component={Link} to={song.url}>
           <ListItemText primary={song.title || <em>no title</em>} secondary={song.author || <em>no author</em>} />
         </ListItem>
       ))}
@@ -33,32 +33,22 @@ const styles = ({ spacing }) => ({
 
 Songs = withStyles(styles)(Songs);
 
-function SongsWrapper({ user, match }) {
-  const draft = match.path.startsWith('/drafts');
-  const collection = draft
-    ? firestore
-        .collection('users')
-        .doc(user.id)
-        .collection('drafts')
-    : firestore.collection('songs');
-
+function SongsWrapper({ user, match: { path } }) {
+  const { collection, toSong } = getSongsCollection({ path, user });
   const [{ loading, error, songs }, setState] = useState({ loading: true });
 
-  useEffect(() => {
-    return collection.onSnapshot({
-      next: snapshot => {
-        const songs = snapshot.docs
-          .map(doc => ({
-            ...doc.data(),
-            id: doc.id,
-            draft,
-          }))
-          .sort((a, b) => (a.title || '').localeCompare(b.title || ''));
-        setState({ loading: false, error: null, songs });
-      },
-      error: error => setState({ loading: false, error, songs: null }),
-    });
-  }, []);
+  useEffect(
+    () => {
+      return collection.onSnapshot({
+        next: snapshot => {
+          const songs = snapshot.docs.map(toSong).sort((a, b) => (a.title || '').localeCompare(b.title || ''));
+          setState({ loading: false, error: null, songs });
+        },
+        error: error => setState({ loading: false, error, songs: null }),
+      });
+    },
+    [user, path]
+  );
 
   return (
     <Layout title="Songs" Fab={CreateSongButton}>

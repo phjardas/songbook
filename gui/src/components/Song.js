@@ -21,7 +21,7 @@ function Song({ song, classes }) {
       </Typography>
       <Typography variant="subtitle1">by {song.author}</Typography>
 
-      {!song.isOwner && (
+      {!song.owned && (
         <Typography variant="body2" component="div" className={classes.screenOnly}>
           Shared by <UserChip id={song.owner} />
         </Typography>

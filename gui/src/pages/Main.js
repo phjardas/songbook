@@ -4,7 +4,6 @@ import ContentUpdatedBanner from '../components/ContentUpdatedBanner';
 import Notifications from '../components/Notifications';
 import { withServiceWorker } from '../providers/ServiceWorker';
 import CreateSong from './CreateSong';
-import Drafts from './Drafts';
 import EditSong from './EditSong';
 import Song from './Song';
 import Songs from './Songs';
@@ -18,7 +17,7 @@ function Main({ contentUpdated }) {
         <Route exact path="/songs/:songId" component={Song} />
         <Route path="/songs/:songId/edit" component={EditSong} />
 
-        <Route exact path="/drafts" component={Drafts} />
+        <Route exact path="/drafts" component={Songs} />
         <Route path="/drafts/:songId" component={EditSong} />
 
         <Route exact path="/">

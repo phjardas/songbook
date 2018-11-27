@@ -1,18 +1,19 @@
 import { withStyles } from '@material-ui/core';
 import { Edit as EditIcon } from '@material-ui/icons';
 import React, { useEffect, useState } from 'react';
+import { withRouter } from 'react-router-dom';
 import { compose } from 'recompose';
 import ButtonLink from '../components/ButtonLink';
 import ErrorSnackbar from '../components/ErrorSnackbar';
+import Layout from '../components/layout';
 import Loading from '../components/Loading';
 import Song from '../components/Song';
-import { firestore } from '../firebase';
 import { withAuth } from '../providers/Auth';
-import Layout from '../components/layout';
+import { getSongsCollection } from './data';
 
 function EditSongButton({ song }) {
   return (
-    song.isOwner &&
+    song.owned &&
     (props => (
       <ButtonLink to={`/songs/${song.id}/edit`} {...props}>
         <EditIcon />
@@ -27,28 +28,27 @@ function SongContent({ loading, error, song, classes }) {
   return <Song song={song} />;
 }
 
-function SongWrapper({ user, songId, classes }) {
+function SongWrapper({
+  match: {
+    params: { songId },
+    path,
+  },
+  user,
+  classes,
+}) {
+  const { collection, toSong } = getSongsCollection({ path, user });
   const [state, setState] = useState({ loading: true });
 
   useEffect(
     () => {
-      return firestore
-        .collection('songs')
-        .doc(songId)
-        .onSnapshot({
-          next: doc => {
-            const data = doc.data();
-            const song = {
-              ...data,
-              id: doc.id,
-              isOwner: user.id === data.owner,
-            };
-            setState({ loading: false, error: null, song });
-          },
-          error: error => {
-            setState({ loading: false, error, song: null });
-          },
-        });
+      return collection.doc(songId).onSnapshot({
+        next: doc => {
+          setState({ loading: false, error: null, song: toSong(doc) });
+        },
+        error: error => {
+          setState({ loading: false, error, song: null });
+        },
+      });
     },
     [user, songId]
   );
@@ -69,5 +69,6 @@ const styles = ({ spacing }) => ({
 
 export default compose(
   withStyles(styles),
-  withAuth
-)(({ match: { params: { songId } }, ...props }) => <SongWrapper songId={songId} {...props} />);
+  withAuth,
+  withRouter
+)(SongWrapper);
