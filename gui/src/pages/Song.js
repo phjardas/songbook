@@ -8,27 +8,30 @@ import Loading from '../components/Loading';
 import Song from '../components/Song';
 import { firestore } from '../firebase';
 import { withAuth } from '../providers/Auth';
-import { withPageData } from '../providers/PageData';
+import Layout from '../components/layout';
 
 function EditSongButton({ song }) {
   return (
     song.isOwner &&
-    (({ withLabel, classes = {}, ...props }) => (
-      <ButtonLink {...props} className={classes.root} to={`/songs/${song.id}/edit`}>
-        <EditIcon className={classes.icon} />
-        {withLabel && 'Edit song'}
+    (props => (
+      <ButtonLink to={`/songs/${song.id}/edit`} {...props}>
+        <EditIcon />
       </ButtonLink>
     ))
   );
 }
 
-function SongWrapper({ user, songId, setPageData, classes }) {
-  const [{ loading, error, song }, setState] = useState({ loading: true });
+function SongContent({ loading, error, song, classes }) {
+  if (loading) return <Loading className={classes.loading} />;
+  if (error) return <ErrorSnackbar error={error} />;
+  return <Song song={song} />;
+}
+
+function SongWrapper({ user, songId, classes }) {
+  const [state, setState] = useState({ loading: true });
 
   useEffect(
     () => {
-      setPageData({ back: '/', fab: null });
-
       return firestore
         .collection('songs')
         .doc(songId)
@@ -40,13 +43,7 @@ function SongWrapper({ user, songId, setPageData, classes }) {
               id: doc.id,
               isOwner: user.id === data.owner,
             };
-
             setState({ loading: false, error: null, song });
-            setPageData({
-              title: song.title,
-              back: '/',
-              Fab: EditSongButton({ song }),
-            });
           },
           error: error => {
             setState({ loading: false, error, song: null });
@@ -56,9 +53,12 @@ function SongWrapper({ user, songId, setPageData, classes }) {
     [user, songId]
   );
 
-  if (loading) return <Loading className={classes.loading} />;
-  if (error) return <ErrorSnackbar error={error} />;
-  return <Song song={song} />;
+  const { song } = state;
+  return (
+    <Layout title={song && song.title} Fab={song && EditSongButton({ song })}>
+      <SongContent {...state} classes={classes} />
+    </Layout>
+  );
 }
 
 const styles = ({ spacing }) => ({
@@ -69,6 +69,5 @@ const styles = ({ spacing }) => ({
 
 export default compose(
   withStyles(styles),
-  withAuth,
-  withPageData
+  withAuth
 )(({ match: { params: { songId } }, ...props }) => <SongWrapper songId={songId} {...props} />);

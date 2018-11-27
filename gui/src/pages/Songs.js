@@ -1,15 +1,19 @@
-import { Button, List, ListItem, ListItemText, withStyles } from '@material-ui/core';
-import { Add as AddIcon } from '@material-ui/icons';
+import { List, ListItem, ListItemText, withStyles } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { compose } from 'recompose';
+import CreateSongButton from '../components/CreateSongButton';
 import ErrorSnackbar from '../components/ErrorSnackbar';
+import Layout from '../components/layout';
 import Loading from '../components/Loading';
 import { firestore } from '../firebase';
 import { withAuth } from '../providers/Auth';
-import { withPageData } from '../providers/PageData';
 
-function Songs({ songs }) {
+let Songs = ({ loading, error, songs, classes }) => {
+  if (loading) return <Loading message="Loading songs…" className={classes.loading} />;
+  if (error) return <ErrorSnackbar error={error} />;
+  if (!songs.length) return <em>You have no songs yet.</em>;
+
   return (
     <List>
       {songs.map(song => (
@@ -19,51 +23,35 @@ function Songs({ songs }) {
       ))}
     </List>
   );
-}
+};
 
-const StyledSongs = compose(withPageData)(Songs);
+const styles = ({ spacing }) => ({
+  loading: {
+    padding: `${spacing.unit * 4}px 0`,
+  },
+});
 
-function NewSongButton({ createSong }) {
-  return ({ withLabel, classes = {}, ...props }) => (
-    <Button {...props} className={classes.root} onClick={createSong}>
-      <AddIcon className={classes.icon} />
-      {withLabel && 'New song'}
-    </Button>
-  );
-}
+Songs = withStyles(styles)(Songs);
 
-function SongsWrapper({ user, history, setPageData, classes }) {
+function SongsWrapper({ user, match }) {
+  const draft = match.path.startsWith('/drafts');
+  const collection = draft
+    ? firestore
+        .collection('users')
+        .doc(user.id)
+        .collection('drafts')
+    : firestore.collection('songs');
+
   const [{ loading, error, songs }, setState] = useState({ loading: true });
 
-  const createSong = async () => {
-    const doc = await firestore.collection('songs').add({
-      title: '',
-      author: '',
-      key: '',
-      lyrics: '',
-      owner: user.id,
-      users: { [user.id]: 'true' },
-    });
-
-    history.push(`/songs/${doc.id}/edit`);
-  };
-
   useEffect(() => {
-    setPageData(
-      {
-        title: 'Songs',
-        back: null,
-        Fab: NewSongButton({ createSong }),
-      },
-      []
-    );
-
-    return firestore.collection('songs').onSnapshot({
+    return collection.onSnapshot({
       next: snapshot => {
         const songs = snapshot.docs
           .map(doc => ({
             ...doc.data(),
             id: doc.id,
+            draft,
           }))
           .sort((a, b) => (a.title || '').localeCompare(b.title || ''));
         setState({ loading: false, error: null, songs });
@@ -72,21 +60,14 @@ function SongsWrapper({ user, history, setPageData, classes }) {
     });
   }, []);
 
-  if (loading) return <Loading message="Loading songs…" className={classes.loading} />;
-  if (error) return <ErrorSnackbar error={error} />;
-  if (!songs.length) return <em>You have no songs yet.</em>;
-  return <StyledSongs songs={songs} createSong={createSong} />;
+  return (
+    <Layout title="Songs" Fab={CreateSongButton}>
+      <Songs loading={loading} error={error} songs={songs} />
+    </Layout>
+  );
 }
 
-const styles = ({ spacing }) => ({
-  loading: {
-    padding: `${spacing.unit * 4}px 0`,
-  },
-});
-
 export default compose(
-  withStyles(styles),
   withAuth,
-  withRouter,
-  withPageData
+  withRouter
 )(SongsWrapper);

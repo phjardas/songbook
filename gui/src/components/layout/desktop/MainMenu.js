@@ -1,34 +1,35 @@
-import { Avatar, List, ListItem, ListItemIcon, ListItemText, withStyles } from '@material-ui/core';
-import { AccountCircle as AccountCircleIcon, Create as CreateIcon, Edit as EditIcon, MusicNote as MusicNoteIcon } from '@material-ui/icons';
+import { Avatar, Divider, List, ListItem, ListItemIcon, ListItemText, withStyles } from '@material-ui/core';
+import { AccountCircle as AccountCircleIcon, Edit as EditIcon, MusicNote as MusicNoteIcon } from '@material-ui/icons';
 import React from 'react';
-import { NavLink } from 'react-router-dom';
 import { compose } from 'recompose';
-import { withAuthentication } from '../providers/Auth';
+import { withAuthentication } from '../../../providers/Auth';
+import NavListItem from '../NavListItem';
+import MainAction from './MainAction';
 
-export const drawerWidth = 240;
+export const drawerWidth = 256;
 
-function MainMenu({ user, signOut, onClose, classes }) {
-  console.log('classes:', classes);
+function DesktopMainMenu({ user, signOut, classes }) {
   return (
     <div className={classes.root}>
-      <ButtonLink to="/songs/_new" variant="extendedFab" color="secondary" className={classes.mainAction}>
-        <CreateIcon className={classes.mainActionIcon} />
-        Create song
-      </ButtonLink>
+      <MainAction className={classes.mainAction} />
 
       <List>
-        <ListItem button component={NavLink} to="/songs" onClick={onClose}>
+        <NavListItem to="/songs">
           <ListItemIcon>
             <MusicNoteIcon />
           </ListItemIcon>
           <ListItemText inset primary="Songs" />
-        </ListItem>
-        <ListItem button component={NavLink} to="/drafts" onClick={onClose}>
+        </NavListItem>
+
+        <NavListItem to="/drafts">
           <ListItemIcon>
             <EditIcon />
           </ListItemIcon>
           <ListItemText inset primary="Drafts" />
-        </ListItem>
+        </NavListItem>
+
+        <Divider />
+
         <ListItem className={classes.user}>
           <ListItemIcon>
             {user.photoURL ? (
@@ -49,30 +50,24 @@ function MainMenu({ user, signOut, onClose, classes }) {
   );
 }
 
-const styles = ({ breakpoints, spacing }) => ({
+const styles = ({ spacing }) => ({
   root: {
     width: drawerWidth,
   },
   user: {
-    height: 56,
-    [breakpoints.up('sm')]: {
-      height: 64,
-    },
+    height: 64,
   },
   userAvatar: {
     width: '1em',
     height: '1em',
     fontSize: 24,
   },
-  fab: {
+  mainAction: {
     margin: spacing.unit,
-  },
-  fabIcon: {
-    marginRight: spacing.unit,
   },
 });
 
 export default compose(
   withStyles(styles),
   withAuthentication
-)(MainMenu);
+)(DesktopMainMenu);

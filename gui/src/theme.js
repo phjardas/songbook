@@ -7,3 +7,5 @@ export const theme = createMuiTheme({
     secondary: amber,
   },
 });
+
+if (process.env.NODE_ENV === 'development') console.log('theme:', theme);

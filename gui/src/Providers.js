@@ -5,7 +5,6 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import { GlobalLoader } from './components/GlobalLoader';
 import { AuthProvider } from './providers/Auth';
 import { NotificationsProvider } from './providers/Notifications';
-import { PageDataProvider } from './providers/PageData';
 import { ServiceWorkerProvider } from './providers/ServiceWorker';
 import { theme } from './theme';
 
@@ -16,11 +15,9 @@ export default function Providers({ children }) {
       <Suspense fallback={<GlobalLoader />}>
         <ServiceWorkerProvider>
           <NotificationsProvider>
-            <PageDataProvider>
-              <AuthProvider>
-                <Router>{children}</Router>
-              </AuthProvider>
-            </PageDataProvider>
+            <AuthProvider>
+              <Router>{children}</Router>
+            </AuthProvider>
           </NotificationsProvider>
         </ServiceWorkerProvider>
       </Suspense>

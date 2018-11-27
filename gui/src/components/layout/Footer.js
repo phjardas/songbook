@@ -4,7 +4,7 @@ import React from 'react';
 const commitHash = process.env.REACT_APP_GIT_SHA || 'aabbccd';
 
 function Footer({ classes }) {
-  return <div className={classes.main}>Songbook v1.0.0 {commitHash}</div>;
+  return <footer className={classes.main}>Songbook v1.0.0 {commitHash}</footer>;
 }
 
 const styles = ({ spacing, typography }) => ({
