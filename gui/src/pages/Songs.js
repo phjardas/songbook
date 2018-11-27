@@ -7,7 +7,7 @@ import ErrorSnackbar from '../components/ErrorSnackbar';
 import Layout from '../components/layout';
 import Loading from '../components/Loading';
 import { withAuth } from '../providers/Auth';
-import { getSongsCollection } from './data';
+import { getSongsCollection } from '../providers/data';
 
 let Songs = ({ loading, error, songs, classes }) => {
   if (loading) return <Loading message="Loading songs…" className={classes.loading} />;
@@ -17,7 +17,7 @@ let Songs = ({ loading, error, songs, classes }) => {
   return (
     <List>
       {songs.map(song => (
-        <ListItem key={song.id} button component={Link} to={song.url}>
+        <ListItem key={song.id} button component={Link} to={song.meta.url}>
           <ListItemText primary={song.title || <em>no title</em>} secondary={song.author || <em>no author</em>} />
         </ListItem>
       ))}

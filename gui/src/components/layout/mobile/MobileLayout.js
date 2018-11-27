@@ -72,6 +72,9 @@ const styles = ({ spacing, transitions }) => ({
     position: 'fixed',
     bottom: spacing.unit * 2,
     right: spacing.unit * 2,
+    '@media print': {
+      display: 'none',
+    },
   },
 });
 

@@ -2,19 +2,14 @@ import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography, 
 import React from 'react';
 import { withRouter } from 'react-router';
 import { compose } from 'recompose';
-import { firestore } from '../../firebase';
 import { withNotifications } from '../../providers/Notifications';
 import CustomSnackbarContent from '../CustomSnackbarContent';
 
-function DeleteDialog({ song, history, addNotification, hide, classes, ...props }) {
+function DeleteDialog({ song, doc, history, addNotification, hide, classes, open, onClose }) {
   const deleteSong = async () => {
-    history.push('/songs');
+    history.push(song.meta.draft ? '/drafts' : '/songs');
 
-    await firestore
-      .collection('songs')
-      .doc(song.id)
-      .delete();
-    hide();
+    await doc.delete();
     addNotification({
       autoHideDuration: 3000,
       content: <CustomSnackbarContent message="The song was deleted." variant="success" />,
@@ -22,7 +17,7 @@ function DeleteDialog({ song, history, addNotification, hide, classes, ...props 
   };
 
   return (
-    <Dialog {...props}>
+    <Dialog open={open} onClose={onClose}>
       <DialogTitle>Delete Song</DialogTitle>
       <DialogContent>
         <Typography variant="body1">

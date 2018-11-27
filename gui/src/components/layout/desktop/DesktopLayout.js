@@ -30,13 +30,23 @@ const styles = ({ palette }) => ({
     backgroundColor: palette.background.paper,
     color: palette.text.primary,
     borderBottom: `1px solid ${palette.divider}`,
+    '@media print': {
+      display: 'none',
+    },
   },
   drawer: {
     marginTop: 65,
+    '@media print': {
+      display: 'none',
+      margin: 0,
+    },
   },
   main: {
     marginLeft: drawerWidth,
     marginTop: 65,
+    '@media print': {
+      margin: 0,
+    },
   },
 });
 

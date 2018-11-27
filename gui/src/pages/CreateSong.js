@@ -1,12 +1,12 @@
 import { withStyles } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
+import { withRouter } from 'react-router-dom';
 import { compose } from 'recompose';
+import ErrorSnackbar from '../components/ErrorSnackbar';
 import Layout from '../components/layout';
 import Loading from '../components/Loading';
-import ErrorSnackbar from '../components/ErrorSnackbar';
 import { firestore } from '../firebase';
 import { withAuth } from '../providers/Auth';
-import { withRouter } from 'react-router-dom';
 
 function CreateSong({ user, history, classes }) {
   const [error, setError] = useState();
@@ -26,7 +26,7 @@ function CreateSong({ user, history, classes }) {
         .doc(user.id)
         .collection('drafts')
         .add(song);
-      history.push(`/drafts/${doc.id}`);
+      history.push(`/drafts/${doc.id}/edit`);
     } catch (error) {
       setError(error);
     }

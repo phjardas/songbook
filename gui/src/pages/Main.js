@@ -13,12 +13,13 @@ function Main({ contentUpdated }) {
     <>
       <Switch>
         <Route exact path="/songs" component={Songs} />
-        <Route path="/songs/_new" component={CreateSong} />
+        <Route exact path="/songs/_new" component={CreateSong} />
         <Route exact path="/songs/:songId" component={Song} />
-        <Route path="/songs/:songId/edit" component={EditSong} />
+        <Route exact path="/songs/:songId/edit" component={EditSong} />
 
         <Route exact path="/drafts" component={Songs} />
-        <Route path="/drafts/:songId" component={EditSong} />
+        <Route exact path="/drafts/:songId" component={Song} />
+        <Route exact path="/drafts/:songId/edit" component={EditSong} />
 
         <Route exact path="/">
           {() => <Redirect to="/songs" />}

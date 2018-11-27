@@ -1,4 +1,4 @@
-import { Typography, withStyles } from '@material-ui/core';
+import { withStyles } from '@material-ui/core';
 import React, { useState } from 'react';
 import PageQR from '../components/PageQR';
 import SongLyrics from '../components/SongLyrics';
@@ -7,44 +7,46 @@ import TransposedLyrics from '../components/TransposedLyrics';
 import UserChip from '../components/UserChip';
 import { parseLyrics } from '../opensong';
 
-function Song({ song, classes }) {
+function Song({ classes, ...props }) {
+  const { song } = props;
   const [transposedKey, setTransposedKey] = useState(song.key);
 
   return (
-    <div className={classes.main}>
+    <>
       <PageQR />
+      <SongMenu {...props} transposedKey={transposedKey} onKeyChange={setTransposedKey} />
 
-      <SongMenu song={song} className={classes.menu} transposedKey={transposedKey} onKeyChange={setTransposedKey} />
+      <div className={classes.main}>
+        <h1 className={classes.title}>{song.title || <em>No Title</em>}</h1>
+        <div className={classes.author}>by {song.author || <em>No author</em>}</div>
 
-      <Typography variant="h4" component="h1">
-        {song.title}
-      </Typography>
-      <Typography variant="subtitle1">by {song.author}</Typography>
+        {!song.meta.draft && (
+          <div className={classes.owner}>
+            Transcribed by <UserChip id={song.owner} />
+          </div>
+        )}
 
-      {!song.owned && (
-        <Typography variant="body2" component="div" className={classes.screenOnly}>
-          Shared by <UserChip id={song.owner} />
-        </Typography>
-      )}
-
-      <TransposedLyrics lyrics={parseLyrics(song.lyrics)} originalKey={song.key} actualKey={transposedKey}>
-        {({ lyrics }) => <SongLyrics lyrics={lyrics} />}
-      </TransposedLyrics>
-    </div>
+        <TransposedLyrics lyrics={parseLyrics(song.lyrics)} originalKey={song.key} actualKey={transposedKey}>
+          {({ lyrics }) => <SongLyrics lyrics={lyrics} />}
+        </TransposedLyrics>
+      </div>
+    </>
   );
 }
 
-const styles = ({ spacing }) => ({
+const styles = ({ spacing, typography }) => ({
   main: {
     padding: spacing.unit * 3,
   },
-  menu: {
-    float: 'right',
-    '@media print': {
-      display: 'none',
-    },
+  title: {
+    ...typography.h4,
+    margin: 0,
   },
-  screenOnly: {
+  author: {
+    ...typography.subtitle1,
+  },
+  owner: {
+    ...typography.body2,
     '@media print': {
       display: 'none',
     },

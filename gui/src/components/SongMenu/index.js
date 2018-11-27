@@ -1,39 +1,17 @@
-import { IconButton, Menu } from '@material-ui/core';
-import { MoreVert as MoreVertIcon } from '@material-ui/icons';
-import React, { useState } from 'react';
-import DeleteMenuItem from './DeleteMenuItem';
-import TransposeMenuItem from './TransposeMenuItem';
+import { Hidden } from '@material-ui/core';
+import React from 'react';
+import DesktopSongMenu from './DesktopSongMenu';
+import MobileSongMenu from './MobileSongMenu';
 
-function SongMenu({ items, anchor, toggle, className }) {
+export default function SongMenuWrapper(props) {
   return (
-    <div className={className}>
-      <IconButton onClick={toggle}>
-        <MoreVertIcon />
-      </IconButton>
-      <Menu open={!!anchor} anchorEl={anchor} onClose={toggle}>
-        {items.map((Item, i) => (
-          <Item key={i} />
-        ))}
-      </Menu>
-    </div>
-  );
-}
-
-export default function SongMenuWrapper({ song, transposedKey, onKeyChange, ...props }) {
-  const [anchor, setAnchor] = useState();
-  const toggle = e => setAnchor(anchor ? null : e.currentTarget);
-  const hide = e => setAnchor(null);
-
-  return (
-    <TransposeMenuItem song={song} transposedKey={transposedKey} onKeyChange={onKeyChange} hideMenu={hide}>
-      {TransposeItem => (
-        <DeleteMenuItem song={song} hideMenu={hide}>
-          {DeleteItem => {
-            const items = [TransposeItem, DeleteItem].filter(m => !!m);
-            return items.length ? <SongMenu {...props} items={items} anchor={anchor} toggle={toggle} /> : null;
-          }}
-        </DeleteMenuItem>
-      )}
-    </TransposeMenuItem>
+    <>
+      <Hidden mdUp>
+        <MobileSongMenu {...props} />
+      </Hidden>
+      <Hidden smDown>
+        <DesktopSongMenu {...props} />
+      </Hidden>
+    </>
   );
 }
