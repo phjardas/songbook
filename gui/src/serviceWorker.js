@@ -23,17 +23,22 @@ export function registerServiceWorker(config) {
 
 async function registerValidSW(swUrl, config) {
   try {
+    console.log('Registering SW:', swUrl);
     const registration = await navigator.serviceWorker.register(swUrl);
 
     registration.onupdatefound = () => {
+      console.log('SW update found');
       const installingWorker = registration.installing;
       if (!installingWorker) return;
 
       installingWorker.onstatechange = () => {
+        console.log('installing SW state change:', installingWorker.state);
         if (installingWorker.state === 'installed') {
           if (navigator.serviceWorker.controller) {
+            console.log('cache has been updated');
             if (config && config.onUpdate) config.onUpdate(registration);
           } else {
+            console.log('cache has been initialized');
             if (config && config.onSuccess) config.onSuccess(registration);
           }
         }

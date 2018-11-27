@@ -13,6 +13,8 @@ export function ServiceWorkerProvider({ children }) {
     });
   }, []);
 
+  console.log({ contentUpdated });
+
   return <Context.Provider value={{ contentUpdated }}>{children}</Context.Provider>;
 }
 
