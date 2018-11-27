@@ -2,7 +2,7 @@ import { Avatar, Divider, List, ListItem, ListItemIcon, ListItemText, withStyles
 import { AccountCircle as AccountCircleIcon, Edit as EditIcon, MusicNote as MusicNoteIcon } from '@material-ui/icons';
 import React from 'react';
 import { compose } from 'recompose';
-import { withAuthentication } from '../../../providers/Auth';
+import { withAuth } from '../../../providers/Auth';
 import Footer from '../Footer';
 import NavListItem from '../NavListItem';
 import MainAction from './MainAction';
@@ -29,23 +29,27 @@ function DesktopMainMenu({ user, signOut, classes }) {
           <ListItemText inset primary="Drafts" />
         </NavListItem>
 
-        <Divider />
+        {user && (
+          <>
+            <Divider />
 
-        <ListItem className={classes.user}>
-          <ListItemIcon>
-            {user.photoURL ? (
-              <Avatar src={user.photoURL} className={classes.userAvatar} />
-            ) : (
-              <Avatar className={classes.userAvatar}>
-                <AccountCircleIcon />
-              </Avatar>
-            )}
-          </ListItemIcon>
-          <ListItemText inset primary={user.displayName} secondary={user.email} />
-        </ListItem>
-        <ListItem button onClick={signOut}>
-          <ListItemText inset primary="Sign out" />
-        </ListItem>
+            <ListItem className={classes.user}>
+              <ListItemIcon>
+                {user.photoURL ? (
+                  <Avatar src={user.photoURL} className={classes.userAvatar} />
+                ) : (
+                  <Avatar className={classes.userAvatar}>
+                    <AccountCircleIcon />
+                  </Avatar>
+                )}
+              </ListItemIcon>
+              <ListItemText inset primary={user.displayName} secondary={user.email} />
+            </ListItem>
+            <ListItem button onClick={signOut}>
+              <ListItemText inset primary="Sign out" />
+            </ListItem>
+          </>
+        )}
       </List>
 
       <Footer className={classes.footer} />
@@ -80,5 +84,5 @@ const styles = ({ spacing }) => ({
 
 export default compose(
   withStyles(styles),
-  withAuthentication
+  withAuth
 )(DesktopMainMenu);

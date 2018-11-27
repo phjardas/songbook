@@ -6,7 +6,7 @@ import ButtonLink from './ButtonLink';
 import Layout from './layout';
 import PageQR from './PageQR';
 import SongLyrics from './SongLyrics';
-import { DesktopSongMenu, WithMenuItems } from './SongMenu';
+import { DesktopSongMenu, MobileSongActions } from './SongMenu';
 import TransposedLyrics from './TransposedLyrics';
 import UserChip from './UserChip';
 
@@ -21,10 +21,6 @@ function EditSongButton({ song }) {
   );
 }
 
-function SongActions(props) {
-  return <WithMenuItems {...props}>{({ items }) => items.map((Item, i) => <Item key={i} color="inherit" />)}</WithMenuItems>;
-}
-
 function Song({ classes, ...props }) {
   const { song } = props;
   const [transposedKey, setTransposedKey] = useState(song.key);
@@ -34,7 +30,7 @@ function Song({ classes, ...props }) {
       title={song.title}
       back={song.meta.draft ? '/drafts' : '/songs'}
       Fab={EditSongButton({ song })}
-      Actions={() => <SongActions {...props} />}
+      Actions={() => <MobileSongActions {...props} />}
     >
       <PageQR />
 

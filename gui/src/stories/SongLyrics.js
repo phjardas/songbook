@@ -18,13 +18,8 @@ const lyrics = parseLyrics(`
 
 storiesOf('SongLyrics', module)
   .addDecorator(withTheme)
-  .add('without transpose', () => (
+  .add('regular', () => (
     <Pad>
       <SongLyrics lyrics={lyrics} />
-    </Pad>
-  ))
-  .add('with transpose', () => (
-    <Pad>
-      <SongLyrics lyrics={lyrics} originalKey="C" />
     </Pad>
   ));

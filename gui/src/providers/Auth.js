@@ -4,7 +4,7 @@ import GitHubIcon from '../icons/GitHub';
 import GoogleIcon from '../icons/Google';
 import { withConsumer } from './with';
 
-const Context = React.createContext();
+export const Context = React.createContext({});
 
 const providers = [
   {

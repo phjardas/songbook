@@ -2,7 +2,7 @@ import { Avatar, Divider, List, ListItem, ListItemIcon, ListItemText, withStyles
 import { AccountCircle as AccountCircleIcon, Edit as EditIcon, MusicNote as MusicNoteIcon } from '@material-ui/icons';
 import React from 'react';
 import { compose } from 'recompose';
-import { withAuthentication } from '../../../providers/Auth';
+import { withAuth } from '../../../providers/Auth';
 import NavListItem from '../NavListItem';
 
 function MobileMainMenu({ user, signOut, onClose, classes }) {
@@ -22,23 +22,27 @@ function MobileMainMenu({ user, signOut, onClose, classes }) {
           <ListItemText inset primary="Drafts" />
         </NavListItem>
 
-        <Divider />
+        {user && (
+          <>
+            <Divider />
 
-        <ListItem className={classes.user}>
-          <ListItemIcon>
-            {user.photoURL ? (
-              <Avatar src={user.photoURL} className={classes.userAvatar} />
-            ) : (
-              <Avatar className={classes.userAvatar}>
-                <AccountCircleIcon />
-              </Avatar>
-            )}
-          </ListItemIcon>
-          <ListItemText inset primary={user.displayName} secondary={user.email} />
-        </ListItem>
-        <ListItem button onClick={signOut}>
-          <ListItemText inset primary="Sign out" />
-        </ListItem>
+            <ListItem className={classes.user}>
+              <ListItemIcon>
+                {user.photoURL ? (
+                  <Avatar src={user.photoURL} className={classes.userAvatar} />
+                ) : (
+                  <Avatar className={classes.userAvatar}>
+                    <AccountCircleIcon />
+                  </Avatar>
+                )}
+              </ListItemIcon>
+              <ListItemText inset primary={user.displayName} secondary={user.email} />
+            </ListItem>
+            <ListItem button onClick={signOut}>
+              <ListItemText inset primary="Sign out" />
+            </ListItem>
+          </>
+        )}
       </List>
     </div>
   );
@@ -60,5 +64,5 @@ const styles = () => ({
 
 export default compose(
   withStyles(styles),
-  withAuthentication
+  withAuth
 )(MobileMainMenu);

@@ -1,4 +1,4 @@
 import DesktopSongMenu from './DesktopSongMenu';
-import WithMenuItems from './WithMenuItems';
+import MobileSongActions from './MobileSongActions';
 
-export { DesktopSongMenu, WithMenuItems };
+export { DesktopSongMenu, MobileSongActions };

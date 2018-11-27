@@ -1,5 +1,5 @@
 import React from 'react';
-import { GlobalLoader } from './components/GlobalLoader';
+import GlobalLoader from './components/GlobalLoader';
 import { withAuth } from './providers/Auth';
 
 const Main = React.lazy(() => import('./pages/Main'));

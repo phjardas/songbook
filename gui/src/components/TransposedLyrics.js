@@ -20,6 +20,6 @@ function transposeTo(lyrics, originalKey, transposedKey) {
   }));
 }
 
-export default function SongLyrics({ lyrics, originalKey, actualKey, children }) {
+export default function TransposedLyrics({ lyrics, originalKey, actualKey, children }) {
   return children({ lyrics: transposeTo(lyrics, originalKey, actualKey) });
 }

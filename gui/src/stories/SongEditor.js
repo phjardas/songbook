@@ -19,6 +19,10 @@ const song = {
 .G              C
  And here comes some more.
 `,
+  meta: {
+    owned: true,
+    draft: true,
+  },
 };
 
 async function saveSong(song) {
@@ -26,7 +30,7 @@ async function saveSong(song) {
   return new Promise(resolve => setTimeout(resolve, 3000));
 }
 
-async function saveSongFailed(song) {
+async function saveSongFailed() {
   return new Promise((_, reject) => setTimeout(() => reject(new Error('Something went wrong!')), 3000));
 }
 
