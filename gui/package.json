@@ -3,9 +3,8 @@
   "private": true,
   "homepage": "https://songbook.jardas.de/",
   "scripts": {
-    "postinstall": "node hack-add-skipWaiting-true-to-react-script.js",
     "start": "REACT_APP_GIT_SHA=$(git rev-parse --short HEAD) react-scripts start",
-    "build": "REACT_APP_GIT_SHA=$(git rev-parse --short HEAD) react-scripts build",
+    "build": "REACT_APP_GIT_SHA=$(git rev-parse --short HEAD) react-scripts build && node hack-skip-waiting.js",
     "storybook": "start-storybook -p 9009 -s public",
     "build-storybook": "build-storybook -s public"
   },
