@@ -3,6 +3,7 @@
   "private": true,
   "homepage": "https://songbook.jardas.de/",
   "scripts": {
+    "postinstall": "node hack-add-skipWaiting-true-to-react-script.js",
     "start": "REACT_APP_GIT_SHA=$(git rev-parse --short HEAD) react-scripts start",
     "build": "REACT_APP_GIT_SHA=$(git rev-parse --short HEAD) react-scripts build",
     "storybook": "start-storybook -p 9009 -s public",
@@ -29,7 +30,8 @@
     "@storybook/addons": "^4.0.7",
     "@storybook/react": "^4.0.7",
     "babel-loader": "^8.0.4",
-    "react-scripts": "2.1.1"
+    "react-scripts": "2.1.1",
+    "replace-in-file": "^3.4.2"
   },
   "eslintConfig": {
     "extends": "react-app"
