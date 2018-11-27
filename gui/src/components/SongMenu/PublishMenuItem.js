@@ -1,4 +1,4 @@
-import { CircularProgress, IconButton, ListItemIcon, ListItemText, MenuItem, Tooltip } from '@material-ui/core';
+import { CircularProgress, IconButton, Tooltip } from '@material-ui/core';
 import { CloudUpload as PublishIcon } from '@material-ui/icons';
 import React, { useState } from 'react';
 
@@ -17,19 +17,11 @@ export default function PublishMenuItem({ song, publishSong, hideMenu, children 
     }
   };
 
-  return children({
-    ListItem: props => (
-      <MenuItem button {...props} onClick={onClick}>
-        <ListItemIcon>{pending ? <CircularProgress size="1em" /> : <PublishIcon />}</ListItemIcon>
-        <ListItemText primary="Publish" />
-      </MenuItem>
-    ),
-    IconButton: props => (
-      <Tooltip title="Publish">
-        <IconButton {...props} onClick={onClick}>
-          {pending ? <CircularProgress size="1em" /> : <PublishIcon />}
-        </IconButton>
-      </Tooltip>
-    ),
-  });
+  return children(props => (
+    <Tooltip title="Publish">
+      <IconButton {...props} onClick={onClick}>
+        {pending ? <CircularProgress color="secondary" size="1em" /> : <PublishIcon />}
+      </IconButton>
+    </Tooltip>
+  ));
 }

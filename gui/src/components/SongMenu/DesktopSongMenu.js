@@ -15,7 +15,7 @@ function DesktopSongMenu({ classes, ...props }) {
         </ButtonLink>
       </Tooltip>
 
-      <WithMenuItems {...props}>{({ items }) => items.map((item, i) => <item.IconButton key={i} />)}</WithMenuItems>
+      <WithMenuItems {...props}>{({ items }) => items.map((Item, i) => <Item key={i} />)}</WithMenuItems>
     </div>
   );
 }

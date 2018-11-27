@@ -1,20 +1,46 @@
-import { withStyles } from '@material-ui/core';
+import { Hidden, withStyles } from '@material-ui/core';
+import { Edit as EditIcon } from '@material-ui/icons';
 import React, { useState } from 'react';
-import PageQR from '../components/PageQR';
-import SongLyrics from '../components/SongLyrics';
-import SongMenu from '../components/SongMenu';
-import TransposedLyrics from '../components/TransposedLyrics';
-import UserChip from '../components/UserChip';
 import { parseLyrics } from '../opensong';
+import ButtonLink from './ButtonLink';
+import Layout from './layout';
+import PageQR from './PageQR';
+import SongLyrics from './SongLyrics';
+import { DesktopSongMenu, WithMenuItems } from './SongMenu';
+import TransposedLyrics from './TransposedLyrics';
+import UserChip from './UserChip';
+
+function EditSongButton({ song }) {
+  return (
+    song.meta.owned &&
+    (props => (
+      <ButtonLink to={`${song.meta.url}/edit`} {...props}>
+        <EditIcon />
+      </ButtonLink>
+    ))
+  );
+}
+
+function SongActions(props) {
+  return <WithMenuItems {...props}>{({ items }) => items.map((Item, i) => <Item key={i} color="inherit" />)}</WithMenuItems>;
+}
 
 function Song({ classes, ...props }) {
   const { song } = props;
   const [transposedKey, setTransposedKey] = useState(song.key);
 
   return (
-    <>
+    <Layout
+      title={song.title}
+      back={song.meta.draft ? '/drafts' : '/songs'}
+      Fab={EditSongButton({ song })}
+      Actions={() => <SongActions {...props} />}
+    >
       <PageQR />
-      <SongMenu {...props} transposedKey={transposedKey} onKeyChange={setTransposedKey} />
+
+      <Hidden smDown>
+        <DesktopSongMenu {...props} transposedKey={transposedKey} onKeyChange={setTransposedKey} />
+      </Hidden>
 
       <div className={classes.main}>
         <h1 className={classes.title}>{song.title || <em>No Title</em>}</h1>
@@ -30,7 +56,7 @@ function Song({ classes, ...props }) {
           {({ lyrics }) => <SongLyrics lyrics={lyrics} />}
         </TransposedLyrics>
       </div>
-    </>
+    </Layout>
   );
 }
 

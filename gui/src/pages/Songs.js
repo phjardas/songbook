@@ -34,7 +34,7 @@ const styles = ({ spacing }) => ({
 Songs = withStyles(styles)(Songs);
 
 function SongsWrapper({ user, match: { path } }) {
-  const { collection, toSong } = getSongsCollection({ path, user });
+  const { draft, collection, toSong } = getSongsCollection({ path, user });
   const [{ loading, error, songs }, setState] = useState({ loading: true });
 
   useEffect(
@@ -51,7 +51,7 @@ function SongsWrapper({ user, match: { path } }) {
   );
 
   return (
-    <Layout title="Songs" Fab={CreateSongButton}>
+    <Layout title={draft ? 'Drafts' : 'Songs'} Fab={CreateSongButton}>
       <Songs loading={loading} error={error} songs={songs} />
     </Layout>
   );

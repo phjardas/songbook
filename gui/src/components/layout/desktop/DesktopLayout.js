@@ -1,7 +1,6 @@
 import { AppBar, Drawer, Toolbar, withStyles } from '@material-ui/core';
 import React from 'react';
 import { compose } from 'recompose';
-import Footer from '../Footer';
 import MainMenu, { drawerWidth } from './MainMenu';
 import Title from './Title';
 
@@ -19,8 +18,6 @@ function DesktopLayout({ classes, children }) {
       </AppBar>
 
       <main className={classes.main}>{children}</main>
-
-      <Footer />
     </>
   );
 }
@@ -36,6 +33,7 @@ const styles = ({ palette }) => ({
   },
   drawer: {
     marginTop: 65,
+    height: 'calc(100% - 65px)',
     '@media print': {
       display: 'none',
       margin: 0,

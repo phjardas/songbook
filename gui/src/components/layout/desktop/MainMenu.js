@@ -3,6 +3,7 @@ import { AccountCircle as AccountCircleIcon, Edit as EditIcon, MusicNote as Musi
 import React from 'react';
 import { compose } from 'recompose';
 import { withAuthentication } from '../../../providers/Auth';
+import Footer from '../Footer';
 import NavListItem from '../NavListItem';
 import MainAction from './MainAction';
 
@@ -13,7 +14,7 @@ function DesktopMainMenu({ user, signOut, classes }) {
     <div className={classes.root}>
       <MainAction className={classes.mainAction} />
 
-      <List>
+      <List className={classes.nav}>
         <NavListItem to="/songs">
           <ListItemIcon>
             <MusicNoteIcon />
@@ -46,6 +47,8 @@ function DesktopMainMenu({ user, signOut, classes }) {
           <ListItemText inset primary="Sign out" />
         </ListItem>
       </List>
+
+      <Footer className={classes.footer} />
     </div>
   );
 }
@@ -53,6 +56,10 @@ function DesktopMainMenu({ user, signOut, classes }) {
 const styles = ({ spacing }) => ({
   root: {
     width: drawerWidth,
+    flex: 1,
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'flex-start',
   },
   user: {
     height: 64,
@@ -65,6 +72,10 @@ const styles = ({ spacing }) => ({
   mainAction: {
     margin: spacing.unit,
   },
+  nav: {
+    flex: 1,
+  },
+  footer: {},
 });
 
 export default compose(
