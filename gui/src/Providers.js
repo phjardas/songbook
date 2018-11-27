@@ -2,7 +2,7 @@ import { CssBaseline } from '@material-ui/core';
 import { MuiThemeProvider } from '@material-ui/core/styles';
 import React, { Suspense } from 'react';
 import { BrowserRouter } from 'react-router-dom';
-import { GlobalLoader } from './components/GlobalLoader';
+import GlobalLoader from './components/GlobalLoader';
 import { AuthProvider } from './providers/Auth';
 import { NotificationsProvider } from './providers/Notifications';
 import { ServiceWorkerProvider } from './providers/ServiceWorker';
