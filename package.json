@@ -9,6 +9,6 @@
     "deploy:hosting": "firebase deploy --only hosting"
   },
   "devDependencies": {
-    "firebase-tools": "^6.0.1"
+    "firebase-tools": "^6.1.1"
   }
 }
