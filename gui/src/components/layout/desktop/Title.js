@@ -1,13 +1,14 @@
 import { withStyles } from '@material-ui/core';
 import React from 'react';
+import { Link } from 'react-router-dom';
 import Logo from '../../Logo';
 
 function Title({ classes }) {
   return (
-    <div className={classes.root}>
+    <Link to="/" className={classes.root}>
       <Logo className={classes.logo} />
       Songbook
-    </div>
+    </Link>
   );
 }
 
@@ -18,6 +19,7 @@ const styles = ({ palette, spacing, typography }) => ({
     ...typography.h6,
     color: palette.text.secondary,
     fontWeight: 'normal',
+    textDecoration: 'none',
   },
   logo: {
     width: '1.25em',
