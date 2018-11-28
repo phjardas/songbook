@@ -6,7 +6,7 @@ import LayoutError from '../components/LayoutError';
 import LayoutLoader from '../components/LayoutLoader';
 import Song from '../components/Song';
 import { withNotifications } from '../providers/Notifications';
-import { SongProvider, withSong } from '../providers/Song';
+import withSong from '../providers/Song';
 
 let SongWrapper = ({ loading, error, history, addNotification, publishSong, unpublishSong, ...props }) => {
   if (loading) return <LayoutLoader />;
@@ -33,14 +33,8 @@ let SongWrapper = ({ loading, error, history, addNotification, publishSong, unpu
   return <Song {...props} publishSong={doPublishSong} unpublishSong={doUnpublishSong} />;
 };
 
-SongWrapper = compose(
+export default compose(
   withRouter,
-  withSong,
-  withNotifications
+  withNotifications,
+  withSong
 )(SongWrapper);
-
-export default props => (
-  <SongProvider>
-    <SongWrapper {...props} />
-  </SongProvider>
-);

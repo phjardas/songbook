@@ -4,9 +4,7 @@ import { compose } from 'recompose';
 import { withAuth } from './Auth';
 import { getSongDocument } from './data';
 
-const Context = React.createContext();
-
-function SongProviderImpl({ songId, match, user, children }) {
+let SongProvider = ({ songId, match, user, children }) => {
   const { path, params } = match;
   songId = songId || params.songId;
   const doc = getSongDocument({ songId, path, user });
@@ -32,16 +30,14 @@ function SongProviderImpl({ songId, match, user, children }) {
     [path, songId, user]
   );
 
-  return <Context.Provider value={state}>{children}</Context.Provider>;
-}
+  return children(state);
+};
 
-export const SongProvider = compose(
+SongProvider = compose(
   withAuth,
   withRouter
-)(SongProviderImpl);
+)(SongProvider);
 
-export const WithSong = Context.Consumer;
-
-export function withSong(Component) {
-  return props => <WithSong>{context => <Component {...context} {...props} />}</WithSong>;
+export default function withSong(Component) {
+  return props => <SongProvider>{context => <Component {...context} {...props} />}</SongProvider>;
 }

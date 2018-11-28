@@ -5,7 +5,7 @@ import Layout from '../components/layout';
 import LayoutError from '../components/LayoutError';
 import LayoutLoader from '../components/LayoutLoader';
 import SongEditor from '../components/SongEditor';
-import { SongProvider, withSong } from '../providers/Song';
+import withSong from '../providers/Song';
 
 let EditSong = ({ loading, error, song, saveSong, classes }) => {
   if (loading) return <LayoutLoader />;
@@ -25,13 +25,7 @@ const styles = ({ spacing }) => ({
   },
 });
 
-EditSong = compose(
-  withSong,
-  withStyles(styles)
+export default compose(
+  withStyles(styles),
+  withSong
 )(EditSong);
-
-export default props => (
-  <SongProvider>
-    <EditSong {...props} />
-  </SongProvider>
-);

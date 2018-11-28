@@ -17,9 +17,12 @@ export default function UserInfo({ id, children }) {
     }
   };
 
-  useEffect(() => {
-    loadUser();
-  });
+  useEffect(
+    () => {
+      loadUser();
+    },
+    [id]
+  );
 
   return children(state);
 }

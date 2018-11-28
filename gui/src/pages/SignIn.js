@@ -1,5 +1,5 @@
 import { Button, withStyles } from '@material-ui/core';
-import React from 'react';
+import React, { useState } from 'react';
 import { compose } from 'recompose';
 import ErrorSnackbar from '../components/ErrorSnackbar';
 import Loading from '../components/Loading';
@@ -22,8 +22,32 @@ function SignInForm({ providers, signIn, signInError, classes }) {
   );
 }
 
-function SignIn({ auth, classes }) {
-  return <SmallLayout>{auth.signingIn ? <Loading message="Signing you in…" /> : <SignInForm {...auth} classes={classes} />}</SmallLayout>;
+function SignIn({ signIn, classes, ...auth }) {
+  const [signingIn, setSigningIn] = useState();
+  const [signInError, setSignInError] = useState();
+
+  const doSignIn = async (...args) => {
+    setSignInError(null);
+    setSigningIn(true);
+
+    try {
+      await signIn(...args);
+    } catch (error) {
+      setSignInError(error);
+    } finally {
+      setSigningIn(false);
+    }
+  };
+
+  return (
+    <SmallLayout>
+      {signingIn ? (
+        <Loading message="Signing you in…" />
+      ) : (
+        <SignInForm {...auth} signIn={doSignIn} signInError={signInError} classes={classes} />
+      )}
+    </SmallLayout>
+  );
 }
 
 const styles = ({ spacing, palette, typography }) => ({
