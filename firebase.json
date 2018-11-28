@@ -3,7 +3,7 @@
     "rules": "firestore.rules",
     "indexes": "firestore.indexes.json"
   },
-  "_functions": {
+  "functions": {
     "predeploy": "npm --prefix functions run build"
   },
   "hosting": {
