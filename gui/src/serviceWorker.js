@@ -7,38 +7,40 @@ const isLocalhost = Boolean(
 export function registerServiceWorker(config) {
   if ('serviceWorker' in navigator) {
     const publicUrl = new URL(process.env.PUBLIC_URL, window.location.href);
-    if (publicUrl.origin !== window.location.origin) return;
+    if (publicUrl.origin !== window.location.origin) {
+      console.warn(
+        'Skipping service worker registration because location %s does not match expected public URL %s',
+        window.location.origin,
+        publicUrl.origin
+      );
+      return;
+    }
 
-    window.addEventListener('load', () => {
-      const swUrl = `${process.env.PUBLIC_URL}/service-worker.js`;
+    const swUrl = `${process.env.PUBLIC_URL}/service-worker.js`;
 
-      if (isLocalhost) {
-        checkValidServiceWorker(swUrl, config);
-      } else {
-        registerValidSW(swUrl, config);
-      }
-    });
+    if (isLocalhost) {
+      checkValidServiceWorker(swUrl, config);
+    } else {
+      registerValidSW(swUrl, config);
+    }
   }
 }
 
 async function registerValidSW(swUrl, config) {
   try {
-    console.log('Registering SW:', swUrl);
     const registration = await navigator.serviceWorker.register(swUrl);
 
     registration.onupdatefound = () => {
-      console.log('SW update found');
       const installingWorker = registration.installing;
       if (!installingWorker) return;
 
       installingWorker.onstatechange = () => {
-        console.log('installing SW state change:', installingWorker.state);
         if (installingWorker.state === 'installed') {
           if (navigator.serviceWorker.controller) {
-            console.log('cache has been updated');
+            console.info('Cache has been updated');
             if (config && config.onUpdate) config.onUpdate(registration);
           } else {
-            console.log('cache has been initialized');
+            console.info('Cache has been initialized');
             if (config && config.onSuccess) config.onSuccess(registration);
           }
         }
@@ -55,6 +57,7 @@ async function checkValidServiceWorker(swUrl, config) {
     const contentType = response.headers.get('content-type');
 
     if (response.status === 404 || (contentType != null && contentType.indexOf('javascript') === -1)) {
+      console.info('Unregistering invalid previous service worker');
       const registration = await navigator.serviceWorker.ready;
       await registration.unregister();
       window.location.reload();

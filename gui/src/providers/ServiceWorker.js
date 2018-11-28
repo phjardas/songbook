@@ -9,12 +9,9 @@ export function ServiceWorkerProvider({ children }) {
 
   useEffect(() => {
     registerServiceWorker({
-      onSuccess: () => console.info('Content is cached for offline use.'),
       onUpdate: () => setUpdated(true),
     });
   }, []);
-
-  console.log({ contentUpdated });
 
   return <Context.Provider value={{ contentUpdated }}>{children}</Context.Provider>;
 }
