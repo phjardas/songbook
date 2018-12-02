@@ -1,4 +1,3 @@
-import { IconButton, Tooltip } from '@material-ui/core';
 import { Delete as DeleteIcon } from '@material-ui/icons';
 import React from 'react';
 import ModalController from '../ModalController';
