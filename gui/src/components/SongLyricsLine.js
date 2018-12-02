@@ -3,7 +3,6 @@ import React from 'react';
 import Chord from './Chord';
 
 function SongLyricsLine({ chords, lyrics, classes }) {
-  console.log(lyrics);
   return (
     <table cellSpacing={0} className={classes.table}>
       <tbody>
