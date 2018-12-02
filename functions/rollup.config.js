@@ -7,6 +7,7 @@ module.exports = {
     file: 'index.js',
     format: 'cjs',
   },
+  external: ['firebase-admin', 'firebase-functions'],
   plugins: [
     babel({
       exclude: 'node_modules/**',
