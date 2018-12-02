@@ -3,8 +3,9 @@ import React from 'react';
 import Chord from './Chord';
 
 function SongLyricsLine({ chords, lyrics, classes }) {
+  console.log(lyrics);
   return (
-    <table className={classes.table}>
+    <table cellSpacing={0} className={classes.table}>
       <tbody>
         {chords && chords.length && (
           <tr>
@@ -19,7 +20,8 @@ function SongLyricsLine({ chords, lyrics, classes }) {
           <tr>
             {lyrics.map((lyric, i) => (
               <td key={i} className={classes.lyricsCell}>
-                {lyric}
+                {lyric.trim()}
+                {lyric.endsWith(' ') && <>&nbsp;</>}
               </td>
             ))}
           </tr>
@@ -29,23 +31,29 @@ function SongLyricsLine({ chords, lyrics, classes }) {
   );
 }
 
-const styles = ({ spacing, typography }) => ({
-  table: {
-    marginBottom: spacing.unit / 2,
-    lineHeight: 1,
-  },
-  chordsCell: {
-    padding: '0 0.5rem 0 0',
-    verticalAlign: 'baseline',
+const styles = ({ spacing, typography }) => {
+  const cell = {
     ...typography.body1,
-    lineHeight: 1,
-  },
-  lyricsCell: {
-    padding: '0 0.1rem 0 0',
     verticalAlign: 'baseline',
-    ...typography.body1,
-    lineHeight: 1,
-  },
-});
+    whiteSpace: 'nowrap',
+    lineHeight: 1.2,
+  };
+
+  return {
+    table: {
+      marginBottom: spacing.unit / 2,
+    },
+    chordsCell: {
+      ...cell,
+      padding: '0 0.5rem 0 0',
+      fontWeight: 500,
+      color: 'rgba(0, 0, 0, 0.66)',
+    },
+    lyricsCell: {
+      ...cell,
+      padding: 0,
+    },
+  };
+};
 
 export default withStyles(styles)(SongLyricsLine);

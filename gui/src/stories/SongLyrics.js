@@ -14,6 +14,19 @@ const lyrics = parseLyrics(`
  This is some text.
 .G              C
  And here comes some more.
+.Am  Em    Dm      F       G   C
+ Sometimes there's changes inbetween.
+
+[V2]
+  And sometimes there's
+  several lines of lyrics
+  in a row without chords.
+
+[B]
+.C F G C
+.C F G C
+.C F G C
+.C F G C
 `);
 
 storiesOf('SongLyrics', module)

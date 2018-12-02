@@ -1,36 +1,26 @@
-import { withStyles } from '@material-ui/core';
 import React from 'react';
 import Pitch from './Pitch';
 
-function Chord({ chord, classes }) {
+function Chord({ chord }) {
   if (!chord.trim()) return null;
-  const m = chord.match(/^([CDEFGAB][b#]?)(m?)(.*?)(\/.*)?$/);
+  const m = chord.trim().match(/^([CDEFGAB][b#]?)(m?)(.*?)(\/.*)?$/);
 
   if (!m) {
-    return (
-      <span className={classes.chord}>
-        <Pitch pitch={chord} />
-      </span>
-    );
+    return <Pitch pitch={chord} />;
   }
+
   // eslint-disable-next-line
   const [_, pitch, gender, alterations, inversion] = m;
+  console.log({ chord, pitch, gender, alterations, inversion });
 
   return (
-    <span className={classes.chord}>
+    <>
       <Pitch pitch={pitch} />
       {gender}
       {alterations && <sup>{alterations}</sup>}
       {inversion}
-    </span>
+    </>
   );
 }
 
-const styles = {
-  chord: {
-    fontWeight: 500,
-    color: 'rgba(0, 0, 0, 0.66)',
-  },
-};
-
-export default withStyles(styles)(Chord);
+export default Chord;
