@@ -4,11 +4,11 @@ import ButtonLink from '../components/ButtonLink';
 import ErrorSnackbar from '../components/ErrorSnackbar';
 import SaveButton from '../components/SaveButton';
 import SongLyrics from '../components/SongLyrics';
-import { parseLyrics } from '../opensong';
+import parseLyrics from '../parser';
 
-function LyricsPreview({ lyrics, ...props }) {
-  const parsedLyrics = parseLyrics(lyrics);
-  return <SongLyrics lyrics={parsedLyrics} {...props} />;
+function LyricsPreview({ type, lyrics, ...props }) {
+  const parsed = parseLyrics({ type, lyrics });
+  return <SongLyrics lyrics={parsed} {...props} />;
 }
 
 function SongEditor({ song, saveSong, className, classes }) {
@@ -17,6 +17,7 @@ function SongEditor({ song, saveSong, className, classes }) {
     meta: { draft },
   } = song;
 
+  const lyricsType = song.lyricsType || 'opensong';
   const [{ saving, saved, error }, setState] = useState({});
   const [title, setTitle] = useState(song.title || '');
   const [author, setAuthor] = useState(song.author || '');
@@ -80,7 +81,7 @@ function SongEditor({ song, saveSong, className, classes }) {
           />
         </Grid>
         <Grid item xs={12} lg={6}>
-          <LyricsPreview lyrics={lyrics} />
+          <LyricsPreview lyrics={lyrics} type={lyricsType} />
         </Grid>
         <Grid item xs={12}>
           <Grid container spacing={8} direction="row-reverse" justify="flex-start">

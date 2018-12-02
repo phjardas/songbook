@@ -1,7 +1,7 @@
 import { Hidden, withStyles } from '@material-ui/core';
 import { Edit as EditIcon } from '@material-ui/icons';
 import React, { useState } from 'react';
-import { parseLyrics } from '../opensong';
+import parseLyrics from '../parser';
 import ButtonLink from './ButtonLink';
 import Layout from './layout';
 import PageQR from './PageQR';
@@ -30,7 +30,7 @@ function Song({ classes, ...props }) {
       title={song.title}
       back={song.meta.draft ? '/drafts' : '/songs'}
       Fab={EditSongButton({ song })}
-      Actions={() => <MobileSongActions {...props} />}
+      Actions={() => <MobileSongActions {...props} transposedKey={transposedKey} onKeyChange={setTransposedKey} />}
     >
       <PageQR />
 
@@ -48,7 +48,11 @@ function Song({ classes, ...props }) {
           </div>
         )}
 
-        <TransposedLyrics lyrics={parseLyrics(song.lyrics)} originalKey={song.key} actualKey={transposedKey}>
+        <TransposedLyrics
+          lyrics={parseLyrics({ type: song.lyricsType || 'opensong', lyrics: song.lyrics })}
+          originalKey={song.key}
+          actualKey={transposedKey}
+        >
           {({ lyrics }) => <SongLyrics lyrics={lyrics} />}
         </TransposedLyrics>
       </div>

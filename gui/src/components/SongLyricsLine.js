@@ -2,27 +2,38 @@ import { withStyles } from '@material-ui/core';
 import React from 'react';
 import Chord from './Chord';
 
-function SongLyricsLine({ chords, lyrics, classes }) {
+function SongLyricsLine({ line, classes }) {
+  const hasChords = line.some(({ chord }) => !!chord);
+  const hasText = line.some(({ text }) => !!text);
+
   return (
     <table cellSpacing={0} className={classes.table}>
       <tbody>
-        {chords && chords.length && (
+        {hasChords && (
           <tr>
-            {chords.map((chord, i) => (
-              <td key={i} className={classes.chordsCell}>
-                <Chord chord={chord} />
-              </td>
-            ))}
+            {line.map(({ chord }, i) =>
+              chord ? (
+                <td key={i} className={classes.chordsCell}>
+                  <Chord chord={chord} />
+                </td>
+              ) : (
+                <td key={i} />
+              )
+            )}
           </tr>
         )}
-        {lyrics && lyrics.length && (
+        {hasText && (
           <tr>
-            {lyrics.map((lyric, i) => (
-              <td key={i} className={classes.lyricsCell}>
-                {lyric.trim()}
-                {lyric.endsWith(' ') && <>&nbsp;</>}
-              </td>
-            ))}
+            {line.map(({ text }, i) =>
+              text ? (
+                <td key={i} className={classes.lyricsCell}>
+                  {text.trim()}
+                  {text.endsWith(' ') && <>&nbsp;</>}
+                </td>
+              ) : (
+                <td key={i} />
+              )
+            )}
           </tr>
         )}
       </tbody>
