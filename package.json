@@ -7,11 +7,15 @@
     "deploy": "firebase deploy",
     "deploy:functions": "firebase deploy --only functions",
     "deploy:hosting": "firebase deploy --only hosting",
-    "lint": "(npm --prefix gui run lint)",
-    "precommit": "npm run lint"
+    "lint": "(npm --prefix gui run lint)"
   },
   "devDependencies": {
     "firebase-tools": "^6.1.1",
     "husky": "^1.2.0"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run lint"
+    }
   }
 }
