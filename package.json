@@ -7,7 +7,7 @@
     "deploy": "firebase deploy",
     "deploy:functions": "firebase deploy --only functions",
     "deploy:hosting": "firebase deploy --only hosting",
-    "build": "(npm --prefix gui run build)",
+    "build": "(npm --prefix functions run build) && (npm --prefix gui run build)",
     "test": "(npm --prefix gui run test)",
     "lint": "(npm --prefix gui run lint)"
   },
