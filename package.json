@@ -7,6 +7,7 @@
     "deploy": "firebase deploy",
     "deploy:functions": "firebase deploy --only functions",
     "deploy:hosting": "firebase deploy --only hosting",
+    "test": "(npm --prefix gui run test)",
     "lint": "(npm --prefix gui run lint)"
   },
   "devDependencies": {
@@ -15,7 +16,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm run lint"
+      "pre-commit": "npm run lint && CI=true npm run test"
     }
   }
 }
