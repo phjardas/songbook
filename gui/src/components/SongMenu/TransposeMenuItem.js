@@ -1,4 +1,3 @@
-import { IconButton, Tooltip } from '@material-ui/core';
 import { SwapVert as SwapVertIcon } from '@material-ui/icons';
 import React from 'react';
 import ModalController from '../ModalController';
@@ -18,13 +17,11 @@ export default function TransposeMenuItem({ song: { key: originalKey }, transpos
         return (
           <>
             <TransposeDialog {...props} originalKey={originalKey} transposedKey={transposedKey} onKeyChange={onKeyChange} />
-            {children(props => (
-              <Tooltip title="Transpose">
-                <IconButton {...props} onClick={onClick}>
-                  <SwapVertIcon />
-                </IconButton>
-              </Tooltip>
-            ))}
+            {children({
+              Icon: SwapVertIcon,
+              label: 'Transpose',
+              onClick,
+            })}
           </>
         );
       }}

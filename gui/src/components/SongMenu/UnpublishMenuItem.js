@@ -1,4 +1,4 @@
-import { CircularProgress, IconButton, Tooltip } from '@material-ui/core';
+import { CircularProgress } from '@material-ui/core';
 import { CloudOff as UnpublishIcon } from '@material-ui/icons';
 import React, { useState } from 'react';
 
@@ -6,7 +6,6 @@ export default function UnpublishMenuItem({ song, unpublishSong, hideMenu, child
   if (!song.meta.owned || song.meta.draft) return children(null);
 
   const [pending, setPending] = useState(false);
-
   const onClick = async () => {
     try {
       setPending(true);
@@ -17,11 +16,9 @@ export default function UnpublishMenuItem({ song, unpublishSong, hideMenu, child
     }
   };
 
-  return children(props => (
-    <Tooltip title="Unpublish">
-      <IconButton {...props} onClick={onClick}>
-        {pending ? <CircularProgress color="secondary" size="1em" /> : <UnpublishIcon />}
-      </IconButton>
-    </Tooltip>
-  ));
+  return children({
+    Icon: props => (pending ? <CircularProgress color="secondary" size="1em" {...props} /> : <UnpublishIcon {...props} />),
+    label: 'Unpublish',
+    onClick,
+  });
 }

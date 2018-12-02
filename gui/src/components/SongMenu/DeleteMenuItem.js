@@ -18,13 +18,11 @@ export default function DeleteMenuItem({ song, doc, hideMenu, children }) {
         return (
           <>
             <DeleteDialog {...props} song={song} doc={doc} />
-            {children(props => (
-              <Tooltip title="Delete">
-                <IconButton {...props} onClick={onClick}>
-                  <DeleteIcon />
-                </IconButton>
-              </Tooltip>
-            ))}
+            {children({
+              Icon: DeleteIcon,
+              label: 'Delete',
+              onClick,
+            })}
           </>
         );
       }}
