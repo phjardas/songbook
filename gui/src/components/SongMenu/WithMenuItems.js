@@ -2,6 +2,7 @@ import React from 'react';
 import DeleteMenuItem from './DeleteMenuItem';
 import EditMenuItem from './EditMenuItem';
 import PublishMenuItem from './PublishMenuItem';
+import PrintMenuItem from './PrintMenuItem';
 import TransposeMenuItem from './TransposeMenuItem';
 import UnpublishMenuItem from './UnpublishMenuItem';
 
@@ -13,20 +14,24 @@ export default function WithMenuItems({ children, hide, ...props }) {
       {TransposeItem => (
         <EditMenuItem {...itemProps}>
           {EditItem => (
-            <PublishMenuItem {...itemProps}>
-              {PublishItem => (
-                <UnpublishMenuItem {...itemProps}>
-                  {UnpublishItem => (
-                    <DeleteMenuItem {...itemProps}>
-                      {DeleteItem => {
-                        const items = [TransposeItem, EditItem, PublishItem, UnpublishItem, DeleteItem].filter(m => !!m);
-                        return items.length ? children({ items }) : null;
-                      }}
-                    </DeleteMenuItem>
+            <PrintMenuItem {...itemProps}>
+              {PrintItem => (
+                <PublishMenuItem {...itemProps}>
+                  {PublishItem => (
+                    <UnpublishMenuItem {...itemProps}>
+                      {UnpublishItem => (
+                        <DeleteMenuItem {...itemProps}>
+                          {DeleteItem => {
+                            const items = [EditItem, TransposeItem, PrintItem, PublishItem, UnpublishItem, DeleteItem].filter(m => !!m);
+                            return items.length ? children({ items }) : null;
+                          }}
+                        </DeleteMenuItem>
+                      )}
+                    </UnpublishMenuItem>
                   )}
-                </UnpublishMenuItem>
+                </PublishMenuItem>
               )}
-            </PublishMenuItem>
+            </PrintMenuItem>
           )}
         </EditMenuItem>
       )}

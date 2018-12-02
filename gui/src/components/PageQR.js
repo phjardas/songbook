@@ -6,17 +6,16 @@ function PageQR({ classes, ...props }) {
   return <QRCode bgColor="#FFFFFF" fgColor="#000000" level="L" value={window.location.href} className={classes.qr} {...props} />;
 }
 
-const styles = {
+const styles = ({ spacing }) => ({
   qr: {
     float: 'right',
-    width: 100,
-    height: 100,
-    marginLeft: 50,
-    marginBottom: 50,
+    width: spacing.unit * 12,
+    height: spacing.unit * 12,
+    margin: spacing.unit * 3,
     '@media screen': {
       display: 'none',
     },
   },
-};
+});
 
 export default withStyles(styles)(PageQR);
