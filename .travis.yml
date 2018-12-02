@@ -7,4 +7,7 @@ cache:
     - functions/node_modules
     - gui/node_modules
 script:
+  - npm test
+  - npm run build
+after_success:
   - ./travis-deploy.sh
