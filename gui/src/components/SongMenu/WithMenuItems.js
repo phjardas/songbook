@@ -34,7 +34,6 @@ export default function WithMenuItems({ children, hide, ...props }) {
                                   UnpublishItem,
                                   DeleteItem,
                                 ].filter(m => !!m);
-                                console.log('items:', items);
                                 return items.length ? children({ items }) : null;
                               }}
                             </DeleteMenuItem>

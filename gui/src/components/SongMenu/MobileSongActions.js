@@ -1,4 +1,4 @@
-import { IconButton, ListItemIcon, ListItemText, Menu, MenuItem } from '@material-ui/core';
+import { IconButton, ListItemIcon, ListItemText, Menu, MenuItem, withStyles } from '@material-ui/core';
 import { MoreVert as MoreVertIcon } from '@material-ui/icons';
 import React, { useState } from 'react';
 import NoprintTooltip from './NoprintTooltip';
@@ -14,7 +14,7 @@ function PrimaryActions({ items }) {
   ));
 }
 
-function SecondaryActions({ items }) {
+function SecondaryActions({ items, classes }) {
   const [anchor, setAnchor] = useState();
   const open = !!anchor;
   const toggle = e => setAnchor(open ? null : e.currentTarget);
@@ -25,7 +25,7 @@ function SecondaryActions({ items }) {
       <IconButton color="inherit" onClick={toggle}>
         <MoreVertIcon />
       </IconButton>
-      <Menu open={open} anchorEl={anchor} onClose={close}>
+      <Menu open={open} anchorEl={anchor} onClose={close} className={classes.menu}>
         {items.map((item, i) => (
           <MenuItem key={i} onClick={item.onClick}>
             <ListItemIcon>
@@ -39,7 +39,7 @@ function SecondaryActions({ items }) {
   );
 }
 
-export default function MobileSongActions(props) {
+function MobileSongActions({ classes, ...props }) {
   return (
     <WithMenuItems {...props}>
       {({ items }) => {
@@ -49,7 +49,7 @@ export default function MobileSongActions(props) {
           return (
             <>
               <PrimaryActions items={primaryItems} />
-              <SecondaryActions items={items} />
+              <SecondaryActions items={items} classes={classes} />
             </>
           );
         }
@@ -59,3 +59,13 @@ export default function MobileSongActions(props) {
     </WithMenuItems>
   );
 }
+
+const styles = {
+  menu: {
+    '@media print': {
+      display: 'none',
+    },
+  },
+};
+
+export default withStyles(styles)(MobileSongActions);
