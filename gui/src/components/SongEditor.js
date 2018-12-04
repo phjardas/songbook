@@ -1,22 +1,17 @@
 import { Grid, TextField, withStyles } from '@material-ui/core';
 import React, { useState } from 'react';
-import ButtonLink from '../components/ButtonLink';
-import ErrorSnackbar from '../components/ErrorSnackbar';
-import SaveButton from '../components/SaveButton';
-import SongLyrics from '../components/SongLyrics';
-import { parseLyrics } from '../opensong';
+import ButtonLink from './ButtonLink';
+import ErrorSnackbar from './ErrorSnackbar';
+import LyricsEditor from './LyricsEditor';
+import SaveButton from './SaveButton';
 
-function LyricsPreview({ lyrics, ...props }) {
-  const parsedLyrics = parseLyrics(lyrics);
-  return <SongLyrics lyrics={parsedLyrics} {...props} />;
-}
-
-function SongEditor({ song, saveSong, className, classes }) {
+function SongEditor({ song, saveSong, className }) {
   const {
     id,
     meta: { draft },
   } = song;
 
+  const lyricsType = song.lyricsType || 'opensong';
   const [{ saving, saved, error }, setState] = useState({});
   const [title, setTitle] = useState(song.title || '');
   const [author, setAuthor] = useState(song.author || '');
@@ -66,21 +61,8 @@ function SongEditor({ song, saveSong, className, classes }) {
         <Grid item xs={12} sm={4}>
           <TextField id="key" label="Key" value={key} onChange={e => setKey(e.currentTarget.value)} disabled={saving} fullWidth />
         </Grid>
-        <Grid item xs={12} lg={6}>
-          <TextField
-            id="lyrics"
-            value={lyrics}
-            multiline
-            rowsMax={100}
-            required
-            onChange={e => setLyrics(e.currentTarget.value)}
-            disabled={saving}
-            fullWidth
-            InputProps={{ className: classes.lyricsInput }}
-          />
-        </Grid>
-        <Grid item xs={12} lg={6}>
-          <LyricsPreview lyrics={lyrics} />
+        <Grid item xs={12}>
+          <LyricsEditor lyrics={lyrics} lyricsType={lyricsType} onChange={setLyrics} disabled={saving} />
         </Grid>
         <Grid item xs={12}>
           <Grid container spacing={8} direction="row-reverse" justify="flex-start">

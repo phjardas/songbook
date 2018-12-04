@@ -1,0 +1,239 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`parser opensong should parse a song 1`] = `
+Object {
+  "messages": Array [],
+  "sections": Array [
+    Object {
+      "firstLine": 0,
+      "label": undefined,
+      "lastLine": 3,
+      "lines": Array [
+        Object {
+          "lines": Array [
+            0,
+            1,
+          ],
+          "parts": Array [
+            Object {
+              "chord": undefined,
+              "col": 1,
+              "text": "I ",
+            },
+            Object {
+              "chord": "D",
+              "col": 3,
+              "text": "looked over Jordan, and ",
+            },
+            Object {
+              "chord": "G",
+              "col": 27,
+              "text": "what did I ",
+            },
+            Object {
+              "chord": "D",
+              "col": 38,
+              "text": "see,",
+            },
+          ],
+        },
+        Object {
+          "lines": Array [
+            2,
+            3,
+          ],
+          "parts": Array [
+            Object {
+              "chord": undefined,
+              "col": 1,
+              "text": "Comin’ for to carry me ",
+            },
+            Object {
+              "chord": "A7",
+              "col": 24,
+              "text": "home.",
+            },
+          ],
+        },
+      ],
+      "type": undefined,
+    },
+    Object {
+      "firstLine": 5,
+      "label": "Chorus",
+      "lastLine": 9,
+      "lines": Array [
+        Object {
+          "lines": Array [
+            6,
+            7,
+          ],
+          "parts": Array [
+            Object {
+              "chord": undefined,
+              "col": 1,
+              "text": "Swing ",
+            },
+            Object {
+              "chord": "D",
+              "col": 7,
+              "text": "low, sweet ",
+            },
+            Object {
+              "chord": "G",
+              "col": 18,
+              "text": "chari",
+            },
+            Object {
+              "chord": "D",
+              "col": 23,
+              "text": "ot,",
+            },
+          ],
+        },
+        Object {
+          "lines": Array [
+            8,
+            9,
+          ],
+          "parts": Array [
+            Object {
+              "chord": undefined,
+              "col": 1,
+              "text": "Comin’ for to carry me ",
+            },
+            Object {
+              "chord": "A7",
+              "col": 24,
+              "text": "home.",
+            },
+          ],
+        },
+      ],
+      "type": "chorus",
+    },
+    Object {
+      "firstLine": 11,
+      "label": "Verse 2",
+      "lastLine": 15,
+      "lines": Array [
+        Object {
+          "lines": Array [
+            12,
+            13,
+          ],
+          "parts": Array [
+            Object {
+              "chord": undefined,
+              "col": 1,
+              "text": "I ",
+            },
+            Object {
+              "chord": "D",
+              "col": 3,
+              "text": "looked over Jordan, and ",
+            },
+            Object {
+              "chord": "G",
+              "col": 27,
+              "text": "what did I ",
+            },
+            Object {
+              "chord": "D",
+              "col": 38,
+              "text": "see,",
+            },
+          ],
+        },
+        Object {
+          "lines": Array [
+            14,
+            15,
+          ],
+          "parts": Array [
+            Object {
+              "chord": undefined,
+              "col": 1,
+              "text": "Comin’ for to carry me ",
+            },
+            Object {
+              "chord": "A7",
+              "col": 24,
+              "text": "home.",
+            },
+          ],
+        },
+      ],
+      "type": "verse",
+    },
+    Object {
+      "firstLine": 17,
+      "label": "Bridge",
+      "lastLine": 19,
+      "lines": Array [
+        Object {
+          "lines": Array [
+            18,
+          ],
+          "parts": Array [
+            Object {
+              "chord": "D",
+              "col": 1,
+            },
+            Object {
+              "chord": "G",
+              "col": 3,
+            },
+            Object {
+              "chord": "D",
+              "col": 5,
+            },
+          ],
+        },
+        Object {
+          "lines": Array [
+            19,
+          ],
+          "parts": Array [
+            Object {
+              "chord": "A7",
+              "col": 1,
+            },
+          ],
+        },
+      ],
+      "type": "bridge",
+    },
+    Object {
+      "firstLine": 21,
+      "label": "Verse 3",
+      "lastLine": 23,
+      "lines": Array [
+        Object {
+          "lines": Array [
+            22,
+          ],
+          "parts": Array [
+            Object {
+              "col": 1,
+              "text": "I looked over Jordan, and what did I see,",
+            },
+          ],
+        },
+        Object {
+          "lines": Array [
+            23,
+          ],
+          "parts": Array [
+            Object {
+              "col": 1,
+              "text": "Comin’ for to carry me home.",
+            },
+          ],
+        },
+      ],
+      "type": "verse",
+    },
+  ],
+}
+`;

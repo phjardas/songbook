@@ -1,11 +1,13 @@
 import { storiesOf } from '@storybook/react';
 import React from 'react';
 import SongLyrics from '../components/SongLyrics';
-import { parseLyrics } from '../opensong';
+import parseLyrics from '../parser';
 import { Pad } from './helpers';
 import { withTheme } from './theme';
 
-const lyrics = parseLyrics(`
+const lyrics = parseLyrics({
+  type: 'opensong',
+  lyrics: `
 [Intro]
 .C F G C
 
@@ -27,7 +29,8 @@ const lyrics = parseLyrics(`
 .C F G C
 .C F G C
 .C F G C
-`);
+`,
+});
 
 storiesOf('SongLyrics', module)
   .addDecorator(withTheme)
