@@ -1,4 +1,4 @@
-import { AppBar, IconButton, SwipeableDrawer, Toolbar, Typography, withStyles, Zoom } from '@material-ui/core';
+import { AppBar, IconButton, SwipeableDrawer, Toolbar, withStyles, Zoom } from '@material-ui/core';
 import { ArrowBack as ArrowBackIcon, Menu as MenuIcon } from '@material-ui/icons';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
@@ -27,7 +27,7 @@ function MobileLayout({ Fab, Actions, back, title, children, theme, classes }) {
       </SwipeableDrawer>
 
       <AppBar position="sticky" elevation={appBarElevation} className={classes.appbar}>
-        <Toolbar>
+        <Toolbar className={classes.toolbar}>
           {back ? (
             <ButtonLink key="icon" Component={IconButton} to={back} color="inherit" className={classes.icon}>
               <ArrowBackIcon />
@@ -39,9 +39,7 @@ function MobileLayout({ Fab, Actions, back, title, children, theme, classes }) {
           )}
 
           <Link to={back || '/'} className={classes.title}>
-            <Typography variant="h6" color="inherit">
-              {title || 'Songbook'}
-            </Typography>
+            {title || 'Songbook'}
           </Link>
 
           {Actions && <Actions />}
@@ -63,19 +61,27 @@ function MobileLayout({ Fab, Actions, back, title, children, theme, classes }) {
   );
 }
 
-const styles = ({ spacing, transitions }) => ({
+const styles = ({ spacing, transitions, typography }) => ({
   appbar: {
     transition: `box-shadow ${transitions.easing.easeInOut} ${transitions.duration.standard}ms`,
     '@media print': {
       display: 'none',
     },
   },
+  toolbar: {
+    flex: 1,
+    display: 'flex',
+  },
   title: {
     display: 'flex',
-    color: 'inherit',
     flexGrow: 1,
     alignItems: 'center',
+    ...typography.h6,
+    color: 'inherit',
     textDecoration: 'none',
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
   },
   icon: {
     marginLeft: -12,
