@@ -2,42 +2,44 @@ import { withStyles } from '@material-ui/core';
 import React from 'react';
 import Chord from './Chord';
 
-function SongLyricsLine({ line, classes }) {
-  const hasChords = line.some(({ chord }) => !!chord);
-  const hasText = line.some(({ text }) => !!text);
+function SongLyricsLine({ line: { parts }, className = '', classes }) {
+  const hasChords = parts.some(({ chord }) => !!chord);
+  const hasText = parts.some(({ text }) => !!text);
 
   return (
-    <table cellSpacing={0} className={classes.table}>
-      <tbody>
-        {hasChords && (
-          <tr>
-            {line.map(({ chord }, i) =>
-              chord ? (
-                <td key={i} className={classes.chordsCell}>
-                  <Chord chord={chord} />
-                </td>
-              ) : (
-                <td key={i} />
-              )
-            )}
-          </tr>
-        )}
-        {hasText && (
-          <tr>
-            {line.map(({ text }, i) =>
-              text ? (
-                <td key={i} className={classes.lyricsCell}>
-                  {text.trim()}
-                  {text.endsWith(' ') && <>&nbsp;</>}
-                </td>
-              ) : (
-                <td key={i} />
-              )
-            )}
-          </tr>
-        )}
-      </tbody>
-    </table>
+    <div className={`${classes.table} ${className}`}>
+      <table cellSpacing={0}>
+        <tbody>
+          {hasChords && (
+            <tr>
+              {parts.map(({ chord }, i) =>
+                chord ? (
+                  <td key={i} className={classes.chordsCell}>
+                    <Chord chord={chord} />
+                  </td>
+                ) : (
+                  <td key={i} />
+                )
+              )}
+            </tr>
+          )}
+          {hasText && (
+            <tr>
+              {parts.map(({ text }, i) =>
+                text ? (
+                  <td key={i} className={classes.lyricsCell}>
+                    {text.trim()}
+                    {text.endsWith(' ') && <>&nbsp;</>}
+                  </td>
+                ) : (
+                  <td key={i} />
+                )
+              )}
+            </tr>
+          )}
+        </tbody>
+      </table>
+    </div>
   );
 }
 

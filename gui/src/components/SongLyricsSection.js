@@ -2,23 +2,32 @@ import { withStyles } from '@material-ui/core';
 import React from 'react';
 import SongLyricsLine from './SongLyricsLine';
 
-function SongLyricsSection({ section: { label, lines }, classes }) {
+function SongLyricsLines({ messages, lines, highlightLine, classes }) {
+  // TODO render messages
+  return lines.map((line, i) => {
+    const highlighted = line.lines && line.lines.indexOf(highlightLine) >= 0;
+    return <SongLyricsLine key={i} line={line} className={highlighted ? classes.highlight : ''} />;
+  });
+}
+
+function SongLyricsSection({ messages, section: { label, lines }, highlightLine, classes }) {
   return (
     <div className={classes.section}>
       {label && <div className={classes.header}>{label}</div>}
-      {lines.map((line, i) => (
-        <SongLyricsLine key={i} line={line} />
-      ))}
+      <SongLyricsLines messages={messages} lines={lines} highlightLine={highlightLine} classes={classes} />
     </div>
   );
 }
 
-const styles = ({ spacing, typography }) => ({
+const styles = ({ palette, spacing, typography }) => ({
   section: {
     marginTop: spacing.unit * 3,
   },
   header: {
     ...typography.h5,
+  },
+  highlight: {
+    background: palette.grey[300],
   },
 });
 

@@ -1,6 +1,6 @@
 export default function parseChordPro(lyrics) {
   const messages = [];
-  const lines = lyrics.split(/(\r|\n|\r\n)/);
+  const lines = lyrics.split(/\r?\n/);
   const sections = [];
   let section;
 
@@ -47,18 +47,18 @@ export default function parseChordPro(lyrics) {
         handleDirective(parts[0], lineNo);
       } else {
         if (!section) section = { lines: [] };
-        const line = [];
+        const line = { parts: [] };
         section.lines.push(line);
 
         parts.forEach((part, i) => {
           if (part.startsWith('[')) {
             const name = part.replace(/(^\[|\]$)/g, '');
-            line.push({ chord: name });
+            line.parts.push({ chord: name });
           } else {
             if (i) {
-              line[line.length - 1].text = part;
+              line.parts[line.parts.length - 1].text = part;
             } else {
-              line.push({ text: part });
+              line.parts.push({ text: part });
             }
           }
         });
