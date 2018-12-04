@@ -2,31 +2,32 @@ import { withStyles } from '@material-ui/core';
 import React from 'react';
 import SongLyricsLine from './SongLyricsLine';
 
-function translateSectionHeader(header) {
-  if (header === 'B') return 'Bridge';
-  if (header === 'C') return 'Chorus';
-  if (header === 'P') return 'Pre-Chorus';
-  if (header.startsWith('V')) return `Verse ${header.substring(1)}`;
-  return header;
+function SongLyricsLines({ messages, lines, highlightLine, classes }) {
+  // TODO render messages
+  return lines.map((line, i) => {
+    const highlighted = line.lines && line.lines.indexOf(highlightLine) >= 0;
+    return <SongLyricsLine key={i} line={line} className={highlighted ? classes.highlight : ''} />;
+  });
 }
 
-function SongLyricsSection({ section: { header, lines }, classes }) {
+function SongLyricsSection({ messages, section: { label, lines }, highlightLine, classes }) {
   return (
     <div className={classes.section}>
-      {header && <div className={classes.header}>{translateSectionHeader(header)}</div>}
-      {lines.map(({ chords, lyrics }, i) => (
-        <SongLyricsLine key={i} chords={chords} lyrics={lyrics} />
-      ))}
+      {label && <div className={classes.header}>{label}</div>}
+      <SongLyricsLines messages={messages} lines={lines} highlightLine={highlightLine} classes={classes} />
     </div>
   );
 }
 
-const styles = ({ spacing, typography }) => ({
+const styles = ({ palette, spacing, typography }) => ({
   section: {
     marginTop: spacing.unit * 3,
   },
   header: {
     ...typography.h5,
+  },
+  highlight: {
+    background: palette.grey[300],
   },
 });
 

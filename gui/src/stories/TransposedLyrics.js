@@ -1,13 +1,16 @@
 import { Button } from '@material-ui/core';
 import { storiesOf } from '@storybook/react';
 import React, { useState } from 'react';
+import Pitch from '../components/Pitch';
 import SongLyrics from '../components/SongLyrics';
 import TransposedLyrics from '../components/TransposedLyrics';
-import { parseLyrics } from '../opensong';
+import parseLyrics from '../parser';
 import { Pad } from './helpers';
 import { withTheme } from './theme';
 
-const lyrics = parseLyrics(`
+const lyrics = parseLyrics({
+  type: 'opensong',
+  lyrics: `
 [Intro]
 .C F G C
 
@@ -20,7 +23,8 @@ const lyrics = parseLyrics(`
 [C]
 .Bb             Eb
  And here's the chorus!
-`);
+`,
+});
 
 const originalKey = 'C';
 
@@ -29,9 +33,9 @@ function Controller() {
 
   return (
     <Pad>
-      {['C', 'D', 'E', 'F', 'G', 'A', 'B'].map(key => (
+      {['C', 'Db', 'D', 'Eb', 'E', 'F', 'F#', 'Gb', 'G', 'Ab', 'A', 'Bb', 'B'].map(key => (
         <Button key={key} variant={key === actualKey ? 'outlined' : 'text'} onClick={() => setKey(key)}>
-          {key}
+          <Pitch pitch={key} />
         </Button>
       ))}
 
