@@ -25,7 +25,14 @@ export default function parseOpenSong(lyrics) {
   for (let l = lines.length; lineNo < l; lineNo++) {
     try {
       let line = lines[lineNo];
-      if (line.startsWith('#') || !line.trim().length) {
+
+      if (line.startsWith('#')) {
+        emptyLines++;
+        continue;
+      }
+
+      if (!line.trim().length) {
+        endSection({ lineNo });
         emptyLines++;
         continue;
       }
