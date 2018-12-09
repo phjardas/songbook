@@ -88,6 +88,8 @@ function parseSection(type) {
   if (type === 'C') return { type: 'chorus', label: 'Chorus' };
   if (type === 'I') return { type: 'intro', label: 'Intro' };
   if (type === 'B') return { type: 'bridge', label: 'Bridge' };
+  if (type === 'P') return { type: 'prechorus', label: 'Pre-Chorus' };
+  if (type === 'O') return { type: 'outro', label: 'Outro' };
   if (type.match(/^V(\d+)$/)) return { type: 'verse', label: `Verse ${type.substring(1)}` };
   return { type, label: type };
 }
