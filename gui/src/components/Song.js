@@ -67,9 +67,15 @@ const styles = ({ spacing, typography }) => ({
   title: {
     ...typography.h4,
     margin: 0,
+    '@media print': {
+      color: 'black',
+    },
   },
   author: {
     ...typography.subtitle1,
+    '@media print': {
+      color: 'black',
+    },
   },
   owner: {
     ...typography.body2,

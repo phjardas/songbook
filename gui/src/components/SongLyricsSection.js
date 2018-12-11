@@ -25,6 +25,9 @@ const styles = ({ palette, spacing, typography }) => ({
   },
   header: {
     ...typography.h5,
+    '@media print': {
+      color: 'black',
+    },
   },
   highlight: {
     background: palette.grey[300],

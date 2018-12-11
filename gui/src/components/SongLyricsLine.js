@@ -49,6 +49,9 @@ const styles = ({ spacing, typography }) => {
     verticalAlign: 'baseline',
     whiteSpace: 'nowrap',
     lineHeight: 1.2,
+    '@media print': {
+      color: 'black',
+    },
   };
 
   return {
