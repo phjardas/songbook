@@ -19,7 +19,13 @@ function transposeTo(lyrics, originalKey, transposedKey) {
     ...lyrics,
     sections: lyrics.sections.map(section => ({
       ...section,
-      lines: section.lines.map(line => line.map(part => ({ ...part, chord: part.chord && transposer(part.chord) }))),
+      lines: section.lines.map(line => ({
+        ...line,
+        parts: line.parts.map(part => ({
+          ...part,
+          chord: part.chord && transposer(part.chord),
+        })),
+      })),
     })),
   };
 }
