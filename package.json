@@ -2,14 +2,12 @@
   "name": "songbook",
   "private": true,
   "scripts": {
-    "postinstall": "(npm --prefix gui install) && (npm --prefix functions install)",
+    "postinstall": "npm --prefix gui install",
     "start": "npm --prefix gui start",
     "deploy": "firebase deploy",
-    "deploy:functions": "firebase deploy --only functions",
-    "deploy:hosting": "firebase deploy --only hosting",
-    "build": "(npm --prefix functions run build) && (npm --prefix gui run build)",
-    "test": "(npm --prefix gui run test)",
-    "lint": "(npm --prefix gui run lint)"
+    "build": "npm --prefix gui run build",
+    "test": "npm --prefix gui run test",
+    "lint": "npm --prefix gui run lint"
   },
   "devDependencies": {
     "firebase-tools": "^6.1.1",
