@@ -1,3 +1,16 @@
 # Songbook
 
 A progressive web app to organize your leadsheets.
+
+## Development
+
+Requires Node.js 26 and pnpm (`corepack enable`).
+
+```sh
+pnpm install
+pnpm start      # dev server
+pnpm test       # unit tests
+pnpm build      # production build into build/
+```
+
+Pushes to the default branch are deployed to Firebase by GitHub Actions. The workflow expects a `FIREBASE_SERVICE_ACCOUNT` secret holding a service account key with Firebase Hosting and Firestore rules permissions.

@@ -1,4 +1,4 @@
 node_modules
 /.firebase
-/songs
 *.log
+/build

@@ -1,0 +1,239 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`parser > opensong > should parse a song 1`] = `
+{
+  "messages": [],
+  "sections": [
+    {
+      "firstLine": 0,
+      "label": undefined,
+      "lastLine": 3,
+      "lines": [
+        {
+          "lines": [
+            0,
+            1,
+          ],
+          "parts": [
+            {
+              "chord": undefined,
+              "col": 1,
+              "text": "I ",
+            },
+            {
+              "chord": "D",
+              "col": 3,
+              "text": "looked over Jordan, and ",
+            },
+            {
+              "chord": "G",
+              "col": 27,
+              "text": "what did I ",
+            },
+            {
+              "chord": "D",
+              "col": 38,
+              "text": "see,",
+            },
+          ],
+        },
+        {
+          "lines": [
+            2,
+            3,
+          ],
+          "parts": [
+            {
+              "chord": undefined,
+              "col": 1,
+              "text": "Comin’ for to carry me ",
+            },
+            {
+              "chord": "A7",
+              "col": 24,
+              "text": "home.",
+            },
+          ],
+        },
+      ],
+      "type": undefined,
+    },
+    {
+      "firstLine": 5,
+      "label": "Chorus",
+      "lastLine": 9,
+      "lines": [
+        {
+          "lines": [
+            6,
+            7,
+          ],
+          "parts": [
+            {
+              "chord": undefined,
+              "col": 1,
+              "text": "Swing ",
+            },
+            {
+              "chord": "D",
+              "col": 7,
+              "text": "low, sweet ",
+            },
+            {
+              "chord": "G",
+              "col": 18,
+              "text": "chari",
+            },
+            {
+              "chord": "D",
+              "col": 23,
+              "text": "ot,",
+            },
+          ],
+        },
+        {
+          "lines": [
+            8,
+            9,
+          ],
+          "parts": [
+            {
+              "chord": undefined,
+              "col": 1,
+              "text": "Comin’ for to carry me ",
+            },
+            {
+              "chord": "A7",
+              "col": 24,
+              "text": "home.",
+            },
+          ],
+        },
+      ],
+      "type": "chorus",
+    },
+    {
+      "firstLine": 11,
+      "label": "Verse 2",
+      "lastLine": 15,
+      "lines": [
+        {
+          "lines": [
+            12,
+            13,
+          ],
+          "parts": [
+            {
+              "chord": undefined,
+              "col": 1,
+              "text": "I ",
+            },
+            {
+              "chord": "D",
+              "col": 3,
+              "text": "looked over Jordan, and ",
+            },
+            {
+              "chord": "G",
+              "col": 27,
+              "text": "what did I ",
+            },
+            {
+              "chord": "D",
+              "col": 38,
+              "text": "see,",
+            },
+          ],
+        },
+        {
+          "lines": [
+            14,
+            15,
+          ],
+          "parts": [
+            {
+              "chord": undefined,
+              "col": 1,
+              "text": "Comin’ for to carry me ",
+            },
+            {
+              "chord": "A7",
+              "col": 24,
+              "text": "home.",
+            },
+          ],
+        },
+      ],
+      "type": "verse",
+    },
+    {
+      "firstLine": 17,
+      "label": "Bridge",
+      "lastLine": 19,
+      "lines": [
+        {
+          "lines": [
+            18,
+          ],
+          "parts": [
+            {
+              "chord": "D",
+              "col": 1,
+            },
+            {
+              "chord": "G",
+              "col": 3,
+            },
+            {
+              "chord": "D",
+              "col": 5,
+            },
+          ],
+        },
+        {
+          "lines": [
+            19,
+          ],
+          "parts": [
+            {
+              "chord": "A7",
+              "col": 1,
+            },
+          ],
+        },
+      ],
+      "type": "bridge",
+    },
+    {
+      "firstLine": 21,
+      "label": "Verse 3",
+      "lastLine": 23,
+      "lines": [
+        {
+          "lines": [
+            22,
+          ],
+          "parts": [
+            {
+              "col": 1,
+              "text": "I looked over Jordan, and what did I see,",
+            },
+          ],
+        },
+        {
+          "lines": [
+            23,
+          ],
+          "parts": [
+            {
+              "col": 1,
+              "text": "Comin’ for to carry me home.",
+            },
+          ],
+        },
+      ],
+      "type": "verse",
+    },
+  ],
+}
+`;
