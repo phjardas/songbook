@@ -1,4 +1,6 @@
 node_modules
 /.firebase
-/songs
 *.log
+/build
+firebase-debug.log
+firestore-debug.log

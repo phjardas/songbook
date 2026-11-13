@@ -1,0 +1,155 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`parser > chordpro > should parse a song 1`] = `
+{
+  "messages": [
+    {
+      "line": 2,
+      "message": "Ignoring directive "title"",
+      "type": "warning",
+    },
+  ],
+  "sections": [
+    {
+      "lines": [
+        {
+          "parts": [
+            {
+              "text": "I ",
+            },
+            {
+              "chord": "D",
+              "text": "looked over Jordan, and ",
+            },
+            {
+              "chord": "G",
+              "text": "what did I ",
+            },
+            {
+              "chord": "D",
+              "text": "see,",
+            },
+          ],
+        },
+        {
+          "parts": [
+            {
+              "text": "Comin’ for to carry me ",
+            },
+            {
+              "chord": "A7",
+              "text": "home.",
+            },
+          ],
+        },
+      ],
+    },
+    {
+      "label": "Chorus",
+      "lines": [
+        {
+          "parts": [
+            {
+              "text": "Swing ",
+            },
+            {
+              "chord": "D",
+              "text": "low, sweet ",
+            },
+            {
+              "chord": "G",
+              "text": "chari",
+            },
+            {
+              "chord": "D",
+              "text": "ot,",
+            },
+          ],
+        },
+        {
+          "parts": [
+            {
+              "text": "Comin’ for to carry me ",
+            },
+            {
+              "chord": "A7",
+              "text": "home.",
+            },
+          ],
+        },
+      ],
+      "type": "chorus",
+    },
+    {
+      "label": "Verse 2",
+      "lines": [
+        {
+          "parts": [
+            {
+              "text": "I ",
+            },
+            {
+              "chord": "D",
+              "text": "looked over Jordan, and ",
+            },
+            {
+              "chord": "G",
+              "text": "what did I ",
+            },
+            {
+              "chord": "D",
+              "text": "see,",
+            },
+          ],
+        },
+        {
+          "parts": [
+            {
+              "text": "Comin’ for to carry me ",
+            },
+            {
+              "chord": "A7",
+              "text": "home.",
+            },
+          ],
+        },
+      ],
+      "type": "verse",
+    },
+    {
+      "lines": [
+        {
+          "parts": [
+            {
+              "text": "I ",
+            },
+            {
+              "chord": "D",
+              "text": "looked over Jordan, and ",
+            },
+            {
+              "chord": "G",
+              "text": "what did I ",
+            },
+            {
+              "chord": "D",
+              "text": "see,",
+            },
+          ],
+        },
+        {
+          "parts": [
+            {
+              "text": "Comin’ for to carry me ",
+            },
+            {
+              "chord": "A7",
+              "text": "home.",
+            },
+          ],
+        },
+      ],
+    },
+  ],
+}
+`;
