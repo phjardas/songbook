@@ -1,0 +1,80 @@
+import type { LyricsLine, LyricsMessage, LyricsSection, ParsedLyrics } from '../types';
+
+export default function parseChordPro(lyrics: string): ParsedLyrics {
+  const messages: LyricsMessage[] = [];
+  const lines = lyrics.split(/\r?\n/);
+  const sections: LyricsSection[] = [];
+  let section: LyricsSection | null = null;
+
+  const handleDirective = (directive: string, lineNo: number) => {
+    const match = directive.match(/^\{(?:([^:]+):\s+)?(.+)\}$/);
+    if (!match) throw new Error(`Invalid directive: ${directive}`);
+    const type = match[1] || match[2];
+    const label = match[1] && match[2];
+
+    if (type.startsWith('start_of_')) {
+      const sectionType = type.substring(9);
+      if (section) sections.push(section);
+      section = {
+        type: sectionType,
+        label: label || capitalize(sectionType),
+        lines: [],
+      };
+    } else if (type.startsWith('end_of_')) {
+      const sectionType = type.substring(7);
+
+      if (!section) {
+        throw new Error(`Cannot end section of type "${sectionType}": missing opening tag.`);
+      }
+
+      if (section.type !== sectionType) {
+        throw new Error(`Cannot end section of type "${sectionType}": mismatched opening tag "${section.type}".`);
+      }
+
+      sections.push(section);
+      section = null;
+    } else if (type === 'comment') {
+      // ignored
+    } else {
+      messages.push({ line: lineNo, type: 'warning', message: `Ignoring directive "${type}"` });
+    }
+  };
+
+  for (let lineNo = 0, l = lines.length; lineNo < l; lineNo++) {
+    try {
+      const line = lines[lineNo];
+      if (line.startsWith('#') || !line.trim().length) continue;
+      const parts = line.split(/(\{[^}]+\}|\[[^\]]+\])/g).filter(s => s.length);
+
+      if (parts[0].startsWith('{')) {
+        handleDirective(parts[0], lineNo);
+      } else {
+        if (!section) section = { lines: [] };
+        const line: LyricsLine = { parts: [] };
+        section.lines.push(line);
+
+        parts.forEach((part, i) => {
+          if (part.startsWith('[')) {
+            const name = part.replace(/(^\[|\]$)/g, '');
+            line.parts.push({ chord: name });
+          } else {
+            if (i) {
+              line.parts[line.parts.length - 1].text = part;
+            } else {
+              line.parts.push({ text: part });
+            }
+          }
+        });
+      }
+    } catch (error) {
+      messages.push({ line: lineNo, type: 'error', message: (error as Error).message });
+    }
+  }
+
+  if (section) sections.push(section);
+  return { sections, messages };
+}
+
+function capitalize(s: string) {
+  return s[0].toUpperCase() + (s.length > 1 ? s.substring(1) : '');
+}
