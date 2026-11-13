@@ -21,6 +21,14 @@ export default defineConfig({
   ],
   build: {
     outDir: 'build',
+    rolldownOptions: {
+      output: {
+        codeSplitting: {
+          // Firebase changes far less often than the app, so a separate chunk stays cached across deploys.
+          groups: [{ name: 'firebase', test: /node_modules[\\/](@firebase|firebase)[\\/]/ }],
+        },
+      },
+    },
   },
   test: {
     environment: 'node',
