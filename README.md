@@ -16,6 +16,6 @@ pnpm format     # apply Prettier
 pnpm build      # production build into build/
 ```
 
-Pushes to the default branch are deployed to Firebase by GitHub Actions. The workflow expects a `FIREBASE_SERVICE_ACCOUNT` secret holding a service account key with Firebase Hosting and Firestore rules permissions.
+Pushes to the default branch are deployed to Firebase by GitHub Actions. The workflow expects a `FIREBASE_SERVICE_ACCOUNT` secret holding a service account key with these roles: Firebase Hosting Admin, Firebase Rules Admin and Service Usage Consumer. It deploys Hosting and the Firestore rules; Firestore indexes are not deployed.
 
 To run against local Firebase emulators (requires Java), start `pnpm emulators` in one terminal and `pnpm start:emulators` in another.
