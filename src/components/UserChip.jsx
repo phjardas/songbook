@@ -1,5 +1,4 @@
-import { Avatar, Chip } from '@material-ui/core';
-import React from 'react';
+import { Avatar, Chip } from '@mui/material';
 import UserInfo from './UserInfo';
 
 export default function UserChip({ id, ...props }) {

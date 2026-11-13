@@ -1,36 +1,34 @@
-import React, { lazy, Suspense } from 'react';
-import { Redirect, Route, Switch } from 'react-router-dom';
+import { lazy, Suspense } from 'react';
+import { Navigate, Route, Routes } from 'react-router';
 import ContentUpdatedBanner from '../components/ContentUpdatedBanner';
 import LayoutLoader from '../components/LayoutLoader';
 import Notifications from '../components/Notifications';
-import { withServiceWorker } from '../providers/ServiceWorker';
+import { useServiceWorker } from '../providers/ServiceWorker';
 
-const CreateSong = lazy(async () => import('./CreateSong'));
-const EditSong = lazy(async () => import('./EditSong'));
-const Song = lazy(async () => import('./Song'));
-const Songs = lazy(async () => import('./Songs'));
+const CreateSong = lazy(() => import('./CreateSong'));
+const EditSong = lazy(() => import('./EditSong'));
+const Song = lazy(() => import('./Song'));
+const Songs = lazy(() => import('./Songs'));
 
-function Main({ contentUpdated, reload }) {
+export default function Main() {
+  const { contentUpdated, reload } = useServiceWorker();
+
   return (
     <Suspense fallback={<LayoutLoader />}>
-      <Switch>
-        <Route exact path="/songs" component={Songs} />
-        <Route exact path="/songs/_new" component={CreateSong} />
-        <Route exact path="/songs/:songId" component={Song} />
-        <Route exact path="/songs/:songId/edit" component={EditSong} />
+      <Routes>
+        <Route path="/songs" element={<Songs />} />
+        <Route path="/songs/_new" element={<CreateSong />} />
+        <Route path="/songs/:songId" element={<Song />} />
+        <Route path="/songs/:songId/edit" element={<EditSong />} />
 
-        <Route exact path="/drafts" component={Songs} />
-        <Route exact path="/drafts/:songId" component={Song} />
-        <Route exact path="/drafts/:songId/edit" component={EditSong} />
+        <Route path="/drafts" element={<Songs draft />} />
+        <Route path="/drafts/:songId" element={<Song />} />
+        <Route path="/drafts/:songId/edit" element={<EditSong />} />
 
-        <Route exact path="/">
-          {() => <Redirect to="/songs" />}
-        </Route>
-      </Switch>
+        <Route path="*" element={<Navigate to="/songs" replace />} />
+      </Routes>
       <Notifications />
       {contentUpdated && <ContentUpdatedBanner reload={reload} />}
     </Suspense>
   );
 }
-
-export default withServiceWorker(Main);

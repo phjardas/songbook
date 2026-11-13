@@ -1,8 +1,7 @@
-import React from 'react';
+import { createContext, useContext } from 'react';
 import { useRegisterSW } from 'virtual:pwa-register/react';
-import { withConsumer } from './with';
 
-const Context = React.createContext();
+const Context = createContext();
 
 export function ServiceWorkerProvider({ children }) {
   const {
@@ -10,8 +9,7 @@ export function ServiceWorkerProvider({ children }) {
     updateServiceWorker,
   } = useRegisterSW();
 
-  return <Context.Provider value={{ contentUpdated, reload: () => updateServiceWorker(true) }}>{children}</Context.Provider>;
+  return <Context value={{ contentUpdated, reload: () => updateServiceWorker(true) }}>{children}</Context>;
 }
 
-export const WithServiceWorker = Context.Consumer;
-export const withServiceWorker = withConsumer(WithServiceWorker);
+export const useServiceWorker = () => useContext(Context);

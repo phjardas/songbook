@@ -1,37 +1,21 @@
-import { Button, withStyles } from '@material-ui/core';
-import React, { useState } from 'react';
-import { compose } from 'recompose';
+import { Box, Button, Stack } from '@mui/material';
+import { useState } from 'react';
 import ErrorSnackbar from '../components/ErrorSnackbar';
 import Loading from '../components/Loading';
 import SmallLayout from '../components/SmallLayout';
-import { withAuth } from '../providers/Auth';
+import { useAuth } from '../providers/Auth';
 
-function SignInForm({ providers, signIn, signInError, classes }) {
-  return (
-    <>
-      <div className={classes.please}>Please sign in</div>
-      {signInError && <ErrorSnackbar error={signInError} />}
-      <div className={classes.buttons}>
-        {providers.map(p => (
-          <Button key={p.id} variant="contained" color="primary" className={classes.signInButton} onClick={() => signIn(p.id)}>
-            <p.icon className={classes.signInIcon} /> {p.label}
-          </Button>
-        ))}
-      </div>
-    </>
-  );
-}
+export default function SignIn() {
+  const { providers, signIn } = useAuth();
+  const [signingIn, setSigningIn] = useState(false);
+  const [signInError, setSignInError] = useState(null);
 
-function SignIn({ signIn, classes, ...auth }) {
-  const [signingIn, setSigningIn] = useState();
-  const [signInError, setSignInError] = useState();
-
-  const doSignIn = async (...args) => {
+  const doSignIn = async providerId => {
     setSignInError(null);
     setSigningIn(true);
 
     try {
-      await signIn(...args);
+      await signIn(providerId);
     } catch (error) {
       setSignInError(error);
     } finally {
@@ -44,38 +28,25 @@ function SignIn({ signIn, classes, ...auth }) {
       {signingIn ? (
         <Loading message="Signing you in…" />
       ) : (
-        <SignInForm {...auth} signIn={doSignIn} signInError={signInError} classes={classes} />
+        <>
+          <Box sx={{ textAlign: 'center', typography: 'body1' }}>Please sign in</Box>
+          {signInError && <ErrorSnackbar error={signInError} />}
+          <Stack direction="row" spacing={1} sx={{ mt: 1, width: '100%' }}>
+            {providers.map(p => (
+              <Button
+                key={p.id}
+                variant="contained"
+                color="primary"
+                sx={{ flex: 1 }}
+                startIcon={<Box component={p.icon} sx={{ height: '1.5em', fill: 'white' }} />}
+                onClick={() => doSignIn(p.id)}
+              >
+                {p.label}
+              </Button>
+            ))}
+          </Stack>
+        </>
       )}
     </SmallLayout>
   );
 }
-
-const styles = ({ spacing, palette, typography }) => ({
-  please: {
-    textAlign: 'center',
-    ...typography.body1,
-  },
-  buttons: {
-    marginTop: spacing.unit,
-    width: '100%',
-    display: 'flex',
-    justifyContent: 'space-between',
-  },
-  signInButton: {
-    flex: 1,
-    marginRight: spacing.unit,
-    '&:last-child': {
-      marginRight: 0,
-    },
-  },
-  signInIcon: {
-    marginRight: spacing.unit,
-    height: '1.5em',
-    fill: palette.common.white,
-  },
-});
-
-export default compose(
-  withAuth,
-  withStyles(styles)
-)(SignIn);

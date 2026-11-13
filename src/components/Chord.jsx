@@ -1,4 +1,3 @@
-import React from 'react';
 import Pitch from './Pitch';
 
 function Chord({ chord }) {

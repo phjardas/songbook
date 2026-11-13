@@ -1,4 +1,3 @@
-import React from 'react';
 
 export default function Pitch({ pitch }) {
   const { key, accidental, suffix } = parsePitch(pitch);

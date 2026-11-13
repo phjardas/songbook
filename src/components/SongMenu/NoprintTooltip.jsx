@@ -1,16 +1,5 @@
-import { Tooltip, withStyles } from '@material-ui/core';
-import React from 'react';
+import { Tooltip } from '@mui/material';
 
-function NoprintTooltip({ classes, ...props }) {
-  return <Tooltip classes={classes} {...props} />;
+export default function NoprintTooltip(props) {
+  return <Tooltip slotProps={{ popper: { sx: { '@media print': { display: 'none' } } } }} {...props} />;
 }
-
-const styles = {
-  popper: {
-    '@media print': {
-      display: 'none',
-    },
-  },
-};
-
-export default withStyles(styles)(NoprintTooltip);

@@ -1,64 +1,30 @@
-import { Button, CircularProgress, withStyles } from '@material-ui/core';
-import { green } from '@material-ui/core/colors';
-import { Check as CheckIcon, Save as SaveIcon } from '@material-ui/icons';
-import React from 'react';
+import { Check as CheckIcon, Save as SaveIcon } from '@mui/icons-material';
+import { Button, CircularProgress } from '@mui/material';
+import { green } from '@mui/material/colors';
 
-const defaultTitles = {
-  save: 'Save',
-  saving: 'Saving…',
-  saved: 'Saved!',
-};
+const buttonSx = { transition: 'color linear 300ms, background-color linear 300ms' };
+const successSx = { ...buttonSx, color: 'white', bgcolor: green[500], '&:hover': { bgcolor: green[700] } };
 
-const defaultIcons = {
-  save: SaveIcon,
-  saving: props => <CircularProgress size={24} color="inherit" {...props} />,
-  saved: CheckIcon,
-};
-
-function SaveButton({ saving, saved, valid, classes, titles, icons, color = 'primary', variant = 'contained', ...props }) {
-  titles = { ...defaultTitles, ...titles };
-  const Icons = { ...defaultIcons, ...icons };
-
+export default function SaveButton({ saving, saved, valid, color = 'primary', variant = 'contained', ...props }) {
   if (saving) {
     return (
-      <Button variant={variant} color={color} disabled={true} className={classes.button} {...props}>
-        <Icons.saving className={classes.icon} />
-        {titles.saving}
+      <Button variant={variant} color={color} disabled sx={buttonSx} startIcon={<CircularProgress size={24} color="inherit" />} {...props}>
+        Saving…
       </Button>
     );
   }
 
   if (saved) {
     return (
-      <Button type="submit" variant={variant} className={`${classes.button} ${classes.success}`} {...props}>
-        <Icons.saved className={classes.icon} />
-        {titles.saved}
+      <Button type="submit" variant={variant} sx={successSx} startIcon={<CheckIcon />} {...props}>
+        Saved!
       </Button>
     );
   }
 
   return (
-    <Button type="submit" variant={variant} color={color} disabled={!valid} className={classes.button} {...props}>
-      <Icons.save className={classes.icon} />
-      {titles.save}
+    <Button type="submit" variant={variant} color={color} disabled={!valid} sx={buttonSx} startIcon={<SaveIcon />} {...props}>
+      Save
     </Button>
   );
 }
-
-const styles = ({ spacing }) => ({
-  icon: {
-    marginRight: spacing.unit,
-  },
-  button: {
-    transition: ['color linear 300ms', 'background-color linear 300ms'],
-  },
-  success: {
-    color: 'white',
-    backgroundColor: green[500],
-    '&:hover': {
-      backgroundColor: green[700],
-    },
-  },
-});
-
-export default withStyles(styles)(SaveButton);

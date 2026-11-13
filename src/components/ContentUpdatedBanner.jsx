@@ -1,31 +1,25 @@
-import { Button, Snackbar, IconButton, withStyles } from '@material-ui/core';
-import { Close as CloseIcon } from '@material-ui/icons';
-import React, { useState } from 'react';
+import { Close as CloseIcon } from '@mui/icons-material';
+import { Button, IconButton, Snackbar } from '@mui/material';
+import { useState } from 'react';
 
-function ContentUpdatedBanner({ reload, classes }) {
+export default function ContentUpdatedBanner({ reload }) {
   const [show, setShow] = useState(true);
-  const handleClose = () => setShow(false);
 
   return (
     <Snackbar
       open={show}
-      anchorOrigin={{
-        vertical: 'bottom',
-        horizontal: 'left',
-      }}
+      anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
       message="The application has been updated"
-      action={[
-        <Button key="reload" color="secondary" size="small" onClick={reload}>
-          Reload
-        </Button>,
-        <IconButton key="close" color="inherit" onClick={handleClose} className={classes.close}>
-          <CloseIcon />
-        </IconButton>,
-      ]}
+      action={
+        <>
+          <Button color="secondary" size="small" onClick={reload}>
+            Reload
+          </Button>
+          <IconButton color="inherit" onClick={() => setShow(false)} sx={{ p: 0.5 }} aria-label="Close">
+            <CloseIcon />
+          </IconButton>
+        </>
+      }
     />
   );
 }
-
-const styles = ({ spacing }) => ({ close: { padding: spacing.unit / 2 } });
-
-export default withStyles(styles)(ContentUpdatedBanner);

@@ -9,8 +9,7 @@ function getPublicCollection() {
   return collection(firestore, 'songs');
 }
 
-export function getSongsCollection({ path, user }) {
-  const draft = path.startsWith('/drafts');
+export function getSongsCollection({ draft, user }) {
 
   return {
     draft,
@@ -19,8 +18,8 @@ export function getSongsCollection({ path, user }) {
   };
 }
 
-export function getSongDocument({ songId, path, user }) {
-  const { draft, collection, toSong } = getSongsCollection({ path, user });
+export function getSongDocument({ songId, draft, user }) {
+  const { collection, toSong } = getSongsCollection({ draft, user });
   const doc = docRef(collection, songId);
   let song;
   const getSong = () => {
@@ -68,7 +67,7 @@ function toSongFactory({ draft, user }) {
       ...data,
       meta: {
         draft,
-        owned: user && user.id === data.owner,
+        owned: user?.id === data.owner,
         url: `/${draft ? 'drafts' : 'songs'}/${data.id}`,
       },
     };

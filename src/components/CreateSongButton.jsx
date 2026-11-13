@@ -1,11 +1,10 @@
-import { Add as AddIcon } from '@material-ui/icons';
-import React from 'react';
+import { Add as AddIcon } from '@mui/icons-material';
 import ButtonLink from './ButtonLink';
 
-export default function CreateSongButton({ withLabel, className = '', classes = {}, ...props }) {
+export default function CreateSongButton({ withLabel, iconSx, ...props }) {
   return (
-    <ButtonLink to="/songs/_new" className={`${className} ${classes.root}`} {...props}>
-      <AddIcon className={classes.icon} />
+    <ButtonLink to="/songs/_new" aria-label="Create Song" {...props}>
+      <AddIcon sx={iconSx} />
       {withLabel && 'Create Song'}
     </ButtonLink>
   );

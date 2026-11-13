@@ -1,16 +1,11 @@
-import { Grid, TextField, withStyles } from '@material-ui/core';
-import React, { useState } from 'react';
+import { Box, Grid, Stack, TextField } from '@mui/material';
+import { useState } from 'react';
 import ButtonLink from './ButtonLink';
 import ErrorSnackbar from './ErrorSnackbar';
 import LyricsEditor from './LyricsEditor';
 import SaveButton from './SaveButton';
 
-function SongEditor({ song, saveSong, className }) {
-  const {
-    id,
-    meta: { draft },
-  } = song;
-
+export default function SongEditor({ song, saveSong, sx }) {
   const lyricsType = song.lyricsType || 'opensong';
   const [{ saving, saved, error }, setState] = useState({});
   const [title, setTitle] = useState(song.title || '');
@@ -23,8 +18,7 @@ function SongEditor({ song, saveSong, className }) {
     setState({ saving: true, saved: false, error: null });
 
     try {
-      const song = { title, author, lyrics, key };
-      await saveSong(song);
+      await saveSong({ title, author, lyrics, key });
       setState({ saving: false, saved: true, error: null });
       setTimeout(() => setState({ saved: false }), 3000);
     } catch (error) {
@@ -34,57 +28,29 @@ function SongEditor({ song, saveSong, className }) {
   };
 
   return (
-    <form onSubmit={save} className={className}>
-      <Grid container spacing={24}>
-        <Grid item xs={12} sm={4}>
-          <TextField
-            id="title"
-            label="Title"
-            value={title}
-            required
-            onChange={e => setTitle(e.currentTarget.value)}
-            disabled={saving}
-            fullWidth
-          />
+    <Box component="form" onSubmit={save} sx={sx}>
+      <Grid container spacing={3}>
+        <Grid size={{ xs: 12, sm: 4 }}>
+          <TextField id="title" label="Title" value={title} required onChange={e => setTitle(e.target.value)} disabled={saving} fullWidth />
         </Grid>
-        <Grid item xs={12} sm={4}>
-          <TextField
-            id="author"
-            label="Author"
-            value={author}
-            required
-            onChange={e => setAuthor(e.currentTarget.value)}
-            disabled={saving}
-            fullWidth
-          />
+        <Grid size={{ xs: 12, sm: 4 }}>
+          <TextField id="author" label="Author" value={author} required onChange={e => setAuthor(e.target.value)} disabled={saving} fullWidth />
         </Grid>
-        <Grid item xs={12} sm={4}>
-          <TextField id="key" label="Key" value={key} onChange={e => setKey(e.currentTarget.value)} disabled={saving} fullWidth />
+        <Grid size={{ xs: 12, sm: 4 }}>
+          <TextField id="key" label="Key" value={key} onChange={e => setKey(e.target.value)} disabled={saving} fullWidth />
         </Grid>
-        <Grid item xs={12}>
+        <Grid size={12}>
           <LyricsEditor lyrics={lyrics} lyricsType={lyricsType} onChange={setLyrics} disabled={saving} />
         </Grid>
-        <Grid item xs={12}>
-          <Grid container spacing={8} direction="row-reverse" justify="flex-start">
-            <Grid item>
-              <SaveButton saving={saving} saved={saved} valid={title && author && lyrics} />
-            </Grid>
-            <Grid item>
-              <ButtonLink to={draft ? `/drafts/${id}` : `/songs/${id}`}>Back</ButtonLink>
-            </Grid>
-          </Grid>
+        <Grid size={12}>
+          <Stack direction="row-reverse" spacing={1}>
+            <SaveButton saving={saving} saved={saved} valid={title && author && lyrics} />
+            <ButtonLink to={song.meta.url}>Back</ButtonLink>
+          </Stack>
         </Grid>
       </Grid>
 
       {error && <ErrorSnackbar error={error} />}
-    </form>
+    </Box>
   );
 }
-
-const styles = {
-  lyricsInput: {
-    fontFamily: 'monospace',
-  },
-};
-
-export default withStyles(styles)(SongEditor);

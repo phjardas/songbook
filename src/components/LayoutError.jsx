@@ -1,8 +1,7 @@
-import React from 'react';
-import ErrorSnackbar from '../components/ErrorSnackbar';
-import Layout from '../components/layout';
+import ErrorSnackbar from './ErrorSnackbar';
+import Layout from './layout';
 
-export default function({ error }) {
+export default function LayoutError({ error }) {
   return (
     <Layout>
       <ErrorSnackbar error={error} />

@@ -1,20 +1,11 @@
-import { withStyles } from '@material-ui/core';
-import React from 'react';
+import { Box } from '@mui/material';
 
 const commitHash = import.meta.env.VITE_GIT_SHA || 'aabbccd';
 
-function Footer({ className = '', classes }) {
-  return <footer className={`${className} ${classes.main}`}>Songbook v1.0.0 {commitHash}</footer>;
+export default function Footer() {
+  return (
+    <Box component="footer" sx={{ typography: 'caption', py: 2, px: 3, '@media print': { display: 'none' } }}>
+      Songbook v1.0.0 {commitHash}
+    </Box>
+  );
 }
-
-const styles = ({ spacing, typography }) => ({
-  main: {
-    ...typography.caption,
-    padding: `${spacing.unit * 2}px ${spacing.unit * 3}px`,
-    '@media print': {
-      display: 'none',
-    },
-  },
-});
-
-export default withStyles(styles)(Footer);

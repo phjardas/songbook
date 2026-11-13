@@ -1,21 +1,10 @@
-import React from 'react';
-import { QRCode } from 'react-qr-svg';
-import { withStyles } from '@material-ui/core';
+import { Box } from '@mui/material';
+import { QRCodeSVG } from 'qrcode.react';
 
-function PageQR({ classes, ...props }) {
-  return <QRCode bgColor="#FFFFFF" fgColor="#000000" level="L" value={window.location.href} className={classes.qr} {...props} />;
+export default function PageQR() {
+  return (
+    <Box sx={{ float: 'right', width: 96, height: 96, m: 3, '@media screen': { display: 'none' } }}>
+      <QRCodeSVG value={window.location.href} level="L" bgColor="#FFFFFF" fgColor="#000000" size={96} />
+    </Box>
+  );
 }
-
-const styles = ({ spacing }) => ({
-  qr: {
-    float: 'right',
-    width: spacing.unit * 12,
-    height: spacing.unit * 12,
-    margin: spacing.unit * 3,
-    '@media screen': {
-      display: 'none',
-    },
-  },
-});
-
-export default withStyles(styles)(PageQR);

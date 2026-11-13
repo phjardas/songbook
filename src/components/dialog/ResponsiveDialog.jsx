@@ -1,16 +1,8 @@
-import { withMobileDialog } from '@material-ui/core';
-import React from 'react';
+import { useIsDesktop } from '../../providers/Theme';
 import FullScreenDialog from './FullScreenDialog';
 import ModalDialog from './ModalDialog';
 
-function ResponsiveDialog({ fullScreen, hide, children, ...props }) {
-  const DialogType = fullScreen ? FullScreenDialog : ModalDialog;
-
-  return (
-    <DialogType {...props} hide={hide}>
-      {children}
-    </DialogType>
-  );
+export default function ResponsiveDialog(props) {
+  const DialogType = useIsDesktop() ? ModalDialog : FullScreenDialog;
+  return <DialogType {...props} />;
 }
-
-export default withMobileDialog()(ResponsiveDialog);

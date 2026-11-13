@@ -1,13 +1,12 @@
-import { AppBar, IconButton, SwipeableDrawer, Toolbar, withStyles, Zoom } from '@material-ui/core';
-import { ArrowBack as ArrowBackIcon, Menu as MenuIcon } from '@material-ui/icons';
-import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { compose } from 'recompose';
+import { ArrowBack as ArrowBackIcon, Menu as MenuIcon } from '@mui/icons-material';
+import { AppBar, Box, Fab as MuiFab, IconButton, SwipeableDrawer, Toolbar, Zoom } from '@mui/material';
+import { useEffect, useState } from 'react';
+import { Link } from 'react-router';
 import ButtonLink from '../../ButtonLink';
 import Footer from '../Footer';
-import MainMenu from './MainMenu';
+import MainMenuList from '../MainMenuList';
 
-function MobileLayout({ Fab, Actions, back, title, children, theme, classes }) {
+export default function MobileLayout({ Fab, Actions, back, title, children }) {
   const [appBarElevation, setAppBarElevation] = useState(0);
   const [drawerOpen, setDrawerOpen] = useState(false);
 
@@ -23,33 +22,54 @@ function MobileLayout({ Fab, Actions, back, title, children, theme, classes }) {
   return (
     <>
       <SwipeableDrawer open={drawerOpen} onClose={closeDrawer} onOpen={openDrawer}>
-        <MainMenu onClose={closeDrawer} />
+        <MainMenuList onNavigate={closeDrawer} userHeight={56} sx={{ width: 240 }} />
       </SwipeableDrawer>
 
-      <AppBar position="sticky" elevation={appBarElevation} className={classes.appbar}>
-        <Toolbar className={classes.toolbar}>
+      <AppBar
+        position="sticky"
+        elevation={appBarElevation}
+        sx={theme => ({
+          transition: theme.transitions.create('box-shadow'),
+          '@media print': { display: 'none' },
+        })}
+      >
+        <Toolbar>
           {back ? (
-            <ButtonLink key="icon" Component={IconButton} to={back} color="inherit" className={classes.icon}>
+            <ButtonLink Component={IconButton} to={back} color="inherit" edge="start" aria-label="Back">
               <ArrowBackIcon />
             </ButtonLink>
           ) : (
-            <IconButton key="icon" color="inherit" onClick={openDrawer} className={classes.icon}>
+            <IconButton color="inherit" onClick={openDrawer} edge="start" aria-label="Menu">
               <MenuIcon />
             </IconButton>
           )}
 
-          <Link to={back || '/'} className={classes.title}>
+          <Box
+            component={Link}
+            to={back || '/'}
+            sx={{
+              display: 'flex',
+              flexGrow: 1,
+              alignItems: 'center',
+              typography: 'h6',
+              color: 'inherit',
+              textDecoration: 'none',
+              whiteSpace: 'nowrap',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+            }}
+          >
             {title || 'Songbook'}
-          </Link>
+          </Box>
 
           {Actions && <Actions />}
 
           {Fab && (
-            <div key={title} className={classes.fab}>
-              <Zoom in={true} timeout={theme.transitions.duration.enteringScreen}>
-                <Fab variant="fab" color="secondary" />
+            <Box key={title} sx={{ position: 'fixed', bottom: 16, right: 16, '@media print': { display: 'none' } }}>
+              <Zoom in>
+                <Fab Component={MuiFab} color="secondary" />
               </Zoom>
-            </div>
+            </Box>
           )}
         </Toolbar>
       </AppBar>
@@ -60,40 +80,3 @@ function MobileLayout({ Fab, Actions, back, title, children, theme, classes }) {
     </>
   );
 }
-
-const styles = ({ spacing, transitions, typography }) => ({
-  appbar: {
-    transition: `box-shadow ${transitions.easing.easeInOut} ${transitions.duration.standard}ms`,
-    '@media print': {
-      display: 'none',
-    },
-  },
-  toolbar: {
-    flex: 1,
-    display: 'flex',
-  },
-  title: {
-    display: 'flex',
-    flexGrow: 1,
-    alignItems: 'center',
-    ...typography.h6,
-    color: 'inherit',
-    textDecoration: 'none',
-    whiteSpace: 'nowrap',
-    overflow: 'hidden',
-    textOverflow: 'ellipsis',
-  },
-  icon: {
-    marginLeft: -12,
-  },
-  fab: {
-    position: 'fixed',
-    bottom: spacing.unit * 2,
-    right: spacing.unit * 2,
-    '@media print': {
-      display: 'none',
-    },
-  },
-});
-
-export default compose(withStyles(styles, { withTheme: true }))(MobileLayout);

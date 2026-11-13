@@ -1,4 +1,3 @@
-import React from 'react';
 import SongLyricsSection from './SongLyricsSection';
 
 export default function SongLyrics({ lyrics: { messages, sections }, highlightLine }) {

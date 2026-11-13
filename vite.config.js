@@ -19,8 +19,6 @@ export default defineConfig({
       },
     }),
   ],
-  // ponytail: MUI 3 (JSS) references Node's global; drop with the MUI upgrade.
-  define: { global: 'globalThis' },
   build: {
     outDir: 'build',
   },

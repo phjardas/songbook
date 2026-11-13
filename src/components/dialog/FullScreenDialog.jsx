@@ -1,14 +1,13 @@
-import { AppBar, Dialog, IconButton, Slide, Toolbar, Typography, withStyles } from '@material-ui/core';
-import { Close as CloseIcon } from '@material-ui/icons';
-import React from 'react';
+import { Close as CloseIcon } from '@mui/icons-material';
+import { AppBar, Box, Dialog, IconButton, Slide, Toolbar, Typography } from '@mui/material';
 
 function SlideUp(props) {
   return <Slide direction="up" {...props} />;
 }
 
-function FullScreenDialog({ children, title, hide, classes, ...props }) {
+export default function FullScreenDialog({ children, title, hide, ...props }) {
   return (
-    <Dialog {...props} fullScreen={true} TransitionComponent={SlideUp}>
+    <Dialog onClose={hide} {...props} fullScreen slots={{ transition: SlideUp }}>
       <AppBar position="static">
         <Toolbar>
           <IconButton color="inherit" onClick={hide} aria-label="Close">
@@ -20,15 +19,7 @@ function FullScreenDialog({ children, title, hide, classes, ...props }) {
         </Toolbar>
       </AppBar>
 
-      <div className={classes.main}>{children}</div>
+      <Box sx={{ p: 3 }}>{children}</Box>
     </Dialog>
   );
 }
-
-const styles = ({ spacing }) => ({
-  main: {
-    padding: spacing.unit * 3,
-  },
-});
-
-export default withStyles(styles)(FullScreenDialog);

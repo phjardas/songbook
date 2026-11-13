@@ -1,27 +1,21 @@
-import React, { useState } from 'react';
-import { withConsumer } from './with';
+import { createContext, useContext, useState } from 'react';
 
-const Context = React.createContext();
+const Context = createContext();
 
 export function NotificationsProvider({ children }) {
   const [notification, setNotification] = useState(null);
 
-  const addNotification = props => {
-    const notification = {
+  const addNotification = props =>
+    setNotification({
+      id: Date.now(),
       ...props,
       onClose: () => {
-        props.onClose && props.onClose();
+        props.onClose?.();
         setNotification(null);
       },
-    };
+    });
 
-    setNotification(notification);
-  };
-
-  const value = { notification: notification, addNotification };
-
-  return <Context.Provider value={value}>{children}</Context.Provider>;
+  return <Context value={{ notification, addNotification }}>{children}</Context>;
 }
 
-export const WithNotifications = Context.Consumer;
-export const withNotifications = withConsumer(WithNotifications);
+export const useNotifications = () => useContext(Context);

@@ -1,22 +1,22 @@
-import { CssBaseline } from '@material-ui/core';
-import { amber, purple } from '@material-ui/core/colors';
-import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
-import React from 'react';
+import { CssBaseline, useMediaQuery } from '@mui/material';
+import { amber, purple } from '@mui/material/colors';
+import { createTheme, ThemeProvider as MuiThemeProvider } from '@mui/material/styles';
 
-const theme = createMuiTheme({
+const theme = createTheme({
   palette: {
     primary: purple,
     secondary: amber,
   },
 });
 
-if (import.meta.env.DEV) console.debug('Theme:', theme);
-
 export function ThemeProvider({ children }) {
   return (
-    <>
+    <MuiThemeProvider theme={theme}>
       <CssBaseline />
-      <MuiThemeProvider theme={theme}>{children}</MuiThemeProvider>
-    </>
+      {children}
+    </MuiThemeProvider>
   );
 }
+
+// Material UI 3's Hidden smDown/mdUp and withMobileDialog switched at the md breakpoint.
+export const useIsDesktop = () => useMediaQuery(theme => theme.breakpoints.up('md'), { noSsr: true });

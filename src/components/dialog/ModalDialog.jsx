@@ -1,9 +1,8 @@
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from '@material-ui/core';
-import React from 'react';
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
 
 export default function ModalDialog({ title, children, hide, ...props }) {
   return (
-    <Dialog {...props}>
+    <Dialog onClose={hide} {...props}>
       <DialogTitle>{title}</DialogTitle>
       <DialogContent>{children}</DialogContent>
       <DialogActions>

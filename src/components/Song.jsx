@@ -1,88 +1,60 @@
-import { Hidden, withStyles } from '@material-ui/core';
-import { Edit as EditIcon } from '@material-ui/icons';
-import React, { useState } from 'react';
+import { Edit as EditIcon } from '@mui/icons-material';
+import { Box } from '@mui/material';
+import { useState } from 'react';
 import parseLyrics from '../parser';
+import { transposeLyrics } from '../parser/transpose';
+import { useIsDesktop } from '../providers/Theme';
 import ButtonLink from './ButtonLink';
 import Layout from './layout';
 import PageQR from './PageQR';
 import SongLyrics from './SongLyrics';
 import { DesktopSongMenu, MobileSongActions } from './SongMenu';
-import TransposedLyrics from './TransposedLyrics';
+import useMenuItems from './SongMenu/useMenuItems';
 import UserChip from './UserChip';
 
-function EditSongButton({ song }) {
-  return (
-    song.meta.owned &&
-    (props => (
-      <ButtonLink to={`${song.meta.url}/edit`} {...props}>
-        <EditIcon />
-      </ButtonLink>
-    ))
-  );
-}
+const printBlack = { '@media print': { color: 'black' } };
 
-function Song({ classes, ...props }) {
+export default function Song(props) {
   const { song } = props;
   const [transposedKey, setTransposedKey] = useState(song.key);
+  const isDesktop = useIsDesktop();
+  const { items, dialogs } = useMenuItems({ ...props, transposedKey, onKeyChange: setTransposedKey });
+  const lyrics = parseLyrics({ type: song.lyricsType || 'opensong', lyrics: song.lyrics });
+
+  const EditSongButton =
+    song.meta.owned &&
+    (fabProps => (
+      <ButtonLink to={`${song.meta.url}/edit`} aria-label="Edit" {...fabProps}>
+        <EditIcon />
+      </ButtonLink>
+    ));
 
   return (
     <Layout
       title={song.title}
       back={song.meta.draft ? '/drafts' : '/songs'}
-      Fab={EditSongButton({ song })}
-      Actions={() => <MobileSongActions {...props} transposedKey={transposedKey} onKeyChange={setTransposedKey} />}
+      Fab={EditSongButton}
+      Actions={() => <MobileSongActions items={items} />}
     >
+      {dialogs}
       <PageQR />
 
-      <Hidden smDown>
-        <DesktopSongMenu {...props} transposedKey={transposedKey} onKeyChange={setTransposedKey} />
-      </Hidden>
+      {isDesktop && <DesktopSongMenu song={song} items={items} />}
 
-      <div className={classes.main}>
-        <h1 className={classes.title}>{song.title || <em>No Title</em>}</h1>
-        <div className={classes.author}>by {song.author || <em>No author</em>}</div>
+      <Box sx={{ p: 3 }}>
+        <Box component="h1" sx={{ typography: 'h4', m: 0, ...printBlack }}>
+          {song.title || <em>No Title</em>}
+        </Box>
+        <Box sx={{ typography: 'subtitle1', ...printBlack }}>by {song.author || <em>No author</em>}</Box>
 
         {!song.meta.draft && (
-          <div className={classes.owner}>
+          <Box sx={{ typography: 'body2', '@media print': { display: 'none' } }}>
             Transcribed by <UserChip id={song.owner} />
-          </div>
+          </Box>
         )}
 
-        <TransposedLyrics
-          lyrics={parseLyrics({ type: song.lyricsType || 'opensong', lyrics: song.lyrics })}
-          originalKey={song.key}
-          actualKey={transposedKey}
-        >
-          {({ lyrics }) => <SongLyrics lyrics={lyrics} />}
-        </TransposedLyrics>
-      </div>
+        <SongLyrics lyrics={transposeLyrics(lyrics, song.key, transposedKey)} />
+      </Box>
     </Layout>
   );
 }
-
-const styles = ({ spacing, typography }) => ({
-  main: {
-    padding: spacing.unit * 3,
-  },
-  title: {
-    ...typography.h4,
-    margin: 0,
-    '@media print': {
-      color: 'black',
-    },
-  },
-  author: {
-    ...typography.subtitle1,
-    '@media print': {
-      color: 'black',
-    },
-  },
-  owner: {
-    ...typography.body2,
-    '@media print': {
-      display: 'none',
-    },
-  },
-});
-
-export default withStyles(styles)(Song);

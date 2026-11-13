@@ -1,20 +1,10 @@
-import { withStyles } from '@material-ui/core';
-import React from 'react';
-import Layout from '../components/layout';
-import Loading from '../components/Loading';
+import Layout from './layout';
+import Loading from './Loading';
 
-function LayoutLoader({ classes }) {
+export default function LayoutLoader() {
   return (
     <Layout>
-      <Loading className={classes.loader} />
+      <Loading sx={{ p: 3 }} />
     </Layout>
   );
 }
-
-const styles = ({ spacing }) => ({
-  loader: {
-    padding: spacing.unit * 3,
-  },
-});
-
-export default withStyles(styles)(LayoutLoader);

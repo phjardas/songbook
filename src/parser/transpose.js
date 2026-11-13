@@ -1,6 +1,6 @@
 import { transpose } from 'chord-transposer';
 
-function transposeTo(lyrics, originalKey, transposedKey) {
+export function transposeLyrics(lyrics, originalKey, transposedKey) {
   if (transposedKey === originalKey) return lyrics;
 
   const transposer = chord => {
@@ -30,6 +30,3 @@ function transposeTo(lyrics, originalKey, transposedKey) {
   };
 }
 
-export default function TransposedLyrics({ lyrics, originalKey, actualKey, children }) {
-  return children({ lyrics: transposeTo(lyrics, originalKey, actualKey) });
-}

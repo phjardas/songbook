@@ -1,7 +1,6 @@
-import { Button } from '@material-ui/core';
-import React from 'react';
-import { Link } from 'react-router-dom';
+import { Button } from '@mui/material';
+import { Link } from 'react-router';
 
 export default function ButtonLink({ Component = Button, ...props }) {
-  return <Component {...props} component={Link} />;
+  return <Component component={Link} {...props} />;
 }

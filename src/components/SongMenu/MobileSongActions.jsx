@@ -1,37 +1,40 @@
-import { IconButton, ListItemIcon, ListItemText, Menu, MenuItem, withStyles } from '@material-ui/core';
-import { MoreVert as MoreVertIcon } from '@material-ui/icons';
-import React, { useState } from 'react';
+import { MoreVert as MoreVertIcon } from '@mui/icons-material';
+import { IconButton, ListItemIcon, ListItemText, Menu, MenuItem } from '@mui/material';
+import { useState } from 'react';
 import NoprintTooltip from './NoprintTooltip';
-import WithMenuItems from './WithMenuItems';
 
 function PrimaryActions({ items }) {
-  return items.map((item, i) => (
-    <NoprintTooltip title={item.label} key={i}>
-      <IconButton onClick={item.onClick} color="inherit">
-        <item.Icon />
+  return items.map(({ Icon, label, onClick }) => (
+    <NoprintTooltip title={label} key={label}>
+      <IconButton onClick={onClick} color="inherit" aria-label={label}>
+        <Icon />
       </IconButton>
     </NoprintTooltip>
   ));
 }
 
-function SecondaryActions({ items, classes }) {
-  const [anchor, setAnchor] = useState();
-  const open = !!anchor;
-  const toggle = e => setAnchor(open ? null : e.currentTarget);
+function SecondaryActions({ items }) {
+  const [anchor, setAnchor] = useState(null);
   const close = () => setAnchor(null);
 
   return (
     <>
-      <IconButton color="inherit" onClick={toggle}>
+      <IconButton color="inherit" onClick={e => setAnchor(e.currentTarget)} aria-label="More actions">
         <MoreVertIcon />
       </IconButton>
-      <Menu open={open} anchorEl={anchor} onClose={close} className={classes.menu}>
-        {items.map((item, i) => (
-          <MenuItem key={i} onClick={item.onClick}>
+      <Menu open={!!anchor} anchorEl={anchor} onClose={close} sx={{ '@media print': { display: 'none' } }}>
+        {items.map(({ Icon, label, onClick }) => (
+          <MenuItem
+            key={label}
+            onClick={() => {
+              close();
+              onClick();
+            }}
+          >
             <ListItemIcon>
-              <item.Icon />
+              <Icon />
             </ListItemIcon>
-            <ListItemText primary={item.label} />
+            <ListItemText primary={label} />
           </MenuItem>
         ))}
       </Menu>
@@ -39,33 +42,15 @@ function SecondaryActions({ items, classes }) {
   );
 }
 
-function MobileSongActions({ classes, ...props }) {
-  return (
-    <WithMenuItems {...props}>
-      {({ items }) => {
-        if (items.length > 3) {
-          const primaryItems = items.slice(0, 2);
+export default function MobileSongActions({ items }) {
+  if (items.length > 3) {
+    return (
+      <>
+        <PrimaryActions items={items.slice(0, 2)} />
+        <SecondaryActions items={items} />
+      </>
+    );
+  }
 
-          return (
-            <>
-              <PrimaryActions items={primaryItems} />
-              <SecondaryActions items={items} classes={classes} />
-            </>
-          );
-        }
-
-        return <PrimaryActions items={items} />;
-      }}
-    </WithMenuItems>
-  );
+  return <PrimaryActions items={items} />;
 }
-
-const styles = {
-  menu: {
-    '@media print': {
-      display: 'none',
-    },
-  },
-};
-
-export default withStyles(styles)(MobileSongActions);

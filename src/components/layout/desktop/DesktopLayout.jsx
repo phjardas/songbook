@@ -1,51 +1,53 @@
-import { AppBar, Drawer, Toolbar, withStyles } from '@material-ui/core';
-import React from 'react';
-import { compose } from 'recompose';
-import MainMenu, { drawerWidth } from './MainMenu';
+import { AppBar, Box, Drawer, Fab, Toolbar } from '@mui/material';
+import CreateSongButton from '../../CreateSongButton';
+import Footer from '../Footer';
+import MainMenuList from '../MainMenuList';
 import Title from './Title';
 
-function DesktopLayout({ classes, children }) {
+const drawerWidth = 256;
+const noPrint = { '@media print': { display: 'none' } };
+
+export default function DesktopLayout({ children }) {
   return (
     <>
-      <Drawer open={true} variant="permanent" classes={{ paper: classes.drawer }}>
-        <MainMenu />
+      <Drawer
+        open
+        variant="permanent"
+        slotProps={{ paper: { sx: { mt: '65px', height: 'calc(100% - 65px)', ...noPrint } } }}
+      >
+        <Box sx={{ width: drawerWidth, flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+          <CreateSongButton
+            Component={Fab}
+            variant="extended"
+            withLabel
+            iconSx={{ mr: 1, color: 'primary.main' }}
+            sx={{
+              m: 1,
+              bgcolor: 'background.paper',
+              color: 'text.primary',
+              textTransform: 'none',
+              letterSpacing: 0.25,
+              boxShadow: 1,
+              '&:hover': { bgcolor: 'background.paper', boxShadow: 4 },
+            }}
+          />
+          <MainMenuList userHeight={64} sx={{ flex: 1, width: '100%' }} />
+          <Footer />
+        </Box>
       </Drawer>
 
-      <AppBar elevation={0} className={classes.appbar}>
+      <AppBar
+        elevation={0}
+        sx={{ bgcolor: 'background.paper', color: 'text.primary', borderBottom: 1, borderColor: 'divider', ...noPrint }}
+      >
         <Toolbar>
           <Title />
         </Toolbar>
       </AppBar>
 
-      <main className={classes.main}>{children}</main>
+      <Box component="main" sx={{ ml: `${drawerWidth}px`, mt: '65px', '@media print': { m: 0 } }}>
+        {children}
+      </Box>
     </>
   );
 }
-
-const styles = ({ palette }) => ({
-  appbar: {
-    backgroundColor: palette.background.paper,
-    color: palette.text.primary,
-    borderBottom: `1px solid ${palette.divider}`,
-    '@media print': {
-      display: 'none',
-    },
-  },
-  drawer: {
-    marginTop: 65,
-    height: 'calc(100% - 65px)',
-    '@media print': {
-      display: 'none',
-      margin: 0,
-    },
-  },
-  main: {
-    marginLeft: drawerWidth,
-    marginTop: 65,
-    '@media print': {
-      margin: 0,
-    },
-  },
-});
-
-export default compose(withStyles(styles))(DesktopLayout);

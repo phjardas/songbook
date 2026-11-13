@@ -1,32 +1,16 @@
-import { withStyles } from '@material-ui/core';
-import React from 'react';
-import { Link } from 'react-router-dom';
+import { Box } from '@mui/material';
+import { Link } from 'react-router';
 import Logo from '../../Logo';
 
-function Title({ classes }) {
+export default function Title() {
   return (
-    <Link to="/" className={classes.root}>
-      <Logo className={classes.logo} />
+    <Box
+      component={Link}
+      to="/"
+      sx={{ display: 'flex', alignItems: 'center', typography: 'h6', color: 'text.secondary', fontWeight: 'normal', textDecoration: 'none' }}
+    >
+      <Box component={Logo} sx={{ width: '1.25em', height: '1.25em', mr: 2, color: 'primary.main' }} />
       Songbook
-    </Link>
+    </Box>
   );
 }
-
-const styles = ({ palette, spacing, typography }) => ({
-  root: {
-    display: 'flex',
-    alignItems: 'center',
-    ...typography.h6,
-    color: palette.text.secondary,
-    fontWeight: 'normal',
-    textDecoration: 'none',
-  },
-  logo: {
-    width: '1.25em',
-    height: '1.25em',
-    marginRight: spacing.unit * 2,
-    color: palette.primary.main,
-  },
-});
-
-export default withStyles(styles)(Title);

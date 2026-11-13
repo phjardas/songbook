@@ -1,13 +1,12 @@
-import React from 'react';
+import { lazy } from 'react';
 import GlobalLoader from './components/GlobalLoader';
-import { withAuth } from './providers/Auth';
+import { useAuth } from './providers/Auth';
 
-const Main = React.lazy(() => import('./pages/Main'));
-const SignIn = React.lazy(() => import('./pages/SignIn'));
+const Main = lazy(() => import('./pages/Main'));
+const SignIn = lazy(() => import('./pages/SignIn'));
 
-function Page({ pending, user }) {
+export default function Page() {
+  const { pending, user } = useAuth();
   if (pending) return <GlobalLoader />;
   return user ? <Main /> : <SignIn />;
 }
-
-export default withAuth(Page);

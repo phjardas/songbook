@@ -1,16 +1,12 @@
-import { ListItem } from '@material-ui/core';
-import React from 'react';
-import { Link } from 'react-router-dom';
-import NavLink from './NavLink';
+import { ListItemButton } from '@mui/material';
+import { Link, useMatch } from 'react-router';
 
-export default function NavListItem({ exact, to, children, ...rest }) {
+export default function NavListItem({ to, children, ...rest }) {
+  const selected = !!useMatch({ path: to, end: false });
+
   return (
-    <NavLink exact={exact} to={to}>
-      {props => (
-        <ListItem button component={Link} {...props} {...rest}>
-          {children}
-        </ListItem>
-      )}
-    </NavLink>
+    <ListItemButton component={Link} to={to} selected={selected} {...rest}>
+      {children}
+    </ListItemButton>
   );
 }

@@ -1,12 +1,11 @@
-import { List, ListItem, ListItemText, withStyles } from '@material-ui/core';
-import React from 'react';
-import Pitch from '../Pitch';
+import { List, ListItemButton, ListItemText } from '@mui/material';
 import { ResponsiveDialog } from '../dialog';
+import Pitch from '../Pitch';
 
 const majorKeys = ['C', 'Db', 'D', 'Eb', 'E', 'F', 'F#', 'Gb', 'G', 'Ab', 'A', 'Bb', 'B'];
 const minorKeys = ['Cm', 'C#m', 'Dm', 'D#m', 'Ebm', 'Em', 'Fm', 'F#m', 'Gm', 'G#m', 'Am', 'Bbm', 'Bm'];
 
-function TransposeDialog({ originalKey, transposedKey, onKeyChange, classes, hide, ...props }) {
+export default function TransposeDialog({ originalKey, transposedKey, onKeyChange, open, hide }) {
   const keys = originalKey.endsWith('m') ? minorKeys : majorKeys;
 
   const selectKey = key => () => {
@@ -15,29 +14,21 @@ function TransposeDialog({ originalKey, transposedKey, onKeyChange, classes, hid
   };
 
   return (
-    <ResponsiveDialog {...props} hide={hide} title="Transpose Song">
+    <ResponsiveDialog open={open} hide={hide} title="Transpose Song">
       <List dense>
         {keys.map(key => (
-          <ListItem key={key} button selected={key === transposedKey} onClick={selectKey(key)}>
+          <ListItemButton key={key} selected={key === transposedKey} onClick={selectKey(key)}>
             <ListItemText
               primary={
-                <span className={key === originalKey ? classes.originalKey : null}>
+                <span style={key === originalKey ? { fontWeight: 600 } : undefined}>
                   <Pitch pitch={key} />
-                  {key === originalKey && ` (original key)`}
+                  {key === originalKey && ' (original key)'}
                 </span>
               }
             />
-          </ListItem>
+          </ListItemButton>
         ))}
       </List>
     </ResponsiveDialog>
   );
 }
-
-const styles = () => ({
-  originalKey: {
-    fontWeight: 600,
-  },
-});
-
-export default withStyles(styles)(TransposeDialog);

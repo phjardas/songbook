@@ -1,5 +1,5 @@
-import React, { Suspense } from 'react';
-import { BrowserRouter } from 'react-router-dom';
+import { Suspense } from 'react';
+import { BrowserRouter } from 'react-router';
 import GlobalLoader from './components/GlobalLoader';
 import { AuthProvider } from './providers/Auth';
 import { NotificationsProvider } from './providers/Notifications';

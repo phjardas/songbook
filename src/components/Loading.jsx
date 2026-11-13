@@ -1,26 +1,12 @@
-import { CircularProgress, withStyles } from '@material-ui/core';
-import React from 'react';
+import { Box, CircularProgress } from '@mui/material';
 
-function Loading({ message = 'loading…', classes, className }) {
+export default function Loading({ message = 'loading…', sx }) {
   return (
-    <div className={`${classes.main} ${className}`}>
-      <CircularProgress color="secondary" className={classes.progress} />
-      <span className={classes.message}>{message}</span>
-    </div>
+    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', ...sx }}>
+      <CircularProgress color="secondary" />
+      <Box component="span" sx={{ mt: 1, typography: 'body1' }}>
+        {message}
+      </Box>
+    </Box>
   );
 }
-
-const styles = ({ spacing, typography }) => ({
-  main: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-  },
-  progress: {},
-  message: {
-    marginTop: spacing.unit,
-    ...typography.body1,
-  },
-});
-
-export default withStyles(styles)(Loading);

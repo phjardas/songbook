@@ -1,15 +1,15 @@
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography, withStyles } from '@material-ui/core';
-import React from 'react';
-import { withRouter } from 'react-router';
-import { compose } from 'recompose';
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography } from '@mui/material';
 import { deleteDoc } from 'firebase/firestore';
-import { withNotifications } from '../../providers/Notifications';
+import { useNavigate } from 'react-router';
+import { useNotifications } from '../../providers/Notifications';
 import CustomSnackbarContent from '../CustomSnackbarContent';
 
-function DeleteDialog({ song, doc, history, addNotification, hide, classes, open, onClose }) {
-  const deleteSong = async () => {
-    history.push(song.meta.draft ? '/drafts' : '/songs');
+export default function DeleteDialog({ song, doc, open, hide }) {
+  const navigate = useNavigate();
+  const { addNotification } = useNotifications();
 
+  const deleteSong = async () => {
+    navigate(song.meta.draft ? '/drafts' : '/songs');
     await deleteDoc(doc);
     addNotification({
       autoHideDuration: 3000,
@@ -18,7 +18,7 @@ function DeleteDialog({ song, doc, history, addNotification, hide, classes, open
   };
 
   return (
-    <Dialog open={open} onClose={onClose}>
+    <Dialog open={open} onClose={hide}>
       <DialogTitle>Delete Song</DialogTitle>
       <DialogContent>
         <Typography variant="body1">
@@ -27,22 +27,10 @@ function DeleteDialog({ song, doc, history, addNotification, hide, classes, open
       </DialogContent>
       <DialogActions>
         <Button onClick={hide}>Cancel</Button>
-        <Button onClick={deleteSong} className={classes.deleteButton}>
+        <Button onClick={deleteSong} color="error">
           Delete Song
         </Button>
       </DialogActions>
     </Dialog>
   );
 }
-
-const styles = ({ palette }) => ({
-  deleteButton: {
-    color: palette.error.main,
-  },
-});
-
-export default compose(
-  withStyles(styles),
-  withRouter,
-  withNotifications
-)(DeleteDialog);

@@ -1,9 +1,8 @@
-import * as React from 'react';
 import CustomSnackbar from './CustomSnackbar';
 import CustomSnackbarContent from './CustomSnackbarContent';
 
 export default function ErrorSnackbar({ error, message }) {
-  const actualMessage = message || (error && error.message);
+  const actualMessage = message || error?.message;
   if (!actualMessage) return null;
 
   return (

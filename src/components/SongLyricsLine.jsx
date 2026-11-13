@@ -1,74 +1,45 @@
-import { withStyles } from '@material-ui/core';
-import React from 'react';
+import { Box } from '@mui/material';
 import Chord from './Chord';
 
-function SongLyricsLine({ line: { parts }, className = '', classes }) {
+const cell = {
+  typography: 'body1',
+  verticalAlign: 'baseline',
+  whiteSpace: 'nowrap',
+  lineHeight: 1.2,
+  '@media print': { color: 'black' },
+};
+const chordsCell = { ...cell, p: '0 0.5rem 0 0', fontWeight: 500, color: 'rgba(0, 0, 0, 0.66)' };
+const lyricsCell = { ...cell, p: 0 };
+
+export default function SongLyricsLine({ line: { parts }, highlighted }) {
   const hasChords = parts.some(({ chord }) => !!chord);
   const hasText = parts.some(({ text }) => !!text);
 
   return (
-    <div className={`${classes.table} ${className}`}>
+    <Box sx={{ mb: 0.5, bgcolor: highlighted ? 'grey.300' : undefined }}>
       <table cellSpacing={0}>
         <tbody>
           {hasChords && (
             <tr>
-              {parts.map(({ chord }, i) =>
-                chord ? (
-                  <td key={i} className={classes.chordsCell}>
-                    <Chord chord={chord} />
-                  </td>
-                ) : (
-                  <td key={i} />
-                )
-              )}
+              {parts.map(({ chord }, i) => (
+                <Box component="td" key={i} sx={chord ? chordsCell : undefined}>
+                  {chord && <Chord chord={chord} />}
+                </Box>
+              ))}
             </tr>
           )}
           {hasText && (
             <tr>
-              {parts.map(({ text }, i) =>
-                text ? (
-                  <td key={i} className={classes.lyricsCell}>
-                    {text.trim()}
-                    {text.endsWith(' ') && <>&nbsp;</>}
-                  </td>
-                ) : (
-                  <td key={i} />
-                )
-              )}
+              {parts.map(({ text }, i) => (
+                <Box component="td" key={i} sx={text ? lyricsCell : undefined}>
+                  {text?.trim()}
+                  {text?.endsWith(' ') && <>&nbsp;</>}
+                </Box>
+              ))}
             </tr>
           )}
         </tbody>
       </table>
-    </div>
+    </Box>
   );
 }
-
-const styles = ({ spacing, typography }) => {
-  const cell = {
-    ...typography.body1,
-    verticalAlign: 'baseline',
-    whiteSpace: 'nowrap',
-    lineHeight: 1.2,
-    '@media print': {
-      color: 'black',
-    },
-  };
-
-  return {
-    table: {
-      marginBottom: spacing.unit / 2,
-    },
-    chordsCell: {
-      ...cell,
-      padding: '0 0.5rem 0 0',
-      fontWeight: 500,
-      color: 'rgba(0, 0, 0, 0.66)',
-    },
-    lyricsCell: {
-      ...cell,
-      padding: 0,
-    },
-  };
-};
-
-export default withStyles(styles)(SongLyricsLine);

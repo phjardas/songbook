@@ -1,31 +1,18 @@
-import { withStyles } from '@material-ui/core';
-import React from 'react';
-import { compose } from 'recompose';
 import Layout from '../components/layout';
 import LayoutError from '../components/LayoutError';
 import LayoutLoader from '../components/LayoutLoader';
 import SongEditor from '../components/SongEditor';
-import withSong from '../providers/Song';
+import { useSong } from '../providers/Song';
 
-let EditSong = ({ loading, error, song, saveSong, classes }) => {
+export default function EditSong() {
+  const { loading, error, song, saveSong } = useSong();
+
   if (loading) return <LayoutLoader />;
   if (error) return <LayoutError error={error} />;
 
-  const back = song && (song.meta.draft ? `/drafts/${song.id}` : `/songs/${song.id}`);
   return (
-    <Layout title={song && song.title} back={back}>
-      <SongEditor song={song} saveSong={saveSong} className={classes.main} />
+    <Layout title={song.title} back={song.meta.url}>
+      <SongEditor song={song} saveSong={saveSong} sx={{ p: 3 }} />
     </Layout>
   );
-};
-
-const styles = ({ spacing }) => ({
-  main: {
-    padding: spacing.unit * 3,
-  },
-});
-
-export default compose(
-  withStyles(styles),
-  withSong
-)(EditSong);
+}

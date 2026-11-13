@@ -1,68 +1,40 @@
-import { IconButton, SnackbarContent } from '@material-ui/core';
-import { amber, green } from '@material-ui/core/colors/';
-import { withStyles } from '@material-ui/core/styles';
 import {
   CheckCircle as CheckCircleIcon,
   Close as CloseIcon,
   Error as ErrorIcon,
   Info as InfoIcon,
   Warning as WarningIcon,
-} from '@material-ui/icons';
-import * as React from 'react';
+} from '@mui/icons-material';
+import { Box, IconButton, SnackbarContent } from '@mui/material';
+import { amber, green } from '@mui/material/colors';
 
-const variantIcon = {
-  success: CheckCircleIcon,
-  warning: WarningIcon,
-  error: ErrorIcon,
-  info: InfoIcon,
+const variants = {
+  success: { Icon: CheckCircleIcon, bgcolor: green[600] },
+  warning: { Icon: WarningIcon, bgcolor: amber[700] },
+  error: { Icon: ErrorIcon, bgcolor: 'error.dark' },
+  info: { Icon: InfoIcon, bgcolor: 'primary.dark' },
 };
 
-const styles = ({ spacing, palette }) => ({
-  success: {
-    backgroundColor: green[600],
-  },
-  error: {
-    backgroundColor: palette.error.dark,
-  },
-  info: {
-    backgroundColor: palette.primary.dark,
-  },
-  warning: {
-    backgroundColor: amber[700],
-  },
-  icon: {
-    fontSize: 20,
-  },
-  iconVariant: {
-    opacity: 0.9,
-    marginRight: spacing.unit,
-  },
-  message: {
-    display: 'flex',
-    alignItems: 'center',
-  },
-});
-
-function CustomSnackbarContent({ classes, message, onClose, variant, ...other }) {
-  const Icon = variantIcon[variant];
+export default function CustomSnackbarContent({ message, onClose, variant, sx, ...other }) {
+  const { Icon, bgcolor } = variants[variant];
 
   return (
     <SnackbarContent
-      className={classes[variant]}
+      sx={{ bgcolor, ...sx }}
       message={
-        <span className={classes.message}>
-          <Icon className={`${classes.icon} ${classes.iconVariant}`} />
+        <Box component="span" sx={{ display: 'flex', alignItems: 'center' }}>
+          <Icon sx={{ fontSize: 20, opacity: 0.9, mr: 1 }} />
           {message}
-        </span>
+        </Box>
       }
-      action={[
-        <IconButton key="close" color="inherit" onClick={onClose}>
-          <CloseIcon className={classes.icon} />
-        </IconButton>,
-      ]}
+      action={
+        onClose && (
+          <IconButton color="inherit" onClick={onClose} aria-label="Close">
+            <CloseIcon sx={{ fontSize: 20 }} />
+          </IconButton>
+        )
+      }
       {...other}
     />
   );
 }
-
-export default withStyles(styles)(CustomSnackbarContent);
