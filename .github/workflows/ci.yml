@@ -43,4 +43,5 @@ jobs:
       - uses: google-github-actions/auth@v3
         with:
           credentials_json: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
-      - run: pnpm exec firebase deploy --non-interactive
+      # Indexes are not deployed: the index file is empty and deploying it needs extra permissions.
+      - run: pnpm exec firebase deploy --only hosting,firestore:rules --non-interactive
