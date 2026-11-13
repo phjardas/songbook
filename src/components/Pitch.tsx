@@ -1,4 +1,3 @@
-
 export default function Pitch({ pitch }: { pitch: string }) {
   const { key, accidental, suffix } = parsePitch(pitch);
   return (

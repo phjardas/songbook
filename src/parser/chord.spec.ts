@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import { parseChord } from './Chord';
+import { parseChord } from './chord';
 
-describe('components', () => {
-  describe('Chord', () => {
+describe('parser', () => {
+  describe('chord', () => {
     describe('parseChord', () => {
       [
         { input: 'C', expected: { pitch: 'C' } },

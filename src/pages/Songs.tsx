@@ -12,24 +12,24 @@ import { getSongsCollection } from '../providers/data';
 
 export default function Songs({ draft = false }) {
   const user = useUser();
-  const [{ loading, error, songs }, setState] = useState<{ loading: boolean; error?: Error | null; songs?: Song[] | null }>({
-    loading: true,
-  });
+  // Results are tagged with the request they belong to, so a stale result reads as loading.
+  const request = `${user.id}:${draft}`;
+  const [result, setResult] = useState<{ request: string; songs?: Song[]; error?: Error }>();
 
   useEffect(() => {
     const { collection, toSong } = getSongsCollection({ draft, user });
-    setState({ loading: true });
     return onSnapshot(collection, {
       next: snapshot => {
         const songs = snapshot.docs.map(toSong).sort((a, b) => (a.title || '').localeCompare(b.title || ''));
-        setState({ loading: false, error: null, songs });
+        setResult({ request, songs });
       },
-      error: error => setState({ loading: false, error, songs: null }),
+      error: error => setResult({ request, error }),
     });
-  }, [user, draft]);
+  }, [request, user, draft]);
 
-  if (loading) return <LayoutLoader />;
-  if (error || !songs) return <LayoutError error={error ?? new Error('No songs')} />;
+  if (result?.request !== request) return <LayoutLoader />;
+  const { songs, error } = result;
+  if (!songs) return <LayoutError error={error ?? new Error('No songs')} />;
 
   return (
     <Layout title={draft ? 'Drafts' : 'Songs'} Fab={CreateSongButton}>

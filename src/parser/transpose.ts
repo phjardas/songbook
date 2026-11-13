@@ -7,10 +7,7 @@ export function transposeLyrics(lyrics: ParsedLyrics, originalKey: string, trans
   const transposer = (chord: string) => {
     try {
       if (!chord.trim()) return chord;
-      return transpose(chord)
-        .fromKey(originalKey)
-        .toKey(transposedKey)
-        .toString();
+      return transpose(chord).fromKey(originalKey).toKey(transposedKey).toString();
     } catch (error) {
       console.error('Error transposing chord "%s" from key "%s" to "%s":', chord, originalKey, transposedKey, error);
     }
@@ -30,4 +27,3 @@ export function transposeLyrics(lyrics: ParsedLyrics, originalKey: string, trans
     })),
   };
 }
-

@@ -14,20 +14,21 @@ export function useSong(): SongState {
   const { pathname } = useLocation();
   const user = useUser();
   const draft = pathname.startsWith('/drafts');
-  const [state, setState] = useState<SongState>({ loading: true });
+  // Results are tagged with the request they belong to, so a stale result reads as loading.
+  const request = `${user.id}:${draft}:${songId}`;
+  const [result, setResult] = useState<{ request: string; state: SongState }>();
 
   useEffect(() => {
     let cancelled = false;
     const doc = getSongDocument({ songId, draft, user });
-    setState({ loading: true });
     doc.song.then(
-      song => !cancelled && setState({ ...doc, loading: false, song }),
-      (error: Error) => !cancelled && setState({ loading: false, error })
+      song => !cancelled && setResult({ request, state: { ...doc, loading: false, song } }),
+      (error: Error) => !cancelled && setResult({ request, state: { loading: false, error } })
     );
     return () => {
       cancelled = true;
     };
-  }, [songId, draft, user]);
+  }, [request, songId, draft, user]);
 
-  return state;
+  return result?.request === request ? result.state : { loading: true };
 }

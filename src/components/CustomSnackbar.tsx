@@ -18,7 +18,12 @@ export default function CustomSnackbar({
   };
 
   return (
-    <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }} open={open} autoHideDuration={autoHideDuration} onClose={handleClose}>
+    <Snackbar
+      anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+      open={open}
+      autoHideDuration={autoHideDuration}
+      onClose={handleClose}
+    >
       {children}
     </Snackbar>
   );

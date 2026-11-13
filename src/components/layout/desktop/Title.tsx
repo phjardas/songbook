@@ -7,7 +7,14 @@ export default function Title() {
     <Box
       component={Link}
       to="/"
-      sx={{ display: 'flex', alignItems: 'center', typography: 'h6', color: 'text.secondary', fontWeight: 'normal', textDecoration: 'none' }}
+      sx={{
+        display: 'flex',
+        alignItems: 'center',
+        typography: 'h6',
+        color: 'text.secondary',
+        fontWeight: 'normal',
+        textDecoration: 'none',
+      }}
     >
       <Box component={Logo} sx={{ width: '1.25em', height: '1.25em', mr: 2, color: 'primary.main' }} />
       Songbook

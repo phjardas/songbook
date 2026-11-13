@@ -41,7 +41,15 @@ export default function SongEditor({ song, saveSong, sx }: Props) {
           <TextField id="title" label="Title" value={title} required onChange={e => setTitle(e.target.value)} disabled={saving} fullWidth />
         </Grid>
         <Grid size={{ xs: 12, sm: 4 }}>
-          <TextField id="author" label="Author" value={author} required onChange={e => setAuthor(e.target.value)} disabled={saving} fullWidth />
+          <TextField
+            id="author"
+            label="Author"
+            value={author}
+            required
+            onChange={e => setAuthor(e.target.value)}
+            disabled={saving}
+            fullWidth
+          />
         </Grid>
         <Grid size={{ xs: 12, sm: 4 }}>
           <TextField id="key" label="Key" value={key} onChange={e => setKey(e.target.value)} disabled={saving} fullWidth />

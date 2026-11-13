@@ -11,11 +11,7 @@ const noPrint = { '@media print': { display: 'none' } };
 export default function DesktopLayout({ children }: LayoutProps) {
   return (
     <>
-      <Drawer
-        open
-        variant="permanent"
-        slotProps={{ paper: { sx: { mt: '65px', height: 'calc(100% - 65px)', ...noPrint } } }}
-      >
+      <Drawer open variant="permanent" slotProps={{ paper: { sx: { mt: '65px', height: 'calc(100% - 65px)', ...noPrint } } }}>
         <Box sx={{ width: drawerWidth, flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
           <CreateSongButton
             Component={Fab}
