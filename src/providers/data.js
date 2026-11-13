@@ -1,35 +1,32 @@
+import { collection, deleteDoc, doc as docRef, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 import { firestore } from '../firebase';
 
 function getDraftsCollection(user) {
-  return firestore
-    .collection('users')
-    .doc(user.id)
-    .collection('drafts');
+  return collection(firestore, 'users', user.id, 'drafts');
 }
 
 function getPublicCollection() {
-  return firestore.collection('songs');
+  return collection(firestore, 'songs');
 }
 
 export function getSongsCollection({ path, user }) {
   const draft = path.startsWith('/drafts');
-  const collection = draft ? getDraftsCollection(user) : getPublicCollection();
 
   return {
     draft,
-    collection,
+    collection: draft ? getDraftsCollection(user) : getPublicCollection(),
     toSong: toSongFactory({ draft, user }),
   };
 }
 
 export function getSongDocument({ songId, path, user }) {
   const { draft, collection, toSong } = getSongsCollection({ path, user });
-  const doc = collection.doc(songId);
+  const doc = docRef(collection, songId);
   let song;
   const getSong = () => {
     if (!song) {
-      song = doc.get().then(snapshot => {
-        if (!snapshot.exists) throw new Error('Song not found');
+      song = getDoc(doc).then(snapshot => {
+        if (!snapshot.exists()) throw new Error('Song not found');
         return toSong(snapshot);
       });
     }
@@ -42,24 +39,20 @@ export function getSongDocument({ songId, path, user }) {
     get song() {
       return getSong();
     },
-    saveSong: data => doc.update(data),
+    saveSong: data => updateDoc(doc, data),
     publishSong: async () => {
       const { id, meta, ...data } = await getSong();
       if (!meta.draft) throw new Error('Cannot publish a public song');
-      await getPublicCollection()
-        .doc(id)
-        .set(data);
-      await doc.delete();
+      await setDoc(docRef(getPublicCollection(), id), data);
+      await deleteDoc(doc);
       return { id, ...data, meta: { ...meta, draft: false, url: `/songs/${id}` } };
     },
     unpublishSong: async () => {
       const { id, meta, ...data } = await getSong();
       if (meta.draft) throw new Error('Cannot unpublish a draft song');
-      await getDraftsCollection(user)
-        .doc(id)
-        .set(data);
-      await doc.delete();
-      return { id, ...data, meta: { ...meta, draft: false, url: `/drafts/${id}` } };
+      await setDoc(docRef(getDraftsCollection(user), id), data);
+      await deleteDoc(doc);
+      return { id, ...data, meta: { ...meta, draft: true, url: `/drafts/${id}` } };
     },
   };
 }

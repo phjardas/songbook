@@ -2,3 +2,5 @@ node_modules
 /.firebase
 *.log
 /build
+firebase-debug.log
+firestore-debug.log

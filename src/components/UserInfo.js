@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { doc, getDoc } from 'firebase/firestore';
 import { firestore } from '../firebase';
 
 export default function UserInfo({ id, children }) {
@@ -6,11 +7,8 @@ export default function UserInfo({ id, children }) {
 
   const loadUser = async () => {
     try {
-      const doc = await firestore
-        .collection('users')
-        .doc(id)
-        .get();
-      const user = { ...doc.data(), id: doc.id };
+      const snapshot = await getDoc(doc(firestore, 'users', id));
+      const user = { ...snapshot.data(), id: snapshot.id };
       setState({ loading: false, error: null, user });
     } catch (error) {
       setState({ loading: false, error, user: null });

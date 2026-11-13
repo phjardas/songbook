@@ -1,6 +1,6 @@
 import { Hidden, withStyles } from '@material-ui/core';
 import React from 'react';
-import Helmet from 'react-helmet';
+import { Helmet } from 'react-helmet';
 import DesktopLayout from './desktop';
 import MobileLayout from './mobile';
 

@@ -1,10 +1,8 @@
-import Firebase from 'firebase/app';
-import 'firebase/auth';
-import 'firebase/firestore';
+import { initializeApp } from 'firebase/app';
+import { connectAuthEmulator, getAuth } from 'firebase/auth';
+import { connectFirestoreEmulator, initializeFirestore, persistentLocalCache, persistentMultipleTabManager } from 'firebase/firestore';
 
-export { Firebase };
-
-const firebase = Firebase.initializeApp(
+const app = initializeApp(
   {
     apiKey: 'AIzaSyB6JZLHNPTfY9y4pGxAIozZYnLhvoFDR2Y',
     authDomain: 'songbook-pi.firebaseapp.com',
@@ -13,11 +11,17 @@ const firebase = Firebase.initializeApp(
     storageBucket: 'songbook-pi.appspot.com',
     messagingSenderId: '328354743065',
   },
+  // The app name is part of the persisted auth key; keep it so users stay signed in.
   'songbook'
 );
 
-export const auth = firebase.auth();
+export const auth = getAuth(app);
 
-export const firestore = firebase.firestore();
-firestore.settings({ timestampsInSnapshots: true });
-firestore.enablePersistence().catch(error => console.error('Error enabling Firestore offline persistence:', error));
+export const firestore = initializeFirestore(app, {
+  localCache: persistentLocalCache({ tabManager: persistentMultipleTabManager() }),
+});
+
+if (import.meta.env.VITE_FIREBASE_EMULATORS) {
+  connectAuthEmulator(auth, 'http://127.0.0.1:9099', { disableWarnings: true });
+  connectFirestoreEmulator(firestore, '127.0.0.1', 8080);
+}

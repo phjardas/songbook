@@ -5,6 +5,7 @@ import { compose } from 'recompose';
 import ErrorSnackbar from '../components/ErrorSnackbar';
 import Layout from '../components/layout';
 import Loading from '../components/Loading';
+import { addDoc, collection } from 'firebase/firestore';
 import { firestore } from '../firebase';
 import { withAuth } from '../providers/Auth';
 
@@ -21,11 +22,7 @@ function CreateSong({ user, history, classes }) {
         owner: user.id,
       };
 
-      const doc = await firestore
-        .collection('users')
-        .doc(user.id)
-        .collection('drafts')
-        .add(song);
+      const doc = await addDoc(collection(firestore, 'users', user.id, 'drafts'), song);
       history.push(`/drafts/${doc.id}/edit`);
     } catch (error) {
       setError(error);

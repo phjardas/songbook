@@ -19,7 +19,7 @@ export default defineConfig({
       },
     }),
   ],
-  // ponytail: Firebase 5 references Node's global; drop with the Firebase upgrade.
+  // ponytail: MUI 3 (JSS) references Node's global; drop with the MUI upgrade.
   define: { global: 'globalThis' },
   build: {
     outDir: 'build',

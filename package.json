@@ -11,13 +11,15 @@
     "build": "vite build",
     "preview": "vite preview",
     "test": "vitest",
-    "deploy": "firebase deploy"
+    "deploy": "firebase deploy",
+    "emulators": "firebase emulators:start --only auth,firestore",
+    "start:emulators": "VITE_FIREBASE_EMULATORS=1 vite"
   },
   "dependencies": {
     "@material-ui/core": "^3.9.4",
     "@material-ui/icons": "^3.0.2",
     "chord-transposer": "^2.5.2",
-    "firebase": "^5.11.1",
+    "firebase": "^13.3.0",
     "react": "16.14.0",
     "react-dom": "16.14.0",
     "react-helmet": "^5.2.1",

@@ -2,6 +2,7 @@ import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography, 
 import React from 'react';
 import { withRouter } from 'react-router';
 import { compose } from 'recompose';
+import { deleteDoc } from 'firebase/firestore';
 import { withNotifications } from '../../providers/Notifications';
 import CustomSnackbarContent from '../CustomSnackbarContent';
 
@@ -9,7 +10,7 @@ function DeleteDialog({ song, doc, history, addNotification, hide, classes, open
   const deleteSong = async () => {
     history.push(song.meta.draft ? '/drafts' : '/songs');
 
-    await doc.delete();
+    await deleteDoc(doc);
     addNotification({
       autoHideDuration: 3000,
       content: <CustomSnackbarContent message="The song was deleted." variant="success" />,

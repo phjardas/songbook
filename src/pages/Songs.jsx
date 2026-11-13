@@ -7,6 +7,7 @@ import Layout from '../components/layout';
 import LayoutError from '../components/LayoutError';
 import LayoutLoader from '../components/LayoutLoader';
 import { withAuth } from '../providers/Auth';
+import { onSnapshot } from 'firebase/firestore';
 import { getSongsCollection } from '../providers/data';
 
 function Songs({ loading, error, draft, songs }) {
@@ -32,7 +33,7 @@ function SongsWrapper({ user, match: { path } }) {
 
   useEffect(
     () => {
-      return collection.onSnapshot({
+      return onSnapshot(collection, {
         next: snapshot => {
           const songs = snapshot.docs.map(toSong).sort((a, b) => (a.title || '').localeCompare(b.title || ''));
           setState({ loading: false, error: null, songs });
