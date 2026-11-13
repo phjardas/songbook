@@ -9,7 +9,10 @@ Requires Node.js 26 and pnpm (`corepack enable`).
 ```sh
 pnpm install
 pnpm start      # dev server
-pnpm test       # unit tests
+pnpm test       # unit tests (Vitest)
+pnpm typecheck  # TypeScript
+pnpm lint       # ESLint and Prettier check
+pnpm format     # apply Prettier
 pnpm build      # production build into build/
 ```
 
