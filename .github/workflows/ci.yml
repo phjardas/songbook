@@ -1,7 +1,10 @@
 name: CI
 
 on:
+  # Branches with an open PR are built through pull_request only; push covers the default branch.
+  # TODO: drop master once it is renamed to main.
   push:
+    branches: [master, main]
   pull_request:
 
 jobs:
