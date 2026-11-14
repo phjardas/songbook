@@ -1,9 +1,8 @@
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography } from '@mui/material';
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 import { deleteDoc, type DocumentReference } from 'firebase/firestore';
-import type { Song, SongData } from '../../types';
 import { useNavigate } from 'react-router';
 import { useNotifications } from '../../providers/Notifications';
-import CustomSnackbarContent from '../CustomSnackbarContent';
+import type { Song, SongData } from '../../types';
 
 interface Props {
   song: Song;
@@ -19,24 +18,19 @@ export default function DeleteDialog({ song, doc, open, hide }: Props) {
   const deleteSong = async () => {
     navigate(song.meta.draft ? '/drafts' : '/songs');
     await deleteDoc(doc);
-    addNotification({
-      autoHideDuration: 3000,
-      content: <CustomSnackbarContent message="The song was deleted." variant="success" />,
-    });
+    addNotification({ message: 'Song deleted' });
   };
 
   return (
-    <Dialog open={open} onClose={hide}>
-      <DialogTitle>Delete Song</DialogTitle>
+    <Dialog open={open} onClose={hide} maxWidth="xs">
+      <DialogTitle>Delete song?</DialogTitle>
       <DialogContent>
-        <Typography variant="body1">
-          Are you sure you want to delete the song <strong>{song.title}</strong>?
-        </Typography>
+        <DialogContentText>“{song.title || 'Untitled'}” will be deleted for everyone. This cannot be undone.</DialogContentText>
       </DialogContent>
       <DialogActions>
         <Button onClick={hide}>Cancel</Button>
         <Button onClick={deleteSong} color="error">
-          Delete Song
+          Delete
         </Button>
       </DialogActions>
     </Dialog>

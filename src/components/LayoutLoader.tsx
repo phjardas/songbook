@@ -4,7 +4,7 @@ import Loading from './Loading';
 export default function LayoutLoader() {
   return (
     <Layout>
-      <Loading sx={{ p: 3 }} />
+      <Loading sx={{ py: 8 }} />
     </Layout>
   );
 }

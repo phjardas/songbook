@@ -9,7 +9,8 @@ export default function ContentUpdatedBanner({ reload }: { reload: () => void })
     <Snackbar
       open={show}
       anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
-      message="The application has been updated"
+      sx={{ bottom: { xs: 96, md: 24 }, left: { md: 120 } }}
+      message="A new version of Songbook is available"
       action={
         <>
           <Button color="secondary" size="small" onClick={reload}>

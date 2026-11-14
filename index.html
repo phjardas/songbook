@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <title>Songbook</title>
 
-    <meta name="theme-color" content="#9c27b0" />
+    <meta name="theme-color" content="#fff7fa" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#171216" media="(prefers-color-scheme: dark)" />
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
@@ -15,7 +16,11 @@
     <meta name="application-name" content="Songbook" />
     <meta name="msapplication-TileColor" content="#9c27b0" />
 
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wdth,wght@8..144,25..151,100..1000&family=Roboto+Mono:wght@400;500&display=swap"
+    />
     <link rel="preconnect" href="https://firestore.googleapis.com" />
   </head>
 
@@ -23,69 +28,56 @@
     <noscript> You need to enable JavaScript to run this app. </noscript>
 
     <div id="root">
+      <!-- Shown until the app starts; mirrors the sign-in screen so the hand-over is seamless. -->
       <style>
         .splash {
-          position: absolute;
-          top: 0;
-          left: 0;
-          bottom: 0;
-          right: 0;
-          background: #fafafa;
+          --surface: #fff7fa;
+          --on-surface: #1f1a1f;
+          --container: #ffd6fe;
+          --on-container: #7b008f;
+          position: fixed;
+          inset: 0;
+          display: grid;
+          place-items: center;
+          background: var(--surface);
+          color: var(--on-surface);
+          font-family: 'Roboto Flex', Roboto, system-ui, sans-serif;
         }
-
-        .splash,
-        .splash * {
-          box-sizing: border-box;
-        }
-
-        .splash-card {
-          width: auto;
-          display: block;
-          margin: 64px 24px 0;
-          padding: 16px 24px 24px;
-
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: center;
-
-          background: #fff;
-          box-shadow:
-            0px 1px 5px 0px rgba(0, 0, 0, 0.2),
-            0px 2px 2px 0px rgba(0, 0, 0, 0.14),
-            0px 3px 1px -2px rgba(0, 0, 0, 0.12);
-          border-radius: 4px;
-        }
-
-        @media (min-width: 448px) {
-          .splash-card {
-            max-width: 400px;
-            margin-left: auto;
-            margin-right: auto;
+        @media (prefers-color-scheme: dark) {
+          .splash {
+            --surface: #171216;
+            --on-surface: #ebdfe6;
+            --container: #7b008f;
+            --on-container: #ffd6fe;
           }
         }
-
-        .splash svg {
-          color: #9c27b0;
-          margin: 8px;
+        .splash-logo {
+          width: 88px;
+          height: 88px;
+          border-radius: 28px;
+          display: grid;
+          place-items: center;
+          margin: 0 auto 24px;
+          background: var(--container);
+          color: var(--on-container);
         }
-
         .splash h1 {
-          font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
-          font-size: 1.5rem;
-          font-weight: 400;
+          font-size: 2rem;
+          line-height: 2.5rem;
+          font-weight: 500;
           margin: 0;
-          line-height: 1.33;
         }
       </style>
       <div class="splash">
-        <div class="splash-card">
-          <svg xmlns="http://www.w3.org/2000/svg" width="150" height="150" viewBox="0 0 512 512">
-            <path
-              fill="currentColor"
-              d="M511.99 32.01c0-21.71-21.1-37.01-41.6-30.51L150.4 96c-13.3 4.2-22.4 16.5-22.4 30.5v261.42c-10.05-2.38-20.72-3.92-32-3.92-53.02 0-96 28.65-96 64s42.98 64 96 64 96-28.65 96-64V214.31l256-75.02v184.63c-10.05-2.38-20.72-3.92-32-3.92-53.02 0-96 28.65-96 64s42.98 64 96 64 96-28.65 96-64l-.01-351.99z"
-            ></path>
-          </svg>
+        <div>
+          <div class="splash-logo">
+            <svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" viewBox="0 0 512 512" aria-hidden="true">
+              <path
+                fill="currentColor"
+                d="M511.99 32.01c0-21.71-21.1-37.01-41.6-30.51L150.4 96c-13.3 4.2-22.4 16.5-22.4 30.5v261.42c-10.05-2.38-20.72-3.92-32-3.92-53.02 0-96 28.65-96 64s42.98 64 96 64 96-28.65 96-64V214.31l256-75.02v184.63c-10.05-2.38-20.72-3.92-32-3.92-53.02 0-96 28.65-96 64s42.98 64 96 64 96-28.65 96-64l-.01-351.99z"
+              ></path>
+            </svg>
+          </div>
           <h1>Songbook</h1>
         </div>
       </div>

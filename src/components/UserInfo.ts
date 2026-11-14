@@ -8,7 +8,7 @@ export default function UserInfo({ id, children }: { id: string; children: (stat
 
   useEffect(() => {
     getDoc(doc(firestore, 'users', id)).then(
-      snapshot => setUser({ ...(snapshot.data() as User), id: snapshot.id }),
+      snapshot => snapshot.exists() && setUser({ ...(snapshot.data() as User), id: snapshot.id }),
       error => console.error('Error loading user %s:', id, error)
     );
   }, [id]);

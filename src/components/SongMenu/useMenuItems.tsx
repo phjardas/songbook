@@ -80,5 +80,5 @@ export default function useMenuItems({
     </>
   );
 
-  return { items, dialogs };
+  return { items, dialogs, openTranspose: () => setDialog('transpose') };
 }

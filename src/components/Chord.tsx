@@ -10,7 +10,11 @@ function Chord({ chord }: { chord: string }) {
       <Pitch pitch={pitch} />
       {gender}
       {alterations && <sup>{alterations}</sup>}
-      {inversion}
+      {inversion && (
+        <>
+          /<Pitch pitch={inversion.slice(1)} />
+        </>
+      )}
     </>
   );
 }

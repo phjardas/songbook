@@ -1,16 +1,18 @@
 import { Snackbar } from '@mui/material';
-import { type ReactElement, useState } from 'react';
+import { useState } from 'react';
+import { useIsDesktop } from '../theme';
 
 export default function CustomSnackbar({
-  autoHideDuration = 6000,
+  message,
+  autoHideDuration = 4000,
   onClose,
-  children,
 }: {
+  message: string;
   autoHideDuration?: number;
   onClose?: () => void;
-  children: ReactElement;
 }) {
   const [open, setOpen] = useState(true);
+  const isDesktop = useIsDesktop();
 
   const handleClose = () => {
     setOpen(false);
@@ -19,12 +21,13 @@ export default function CustomSnackbar({
 
   return (
     <Snackbar
-      anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+      anchorOrigin={{ vertical: 'bottom', horizontal: isDesktop ? 'left' : 'center' }}
       open={open}
+      message={message}
       autoHideDuration={autoHideDuration}
       onClose={handleClose}
-    >
-      {children}
-    </Snackbar>
+      // Clear the navigation bar on phones.
+      sx={{ bottom: { xs: 96, md: 24 }, left: { md: 120 } }}
+    />
   );
 }
