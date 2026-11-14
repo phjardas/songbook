@@ -8,11 +8,25 @@ interface Props {
   highlightLine?: number;
 }
 
-export default function SongLyricsSection({ section: { label, lines }, highlightLine }: Props) {
+export default function SongLyricsSection({ section: { type, label, lines }, highlightLine }: Props) {
   // TODO render messages
+  // The chorus is indented behind a bar, as in printed songbooks, so it stands out when it repeats.
+  const chorus = type === 'chorus';
+
   return (
-    <Box sx={{ mt: 3 }}>
-      {label && <Box sx={{ typography: 'h5', '@media print': { color: 'black' } }}>{label}</Box>}
+    <Box
+      component="section"
+      sx={{
+        mt: 3,
+        breakInside: 'avoid',
+        ...(chorus && { pl: 2, borderLeft: 4, borderColor: 'm3.primaryContainer', '@media print': { borderColor: '#000' } }),
+      }}
+    >
+      {label && (
+        <Box component="h3" sx={{ typography: 'subtitle2', color: 'm3.primary', m: 0, mb: 0.5, '@media print': { color: '#000' } }}>
+          {label}
+        </Box>
+      )}
       {lines.map((line, i) => (
         <SongLyricsLine key={i} line={line} highlighted={highlightLine !== undefined && !!line.lines?.includes(highlightLine)} />
       ))}

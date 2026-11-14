@@ -12,8 +12,8 @@ export default function EditSong() {
   const { song, saveSong } = state;
 
   return (
-    <Layout title={song.title} back={song.meta.url}>
-      <SongEditor song={song} saveSong={saveSong} sx={{ p: 3 }} />
+    <Layout title={song.title ? `Edit ${song.title}` : 'Edit song'} back={song.meta.url} maxWidth={1200}>
+      <SongEditor song={song} saveSong={saveSong} />
     </Layout>
   );
 }

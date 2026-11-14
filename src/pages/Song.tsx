@@ -1,5 +1,4 @@
 import { useNavigate } from 'react-router';
-import CustomSnackbarContent from '../components/CustomSnackbarContent';
 import LayoutError from '../components/LayoutError';
 import LayoutLoader from '../components/LayoutLoader';
 import Song from '../components/Song';
@@ -18,18 +17,15 @@ export default function SongPage() {
   const moveSong = (move: () => Promise<SongType>, message: string) => async () => {
     const moved = await move();
     navigate(moved.meta.url);
-    addNotification({
-      autoHideDuration: 3000,
-      content: <CustomSnackbarContent message={message} variant="success" />,
-    });
+    addNotification({ message });
   };
 
   return (
     <Song
       song={state.song}
       doc={state.doc}
-      publishSong={moveSong(state.publishSong, 'The song was published and removed from drafts.')}
-      unpublishSong={moveSong(state.unpublishSong, 'The song was unpublished and moved to drafts.')}
+      publishSong={moveSong(state.publishSong, 'Song published')}
+      unpublishSong={moveSong(state.unpublishSong, 'Song unpublished and moved to drafts')}
     />
   );
 }

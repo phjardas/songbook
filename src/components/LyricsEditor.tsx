@@ -1,7 +1,7 @@
-import { Grid, TextField } from '@mui/material';
+import { Box, Grid, TextField } from '@mui/material';
 import { type SyntheticEvent, useState } from 'react';
-import type { LyricsType } from '../types';
 import parseLyrics from '../parser';
+import type { LyricsType } from '../types';
 import SongLyrics from './SongLyrics';
 
 interface Props {
@@ -20,20 +20,22 @@ export default function LyricsEditor({ lyrics, lyricsType, onChange, ...props }:
   };
 
   return (
-    <Grid container spacing={3}>
+    <Grid container spacing={2}>
       <Grid size={{ xs: 12, lg: 6 }}>
         <TextField
           id="lyrics"
+          label={lyricsType === 'chordpro' ? 'Lyrics (ChordPro)' : 'Lyrics (OpenSong)'}
           value={lyrics}
           multiline
-          maxRows={100}
+          minRows={12}
           required
           onChange={e => onChange(e.target.value)}
           fullWidth
           slotProps={{
             input: {
-              sx: { fontFamily: 'monospace' },
+              sx: { fontFamily: '"Roboto Mono", ui-monospace, monospace', fontSize: '0.875rem', lineHeight: 1.6 },
               onKeyUp: updateCaretPosition,
+              onClick: updateCaretPosition,
               onFocus: updateCaretPosition,
             },
           }}
@@ -41,7 +43,12 @@ export default function LyricsEditor({ lyrics, lyricsType, onChange, ...props }:
         />
       </Grid>
       <Grid size={{ xs: 12, lg: 6 }}>
-        <SongLyrics lyrics={parseLyrics({ type: lyricsType, lyrics })} highlightLine={caretLine} />
+        <Box
+          aria-label="Preview"
+          sx={{ bgcolor: 'm3.surfaceContainerLow', borderRadius: '16px', px: 3, pb: 3, pt: 0.5, minHeight: '100%' }}
+        >
+          <SongLyrics lyrics={parseLyrics({ type: lyricsType, lyrics })} highlightLine={caretLine} />
+        </Box>
       </Grid>
     </Grid>
   );

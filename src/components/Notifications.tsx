@@ -7,8 +7,11 @@ export default function Notifications() {
 
   return (
     // Keyed so that a new notification gets a fresh, open snackbar.
-    <CustomSnackbar key={notification.id} autoHideDuration={notification.autoHideDuration} onClose={notification.onClose}>
-      {notification.content}
-    </CustomSnackbar>
+    <CustomSnackbar
+      key={notification.id}
+      message={notification.message}
+      autoHideDuration={notification.autoHideDuration}
+      onClose={notification.onClose}
+    />
   );
 }

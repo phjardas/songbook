@@ -25,28 +25,28 @@ export default function SignIn() {
 
   return (
     <SmallLayout>
+      <Box sx={{ typography: 'body1', color: 'text.secondary', mb: 4, textWrap: 'balance' }}>
+        Your leadsheets with lyrics and chords, in any key.
+      </Box>
       {signingIn ? (
         <Loading message="Signing you in…" />
       ) : (
-        <>
-          <Box sx={{ textAlign: 'center', typography: 'body1' }}>Please sign in</Box>
-          {signInError && <ErrorSnackbar error={signInError} />}
-          <Stack direction="row" spacing={1} sx={{ mt: 1, width: '100%' }}>
-            {providers.map(p => (
-              <Button
-                key={p.id}
-                variant="contained"
-                color="primary"
-                sx={{ flex: 1 }}
-                startIcon={<Box component={p.icon} sx={{ height: '1.5em', fill: 'white' }} />}
-                onClick={() => doSignIn(p.id)}
-              >
-                {p.label}
-              </Button>
-            ))}
-          </Stack>
-        </>
+        <Stack spacing={1.5}>
+          {providers.map(p => (
+            <Button
+              key={p.id}
+              variant="outlined"
+              size="large"
+              startIcon={<Box component={p.icon} sx={{ width: 20, height: 20, fill: 'currentColor' }} />}
+              onClick={() => doSignIn(p.id)}
+              sx={{ minHeight: 48, color: 'm3.onSurface', borderColor: 'm3.outline' }}
+            >
+              Continue with {p.label}
+            </Button>
+          ))}
+        </Stack>
       )}
+      {signInError && <ErrorSnackbar error={signInError} />}
     </SmallLayout>
   );
 }
