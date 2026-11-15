@@ -39,7 +39,8 @@ function KeyBadge({ songKey }: { songKey: string }) {
         mr: 2,
       }}
     >
-      {songKey ? <Pitch pitch={songKey} /> : '–'}
+      {/* Single child, otherwise the grid stacks key, accidental and suffix as separate rows. */}
+      <span>{songKey ? <Pitch pitch={songKey} /> : '–'}</span>
     </Box>
   );
 }
